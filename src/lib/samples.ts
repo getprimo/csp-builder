@@ -1,26 +1,26 @@
 // Sample ADMX/ADML bundles, imported as raw strings so they work both via HTTP
 // and inside the single-file build (no fetch required).
 
-import chromeAdmx from "../../public/samples/chrome/chrome.admx?raw";
-import chromeAdml from "../../public/samples/chrome/en-US/chrome.adml?raw";
-import edgeAdmx from "../../public/samples/edge/msedge.admx?raw";
-import edgeAdml from "../../public/samples/edge/en-US/msedge.adml?raw";
-import edgeUpdateAdmx from "../../public/samples/edge-update/msedgeupdate.admx?raw";
-import edgeUpdateAdml from "../../public/samples/edge-update/en-US/msedgeupdate.adml?raw";
-import firefoxAdmx from "../../public/samples/firefox/firefox.admx?raw";
-import firefoxAdml from "../../public/samples/firefox/en-US/firefox.adml?raw";
-import onedriveAdmx from "../../public/samples/onedrive/OneDrive.admx?raw";
-import onedriveAdml from "../../public/samples/onedrive/en-US/OneDrive.adml?raw";
-import acrobatAdmx from "../../public/samples/acrobat-dc/AdobeDC.admx?raw";
-import acrobatAdml from "../../public/samples/acrobat-dc/en-US/AdobeDC.adml?raw";
-import readerAdmx from "../../public/samples/reader-dc/ReaderDC.admx?raw";
-import readerAdml from "../../public/samples/reader-dc/en-US/ReaderDC.adml?raw";
-import officeAdmx from "../../public/samples/office/office16.admx?raw";
-import officeAdml from "../../public/samples/office/en-US/office16.adml?raw";
-import wordAdmx from "../../public/samples/word/word16.admx?raw";
-import wordAdml from "../../public/samples/word/en-US/word16.adml?raw";
-import outlookAdmx from "../../public/samples/outlook/outlk16.admx?raw";
-import outlookAdml from "../../public/samples/outlook/en-US/outlk16.adml?raw";
+import chromeAdmx from "../samples/chrome/chrome.admx?raw";
+import chromeAdml from "../samples/chrome/en-US/chrome.adml?raw";
+import edgeAdmx from "../samples/edge/msedge.admx?raw";
+import edgeAdml from "../samples/edge/en-US/msedge.adml?raw";
+import edgeUpdateAdmx from "../samples/edge-update/msedgeupdate.admx?raw";
+import edgeUpdateAdml from "../samples/edge-update/en-US/msedgeupdate.adml?raw";
+import firefoxAdmx from "../samples/firefox/firefox.admx?raw";
+import firefoxAdml from "../samples/firefox/en-US/firefox.adml?raw";
+import onedriveAdmx from "../samples/onedrive/OneDrive.admx?raw";
+import onedriveAdml from "../samples/onedrive/en-US/OneDrive.adml?raw";
+import acrobatAdmx from "../samples/acrobat-dc/AdobeDC.admx?raw";
+import acrobatAdml from "../samples/acrobat-dc/en-US/AdobeDC.adml?raw";
+import readerAdmx from "../samples/reader-dc/ReaderDC.admx?raw";
+import readerAdml from "../samples/reader-dc/en-US/ReaderDC.adml?raw";
+import officeAdmx from "../samples/office/office16.admx?raw";
+import officeAdml from "../samples/office/en-US/office16.adml?raw";
+import wordAdmx from "../samples/word/word16.admx?raw";
+import wordAdml from "../samples/word/en-US/word16.adml?raw";
+import outlookAdmx from "../samples/outlook/outlk16.admx?raw";
+import outlookAdml from "../samples/outlook/en-US/outlk16.adml?raw";
 
 export interface SampleBundle {
   id: string;

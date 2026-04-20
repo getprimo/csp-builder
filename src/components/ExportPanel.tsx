@@ -102,13 +102,16 @@ export function ExportPanel() {
         </div>
 
         <div className="flex gap-2">
-          <Button onClick={onDownload} disabled={files.length === 0}>
+          <Button
+            onClick={onDownload}
+            disabled={files.length === 0 && cspApplyCount === 0}
+          >
             <Download className="h-4 w-4 mr-2" /> Download .xml
           </Button>
           <Button
             variant="outline"
             onClick={onCopy}
-            disabled={files.length === 0}
+            disabled={files.length === 0 && cspApplyCount === 0}
           >
             {copied ? (
               <Check className="h-4 w-4 mr-2" />

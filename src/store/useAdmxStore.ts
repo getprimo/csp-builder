@@ -7,17 +7,23 @@ import type {
   PolicyScope,
   PolicyState,
 } from "@/lib/admx/types";
+import type { ConfiguredCsp, CspValue } from "@/lib/csp-native/types";
+import { getCspSetting } from "@/lib/csp-native/catalog";
 
 interface AdmxStoreState {
   files: AdmxFile[];
   configured: Record<string, ConfiguredPolicy>;
-  selectedPolicyKey?: string;
+  configuredCsp: Record<string, ConfiguredCsp>;
+  selectedKey?: string;
 
   addFile(file: AdmxFile): void;
   removeFile(id: string): void;
   clearFiles(): void;
 
+  /** Select an ADMX policy for editing. */
   selectPolicy(admxId: string, policyName: string): void;
+  /** Select a native CSP setting for editing. */
+  selectCsp(settingId: string): void;
 
   setPolicyState(
     admxId: string,
@@ -44,17 +50,29 @@ interface AdmxStoreState {
     apply: boolean,
     cls: PolicyClass
   ): void;
+
+  setCspValue(settingId: string, value: CspValue): void;
+  setCspScope(settingId: string, scope: PolicyScope): void;
+  setCspApply(settingId: string, apply: boolean): void;
 }
 
 export function defaultScopeFor(cls: PolicyClass): PolicyScope {
   return cls === "User" ? "User" : "Device";
 }
 
-export function policyKey(admxId: string, policyName: string): string {
-  return `${admxId}::${policyName}`;
+export function defaultCspScope(s: "Device" | "User" | "Both"): PolicyScope {
+  return s === "User" ? "User" : "Device";
 }
 
-function upsert(
+export function policyKey(admxId: string, policyName: string): string {
+  return `admx::${admxId}::${policyName}`;
+}
+
+export function cspKey(settingId: string): string {
+  return `csp::${settingId}`;
+}
+
+function upsertAdmx(
   s: Record<string, ConfiguredPolicy>,
   admxId: string,
   policyName: string,
@@ -73,10 +91,26 @@ function upsert(
   );
 }
 
+function upsertCsp(
+  s: Record<string, ConfiguredCsp>,
+  settingId: string
+): ConfiguredCsp {
+  const existing = s[settingId];
+  if (existing) return existing;
+  const setting = getCspSetting(settingId);
+  return {
+    settingId,
+    scope: defaultCspScope(setting?.scope ?? "Device"),
+    value: undefined,
+    apply: false,
+  };
+}
+
 export const useAdmxStore = create<AdmxStoreState>((set) => ({
   files: [],
   configured: {},
-  selectedPolicyKey: undefined,
+  configuredCsp: {},
+  selectedKey: undefined,
 
   addFile: (file) =>
     set((s) => ({
@@ -91,22 +125,24 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
       return {
         files: s.files.filter((f) => f.id !== id),
         configured: remainingConfigured,
-        selectedPolicyKey: s.selectedPolicyKey?.startsWith(`${id}::`)
+        selectedKey: s.selectedKey?.startsWith(`admx::${id}::`)
           ? undefined
-          : s.selectedPolicyKey,
+          : s.selectedKey,
       };
     }),
 
   clearFiles: () =>
-    set({ files: [], configured: {}, selectedPolicyKey: undefined }),
+    set({ files: [], configured: {}, selectedKey: undefined }),
 
   selectPolicy: (admxId, policyName) =>
-    set({ selectedPolicyKey: policyKey(admxId, policyName) }),
+    set({ selectedKey: policyKey(admxId, policyName) }),
+
+  selectCsp: (settingId) => set({ selectedKey: cspKey(settingId) }),
 
   setPolicyState: (admxId, policyName, state, cls) =>
     set((s) => {
       const key = policyKey(admxId, policyName);
-      const existing = upsert(s.configured, admxId, policyName, cls);
+      const existing = upsertAdmx(s.configured, admxId, policyName, cls);
       return {
         configured: {
           ...s.configured,
@@ -118,7 +154,7 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
   setPolicyScope: (admxId, policyName, scope, cls) =>
     set((s) => {
       const key = policyKey(admxId, policyName);
-      const existing = upsert(s.configured, admxId, policyName, cls);
+      const existing = upsertAdmx(s.configured, admxId, policyName, cls);
       return {
         configured: {
           ...s.configured,
@@ -130,7 +166,7 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
   setElementValue: (admxId, policyName, elementId, value, cls) =>
     set((s) => {
       const key = policyKey(admxId, policyName);
-      const existing = upsert(s.configured, admxId, policyName, cls);
+      const existing = upsertAdmx(s.configured, admxId, policyName, cls);
       return {
         configured: {
           ...s.configured,
@@ -146,11 +182,44 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
   setApply: (admxId, policyName, apply, cls) =>
     set((s) => {
       const key = policyKey(admxId, policyName);
-      const existing = upsert(s.configured, admxId, policyName, cls);
+      const existing = upsertAdmx(s.configured, admxId, policyName, cls);
       return {
         configured: {
           ...s.configured,
           [key]: { ...existing, apply },
+        },
+      };
+    }),
+
+  setCspValue: (settingId, value) =>
+    set((s) => {
+      const existing = upsertCsp(s.configuredCsp, settingId);
+      return {
+        configuredCsp: {
+          ...s.configuredCsp,
+          [settingId]: { ...existing, value, apply: true },
+        },
+      };
+    }),
+
+  setCspScope: (settingId, scope) =>
+    set((s) => {
+      const existing = upsertCsp(s.configuredCsp, settingId);
+      return {
+        configuredCsp: {
+          ...s.configuredCsp,
+          [settingId]: { ...existing, scope, apply: true },
+        },
+      };
+    }),
+
+  setCspApply: (settingId, apply) =>
+    set((s) => {
+      const existing = upsertCsp(s.configuredCsp, settingId);
+      return {
+        configuredCsp: {
+          ...s.configuredCsp,
+          [settingId]: { ...existing, apply },
         },
       };
     }),

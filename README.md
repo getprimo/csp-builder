@@ -5,8 +5,11 @@ A client-only web demo that:
 1. Ingests one or more ADMX files (with optional ADML labels).
 2. Filters **CSP-ingestable** (ADMX-backed) policies, with a rejection reason
    for each one that doesn't pass.
-3. Provides a dynamic editor to configure the retained policies.
-4. Exports the configuration as **SyncML** ready to push via an MDM.
+3. Bundles the full **native Policy CSP catalog** (~3,000 settings parsed from
+   Microsoft's official DDF XML) as sibling groups in the same list.
+4. Provides a dynamic editor (ADMX Apply/Enable/Disable + per-element inputs,
+   or CSP value input per format).
+5. Exports the configuration as **SyncML** ready to push via an MDM.
 
 Stack: React 19 · TypeScript · Vite · TailwindCSS · fast-xml-parser · Zustand ·
 Radix/shadcn components · react-dropzone.
@@ -39,6 +42,25 @@ The file inlines JS, CSS, favicon, and **all sample ADMX** (Chrome, Edge,
 Firefox, Office, OneDrive, Adobe, etc.). It opens directly via `file://` or
 can be emailed, dropped on a network share, served static — no server or
 runtime fetch required.
+
+### Native Policy CSP catalog
+
+Alongside the ADMX uploads, the app bundles the entire Microsoft Policy CSP
+catalog — ~3,000 settings across 260+ areas — generated from the official DDF
+XML.
+
+- **Source**: [DDFv2 Feb 2026](https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf)
+  zip (committed at `scripts/csp-ddf/`).
+- **Build**: `npm run build:csp-catalog` reads the zip, walks every area DDF,
+  and writes `src/lib/csp-native/catalog.json` (~1.5 MB) — committed so the
+  regular build doesn't re-parse the DDF.
+- **UI**: each Policy CSP area appears as a group (with a shield icon) next
+  to the ADMX groups in the unified list. Search spans both, the Apply
+  switch/scope radios work the same, and the export pipeline emits both
+  command types.
+- **Scope**: areas that ship under both `./Device/Vendor/MSFT/Policy/Config`
+  and `./User/…` get a `scope=Both` editor toggle; the rest are locked to
+  Device or User.
 
 ### Pre-filled samples
 

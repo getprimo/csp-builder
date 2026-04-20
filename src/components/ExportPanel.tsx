@@ -22,12 +22,13 @@ import { buildSyncML, EXPORT_MODES, type ExportMode } from "@/lib/csp/syncml";
 export function ExportPanel() {
   const files = useAdmxStore((s) => s.files);
   const configured = useAdmxStore((s) => s.configured);
+  const configuredCsp = useAdmxStore((s) => s.configuredCsp);
   const [mode, setMode] = useState<ExportMode>("fleetdm");
   const [copied, setCopied] = useState(false);
 
   const xml = useMemo(
-    () => buildSyncML(files, configured, { mode }),
-    [files, configured, mode]
+    () => buildSyncML(files, configured, configuredCsp, { mode }),
+    [files, configured, configuredCsp, mode]
   );
 
   const applied = Object.values(configured).filter((c) => c.apply);
@@ -35,6 +36,9 @@ export function ExportPanel() {
     (c) => c.state !== "notConfigured"
   ).length;
   const deleteCount = applied.filter((c) => c.state === "notConfigured").length;
+  const cspApplyCount = Object.values(configuredCsp).filter(
+    (c) => c.apply
+  ).length;
 
   const selectedMode = EXPORT_MODES.find((m) => m.id === mode)!;
 
@@ -66,8 +70,8 @@ export function ExportPanel() {
           <FileJson className="h-5 w-5" /> Export
         </CardTitle>
         <CardDescription>
-          {configuredCount} policies to apply · {deleteCount} to reset ·{" "}
-          {files.length} ADMX
+          {configuredCount} ADMX · {cspApplyCount} CSP · {deleteCount} reset ·{" "}
+          {files.length} ADMX files loaded
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">

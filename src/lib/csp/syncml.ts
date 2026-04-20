@@ -4,6 +4,13 @@ import type {
   ConfiguredPolicy,
   PolicyDefinition,
 } from "@/lib/admx/types";
+import type { ConfiguredCsp } from "@/lib/csp-native/types";
+import { getCspSetting } from "@/lib/csp-native/catalog";
+import {
+  cspDataPayload,
+  cspLocUri,
+  defaultCspValue,
+} from "@/lib/csp-native/encoder";
 import { buildPolicyPayload, xmlEscape } from "./encoder";
 
 export type ExportMode =
@@ -108,7 +115,7 @@ function ingestionUri(file: AdmxFile): string {
 interface CommandArgs {
   cmdId: number;
   locUri: string;
-  format: "chr" | "xml";
+  format: string;
   data?: string;
   kind: "Replace" | "Delete";
   dataIsCData?: boolean;
@@ -139,6 +146,7 @@ function commandXml(args: CommandArgs): string {
 export function buildSyncML(
   files: AdmxFile[],
   configured: Record<string, ConfiguredPolicy>,
+  configuredCsp: Record<string, ConfiguredCsp> = {},
   opts: SyncMLOptions = {}
 ): string {
   const mode: ExportMode = opts.mode ?? "fleetdm";
@@ -202,6 +210,25 @@ export function buildSyncML(
         locUri: uri,
         format: "chr",
         data: xmlEscape(payload),
+        kind: "Replace",
+      })
+    );
+  }
+
+  // Native CSP commands.
+  for (const cfg of Object.values(configuredCsp)) {
+    if (!cfg.apply) continue;
+    const setting = getCspSetting(cfg.settingId);
+    if (!setting) continue;
+    const value = cfg.value ?? defaultCspValue(setting);
+    const uri = cspLocUri(setting, cfg.scope);
+    const { format, data } = cspDataPayload(value, setting);
+    parts.push(
+      commandXml({
+        cmdId: cmdId++,
+        locUri: uri,
+        format,
+        data,
         kind: "Replace",
       })
     );

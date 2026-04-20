@@ -1,0 +1,1153 @@
+<policyDefinitions revision="1.0" schemaVersion="1.0" xmlns="http://www.microsoft.com/GroupPolicy/PolicyDefinitions">
+  <policyNamespaces>
+    <target namespace="Microsoft.Policies.Update" prefix="update"/>
+    <using prefix="windows" namespace="Microsoft.Policies.Windows" />
+  </policyNamespaces>
+  <supersededAdm fileName="EdgeUpdate.adm" />
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="Sup_GoogleUpdate1_2_145_5"
+          displayName="$(string.Sup_GoogleUpdate1_2_145_5)" />
+      <definition name="Sup_GoogleUpdate1_3_21_81"
+          displayName="$(string.Sup_GoogleUpdate1_3_21_81)" />
+      <definition name="Sup_GoogleUpdate1_3_26_0"
+          displayName="$(string.Sup_GoogleUpdate1_3_26_0)" />
+      <definition name="Sup_GoogleUpdate1_3_33_5"
+          displayName="$(string.Sup_GoogleUpdate1_3_33_5)" />
+      <definition name="Sup_GoogleUpdate1_3_34_3"
+          displayName="$(string.Sup_GoogleUpdate1_3_34_3)" />
+      <definition name="Sup_EdgeUpdate1_3_119_43"
+          displayName="$(string.Sup_EdgeUpdate1_3_119_43)" />
+      <definition name="Sup_EdgeUpdate1_3_127_1"
+          displayName="$(string.Sup_EdgeUpdate1_3_127_1)" />
+      <definition name="Sup_EdgeUpdate1_3_128_0"
+          displayName="$(string.Sup_EdgeUpdate1_3_128_0)" />
+      <definition name="Sup_EdgeUpdate1_3_133_3"
+          displayName="$(string.Sup_EdgeUpdate1_3_133_3)" />
+      <definition name="Sup_EdgeUpdate1_3_145_1"
+          displayName="$(string.Sup_EdgeUpdate1_3_145_1)" />
+      <definition name="Sup_EdgeUpdate1_3_147_1"
+          displayName="$(string.Sup_EdgeUpdate1_3_147_1)" />
+      <definition name="Sup_EdgeUpdate1_3_155_1"
+          displayName="$(string.Sup_EdgeUpdate1_3_155_1)" />
+      <definition name="Sup_EdgeUpdate1_3_168_21"
+          displayName="$(string.Sup_EdgeUpdate1_3_168_21)" />
+      <definition name="Sup_EdgeUpdate1_3_179_5"
+          displayName="$(string.Sup_EdgeUpdate1_3_179_5)" />
+      <definition name="Sup_EdgeUpdate1_3_193_5"
+          displayName="$(string.Sup_EdgeUpdate1_3_193_5)" />
+      <definition name="Sup_EdgeUpdate1_3_221_3"
+          displayName="$(string.Sup_EdgeUpdate1_3_221_3)" />
+    </definitions>
+  </supportedOn>
+
+  <categories>
+    <category name="Cat_EdgeUpdate" displayName="$(string.Cat_GoogleUpdate)"
+        explainText="$(string.Explain_GoogleUpdate)">
+    </category>
+    <category name="Cat_Preferences" displayName="$(string.Cat_Preferences)"
+        explainText="$(string.Explain_Preferences)">
+      <parentCategory ref="Cat_EdgeUpdate" />
+    </category>
+    <category name="Cat_ProxyServer" displayName="$(string.Cat_ProxyServer)">
+      <parentCategory ref="Cat_EdgeUpdate" />
+    </category>
+    <category name="Cat_Applications" displayName="$(string.Cat_Applications)"
+        explainText="$(string.Explain_Applications)">
+      <parentCategory ref="Cat_EdgeUpdate" />
+    </category>
+    <category name="Cat_WebView" displayName="$(string.Cat_WebView)"
+        explainText="$(string.Explain_WebView)">
+      <parentCategory ref="Cat_EdgeUpdate" />
+    </category>
+
+    <category name="Cat_MicrosoftEdge"
+        displayName="$(string.Cat_MicrosoftEdge)">
+      <parentCategory ref="Cat_Applications" />
+    </category>
+    <category name="Cat_MicrosoftEdgeBeta"
+        displayName="$(string.Cat_MicrosoftEdgeBeta)">
+      <parentCategory ref="Cat_Applications" />
+    </category>
+    <category name="Cat_MicrosoftEdgeDev"
+        displayName="$(string.Cat_MicrosoftEdgeDev)">
+      <parentCategory ref="Cat_Applications" />
+    </category>
+    <category name="Cat_MicrosoftEdgeCanary"
+        displayName="$(string.Cat_MicrosoftEdgeCanary)">
+      <parentCategory ref="Cat_Applications" />
+    </category>
+  </categories>
+
+  <policies>
+    <policy name="Pol_AutoUpdateCheckPeriod" class="Machine"
+        displayName="$(string.Pol_AutoUpdateCheckPeriod)"
+        explainText="$(string.Explain_AutoUpdateCheckPeriod)"
+        presentation="$(presentation.Pol_AutoUpdateCheckPeriod)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_Preferences" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <decimal id="Part_AutoUpdateCheckPeriod"
+            key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="AutoUpdateCheckPeriodMinutes"
+            required="true" minValue="0" maxValue="43200" />
+      </elements>
+    </policy>
+    <policy name="Pol_UpdateCheckSuppressedPeriod" class="Machine"
+        displayName="$(string.Pol_UpdateCheckSuppressedPeriod)"
+        explainText="$(string.Explain_UpdateCheckSuppressedPeriod)"
+        presentation="$(presentation.Pol_UpdateCheckSuppressedPeriod)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_Preferences" />
+      <supportedOn ref="Sup_GoogleUpdate1_3_33_5" />
+      <elements>
+        <decimal id="Part_UpdateCheckSuppressedStartHour"
+            key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="UpdatesSuppressedStartHour"
+            required="true" minValue="0" maxValue="23" />
+        <decimal id="Part_UpdateCheckSuppressedStartMin"
+            key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="UpdatesSuppressedStartMin"
+            required="true" minValue="0" maxValue="59" />
+        <decimal id="Part_UpdateCheckSuppressedDurationMin"
+            key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="UpdatesSuppressedDurationMin"
+            required="true" minValue="1" maxValue="960" />
+      </elements>
+    </policy>
+    <policy name="Pol_ProxyMode" class="Machine"
+        displayName="$(string.Pol_ProxyMode)"
+        explainText="$(string.Explain_ProxyMode)"
+        presentation="$(presentation.Pol_ProxyMode)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_ProxyServer" />
+      <supportedOn ref="Sup_GoogleUpdate1_3_21_81" />
+      <elements>
+        <enum id="Part_ProxyMode" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="ProxyMode">
+          <item displayName="$(string.ProxyDisabled_DropDown)">
+            <value>
+              <string>direct</string>
+            </value>
+          </item>
+          <item displayName="$(string.ProxyAutoDetect_DropDown)">
+            <value>
+              <string>auto_detect</string>
+            </value>
+          </item>
+          <item displayName="$(string.ProxyPacScript_DropDown)">
+            <value>
+              <string>pac_script</string>
+            </value>
+          </item>
+          <item displayName="$(string.ProxyFixedServers_DropDown)">
+            <value>
+              <string>fixed_servers</string>
+            </value>
+          </item>
+          <item displayName="$(string.ProxyUseSystem_DropDown)">
+            <value>
+              <string>system</string>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="Pol_ProxyServer" class="Machine"
+        displayName="$(string.Pol_ProxyServer)"
+        explainText="$(string.Explain_ProxyServer)"
+        presentation="$(presentation.Pol_ProxyServer)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_ProxyServer" />
+      <supportedOn ref="Sup_GoogleUpdate1_3_21_81" />
+      <elements>
+        <text id="Part_ProxyServer" valueName="ProxyServer" />
+      </elements>
+    </policy>
+    <policy name="Pol_ProxyPacUrl" class="Machine"
+        displayName="$(string.Pol_ProxyPacUrl)"
+        explainText="$(string.Explain_ProxyPacUrl)"
+        presentation="$(presentation.Pol_ProxyPacUrl)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_ProxyServer" />
+      <supportedOn ref="Sup_GoogleUpdate1_3_21_81" />
+      <elements>
+        <text id="Part_ProxyPacUrl" valueName="ProxyPacUrl" />
+      </elements>
+    </policy>
+
+    <policy name="Pol_DefaultAllowInstallation" class="Machine"
+        displayName="$(string.Pol_DefaultAllowInstallation)"
+        explainText="$(string.Explain_DefaultAllowInstallation)"
+        presentation="$(presentation.Pol_DefaultAllowInstallation)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_Applications" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_InstallPolicy" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="InstallDefault" required="true">
+          <item displayName="$(string.Name_InstallsEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="Pol_DefaultUpdatePolicy" class="Machine"
+        displayName="$(string.Pol_DefaultUpdatePolicy)"
+        explainText="$(string.Explain_DefaultUpdatePolicy)"
+        presentation="$(presentation.Pol_DefaultUpdatePolicy)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_Applications" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_UpdatePolicy" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="UpdateDefault" required="true">
+          <item displayName="$(string.Name_UpdatesEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ManualUpdatesOnly)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_AutomaticUpdatesOnly)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UpdatesDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="Pol_AllowSideBySideExperience" class="Machine"
+        displayName="$(string.Pol_AllowSideBySideExperience)"
+        explainText="$(string.Explain_AllowSideBySideExperience)"
+        presentation="$(presentation.Pol_AllowSideBySideExperience)"
+        key="Software\Policies\Microsoft\EdgeUpdate" valueName="Allowsxs">
+      <parentCategory ref="Cat_Applications" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="Pol_DefaultCreateDesktopShortcut" class="Machine"
+        displayName="$(string.Pol_DefaultCreateDesktopShortcut)"
+        explainText="$(string.Explain_DefaultCreateDesktopShortcut)"
+        presentation="$(presentation.Pol_DefaultCreateDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="CreateDesktopShortcutDefault">
+      <parentCategory ref="Cat_Applications" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_128_0" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="Pol_DefaultMeteredUpdates" class="Machine"
+        displayName="$(string.Pol_DefaultMeteredUpdates)"
+        explainText="$(string.Explain_DefaultMeteredUpdatesPolicy)"
+        presentation="$(presentation.Pol_DefaultMeteredUpdates)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_Applications" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_179_5" />
+      <elements>
+        <enum id="Part_DefaultMeteredUpdatesPolicy"
+             valueName="MeteredUpdatesDefault" required="true">
+          <item displayName="$(string.Name_DefaultMeteredUpdatesDisabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DefaultMeteredUpdatesEnabled)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_DefaultRemoveDesktopShortcut" class="Machine"
+        displayName="$(string.Pol_DefaultRemoveDesktopShortcut)"
+        explainText="$(string.Explain_DefaultRemoveDesktopShortcut)"
+        presentation="$(presentation.Pol_DefaultRemoveDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RemoveDesktopShortcutDefault">
+      <parentCategory ref="Cat_Applications" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_155_1" />
+      <elements>
+        <enum id="Part_RemoveDesktopShortcut" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="RemoveDesktopShortcutDefault" required="true">
+          <item displayName="$(string.Name_DeleteSystemDesktopShortcuts)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DeleteAllDesktopShortcuts)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DesktopShortcutDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_ECSControl" class="Machine"
+        displayName="$(string.Pol_ECSControl)"
+        explainText="$(string.Explain_ECSControl)"
+        presentation="$(presentation.Pol_ECSControl)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_EdgeUpdate" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_145_1" />
+      <elements>
+        <enum id="Part_ECSControl" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="UpdaterExperimentationAndConfigurationServiceControl" required="true">
+          <item displayName="$(string.Name_ECSCommunicationDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ECSCommunicationEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="Pol_AllowInstallationMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_AllowInstallation)"
+        explainText="$(string.Explain_InstallMicrosoftEdge)"
+        presentation="$(presentation.Pol_AllowInstallation)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_InstallPolicy"
+             valueName="Install{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" required="true">
+          <item displayName="$(string.Name_InstallsEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          
+          <item displayName="$(string.Name_ForceInstallsMachine)">
+            <value>
+              <decimal value="5" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsEnabledMachineOnly)">
+            <value>
+              <decimal value="4" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ForceInstallsUser)">
+            <value>
+              <decimal value="6" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_UpdatePolicyMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_UpdatePolicy)"
+        explainText="$(string.Explain_AutoUpdateMicrosoftEdge)"
+        presentation="$(presentation.Pol_UpdatePolicy)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_UpdatePolicy"
+             valueName="Update{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" required="true">
+          <item displayName="$(string.Name_UpdatesEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ManualUpdatesOnly)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_AutomaticUpdatesOnly)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UpdatesDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_CreateDesktopShortcutMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_CreateDesktopShortcut)"
+        explainText="$(string.Explain_CreateDesktopShortcut)"
+        presentation="$(presentation.Pol_CreateDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="CreateDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_128_0" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_RemoveDesktopShortcutMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_RemoveDesktopShortcut)"
+        explainText="$(string.Explain_RemoveDesktopShortcut)"
+        presentation="$(presentation.Pol_RemoveDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RemoveDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_155_1" />
+      <elements>
+        <enum id="Part_RemoveDesktopShortcut" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="RemoveDesktopShortcut{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" required="true">
+          <item displayName="$(string.Name_DeleteSystemDesktopShortcuts)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DeleteAllDesktopShortcuts)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DesktopShortcutDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_TargetVersionPrefixMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_TargetVersionPrefix)"
+        explainText="$(string.Explain_TargetVersionPrefixMicrosoftEdge)"
+        presentation="$(presentation.Pol_TargetVersionPrefix)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_119_43" />
+      <elements>
+        <text id="Part_TargetVersionPrefix"
+            valueName="TargetVersionPrefix{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" />
+      </elements>
+    </policy>
+
+    <policy name="Pol_RollbackToTargetVersionMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_RollbackToTargetVersion)"
+        explainText="$(string.Explain_RollbackToTargetVersionMicrosoftEdge)"
+        presentation="$(presentation.Pol_RollbackToTargetVersion)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RollbackToTargetVersion{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_133_3" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_MeteredUpdatesMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_MeteredUpdates)"
+        explainText="$(string.Explain_MeteredUpdatesPolicyMicrosoftEdge)"
+        presentation="$(presentation.Pol_MeteredUpdates)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="MeteredUpdates{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_179_5" />
+      <elements>
+        <enum id="Part_MeteredUpdatesPolicy"
+             valueName="MeteredUpdates{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" required="true">
+          <item displayName="$(string.Name_MeteredUpdatesDisabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_MeteredUpdatesEnabled)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_TargetChannelMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_TargetChannel)"
+        explainText="$(string.Explain_TargetChannelMicrosoftEdge)"
+        presentation="$(presentation.Pol_TargetChannel)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_147_1" />
+      <elements>
+        <enum id="Part_TargetChannel" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="TargetChannel{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+          <item displayName="$(string.TargetChannel_Stable_DropDown)">
+            <value>
+              <string>stable</string>
+            </value>
+          </item>
+          <item displayName="$(string.TargetChannel_Beta_DropDown)">
+            <value>
+              <string>beta</string>
+            </value>
+          </item>
+          <item displayName="$(string.TargetChannel_Dev_DropDown)">
+            <value>
+              <string>dev</string>
+            </value>
+          </item>
+          <item displayName="$(string.TargetChannel_Extended_Stable_DropDown)">
+            <value>
+              <string>extended</string>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_EdgePreviewMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_EdgePreview)"
+        explainText="$(string.Explain_EdgePolicyMicrosoftEdge)"
+        presentation="$(presentation.Pol_EdgePreview)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="EdgePreview{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_168_21" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_EdgePreviewEnrollmentTypeMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_EdgePreviewEnrollmentType)"
+        explainText="$(string.Explain_EdgePreviewEnrollmentTypeMicrosoftEdge)"
+        presentation="$(presentation.Pol_EdgePreviewEnrollmentType)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="EdgePreviewEnrollmentType{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_221_3" />
+      <elements>
+        <enum id="Part_EdgePreviewEnrollmentType" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="EdgePreviewEnrollmentType{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" required="true">
+          <item displayName="$(string.Name_EdgePreviewEnrollmentTypeAllowOptOut)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_EdgePreviewEnrollmentTypeRequired)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_UninstallEdgeMicrosoftEdge" class="Machine"
+        displayName="$(string.Pol_UninstallEdge)"
+        explainText="$(string.Explain_UninstallEdgeMicrosoftEdge)"
+        presentation="$(presentation.Pol_UninstallEdge)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="Uninstall{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}">
+      <parentCategory ref="Cat_MicrosoftEdge" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_193_5" />
+      <elements>
+        <enum id="Part_UninstallEdgePolicy"
+             valueName="Uninstall{56EB18F8-B008-4CBD-B6D2-8C97FE7E9062}" required="true">
+          <item displayName="$(string.Name_UninstallEdgeEnabledAndKeepData)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UninstallEdgeEnabledAndDeleteData)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UninstallEdgeDisabled)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UninstallEdgeNotConfigured)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_AllowInstallationMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_AllowInstallation)"
+        explainText="$(string.Explain_InstallMicrosoftEdgeBeta)"
+        presentation="$(presentation.Pol_AllowInstallation)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_InstallPolicy"
+             valueName="Install{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" required="true">
+          <item displayName="$(string.Name_InstallsEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          
+          <item displayName="$(string.Name_ForceInstallsMachine)">
+            <value>
+              <decimal value="5" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsEnabledMachineOnly)">
+            <value>
+              <decimal value="4" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ForceInstallsUser)">
+            <value>
+              <decimal value="6" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_UpdatePolicyMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_UpdatePolicy)"
+        explainText="$(string.Explain_AutoUpdateMicrosoftEdgeBeta)"
+        presentation="$(presentation.Pol_UpdatePolicy)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_UpdatePolicy"
+             valueName="Update{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" required="true">
+          <item displayName="$(string.Name_UpdatesEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ManualUpdatesOnly)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_AutomaticUpdatesOnly)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UpdatesDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_CreateDesktopShortcutMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_CreateDesktopShortcut)"
+        explainText="$(string.Explain_CreateDesktopShortcut)"
+        presentation="$(presentation.Pol_CreateDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="CreateDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_128_0" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_RemoveDesktopShortcutMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_RemoveDesktopShortcut)"
+        explainText="$(string.Explain_RemoveDesktopShortcut)"
+        presentation="$(presentation.Pol_RemoveDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RemoveDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_155_1" />
+      <elements>
+        <enum id="Part_RemoveDesktopShortcut" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="RemoveDesktopShortcut{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" required="true">
+          <item displayName="$(string.Name_DeleteSystemDesktopShortcuts)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DeleteAllDesktopShortcuts)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DesktopShortcutDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_TargetVersionPrefixMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_TargetVersionPrefix)"
+        explainText="$(string.Explain_TargetVersionPrefixMicrosoftEdgeBeta)"
+        presentation="$(presentation.Pol_TargetVersionPrefix)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_119_43" />
+      <elements>
+        <text id="Part_TargetVersionPrefix"
+            valueName="TargetVersionPrefix{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" />
+      </elements>
+    </policy>
+
+    <policy name="Pol_RollbackToTargetVersionMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_RollbackToTargetVersion)"
+        explainText="$(string.Explain_RollbackToTargetVersionMicrosoftEdgeBeta)"
+        presentation="$(presentation.Pol_RollbackToTargetVersion)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RollbackToTargetVersion{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_133_3" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_MeteredUpdatesMicrosoftEdgeBeta" class="Machine"
+        displayName="$(string.Pol_MeteredUpdates)"
+        explainText="$(string.Explain_MeteredUpdatesPolicyMicrosoftEdgeBeta)"
+        presentation="$(presentation.Pol_MeteredUpdates)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="MeteredUpdates{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}">
+      <parentCategory ref="Cat_MicrosoftEdgeBeta" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_179_5" />
+      <elements>
+        <enum id="Part_MeteredUpdatesPolicy"
+             valueName="MeteredUpdates{2CD8A007-E189-409D-A2C8-9AF4EF3C72AA}" required="true">
+          <item displayName="$(string.Name_MeteredUpdatesDisabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_MeteredUpdatesEnabled)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_AllowInstallationMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_AllowInstallation)"
+        explainText="$(string.Explain_InstallMicrosoftEdgeDev)"
+        presentation="$(presentation.Pol_AllowInstallation)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_InstallPolicy"
+             valueName="Install{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" required="true">
+          <item displayName="$(string.Name_InstallsEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          
+          <item displayName="$(string.Name_ForceInstallsMachine)">
+            <value>
+              <decimal value="5" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsEnabledMachineOnly)">
+            <value>
+              <decimal value="4" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ForceInstallsUser)">
+            <value>
+              <decimal value="6" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_UpdatePolicyMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_UpdatePolicy)"
+        explainText="$(string.Explain_AutoUpdateMicrosoftEdgeDev)"
+        presentation="$(presentation.Pol_UpdatePolicy)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_UpdatePolicy"
+             valueName="Update{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" required="true">
+          <item displayName="$(string.Name_UpdatesEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ManualUpdatesOnly)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_AutomaticUpdatesOnly)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UpdatesDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_CreateDesktopShortcutMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_CreateDesktopShortcut)"
+        explainText="$(string.Explain_CreateDesktopShortcut)"
+        presentation="$(presentation.Pol_CreateDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="CreateDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_128_0" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_RemoveDesktopShortcutMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_RemoveDesktopShortcut)"
+        explainText="$(string.Explain_RemoveDesktopShortcut)"
+        presentation="$(presentation.Pol_RemoveDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RemoveDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_155_1" />
+      <elements>
+        <enum id="Part_RemoveDesktopShortcut" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="RemoveDesktopShortcut{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" required="true">
+          <item displayName="$(string.Name_DeleteSystemDesktopShortcuts)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DeleteAllDesktopShortcuts)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DesktopShortcutDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_TargetVersionPrefixMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_TargetVersionPrefix)"
+        explainText="$(string.Explain_TargetVersionPrefixMicrosoftEdgeDev)"
+        presentation="$(presentation.Pol_TargetVersionPrefix)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_119_43" />
+      <elements>
+        <text id="Part_TargetVersionPrefix"
+            valueName="TargetVersionPrefix{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" />
+      </elements>
+    </policy>
+
+    <policy name="Pol_RollbackToTargetVersionMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_RollbackToTargetVersion)"
+        explainText="$(string.Explain_RollbackToTargetVersionMicrosoftEdgeDev)"
+        presentation="$(presentation.Pol_RollbackToTargetVersion)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RollbackToTargetVersion{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_133_3" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_MeteredUpdatesMicrosoftEdgeDev" class="Machine"
+        displayName="$(string.Pol_MeteredUpdates)"
+        explainText="$(string.Explain_MeteredUpdatesPolicyMicrosoftEdgeDev)"
+        presentation="$(presentation.Pol_MeteredUpdates)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="MeteredUpdates{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}">
+      <parentCategory ref="Cat_MicrosoftEdgeDev" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_179_5" />
+      <elements>
+        <enum id="Part_MeteredUpdatesPolicy"
+             valueName="MeteredUpdates{0D50BFEC-CD6A-4F9A-964C-C7416E3ACB10}" required="true">
+          <item displayName="$(string.Name_MeteredUpdatesDisabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_MeteredUpdatesEnabled)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_AllowInstallationMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_AllowInstallation)"
+        explainText="$(string.Explain_InstallMicrosoftEdgeCanary)"
+        presentation="$(presentation.Pol_AllowInstallation)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_InstallPolicy"
+             valueName="Install{65C35B14-6C1D-4122-AC46-7148CC9D6497}" required="true">
+          <item displayName="$(string.Name_InstallsEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          
+          <item displayName="$(string.Name_ForceInstallsUser)">
+            <value>
+              <decimal value="6" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_UpdatePolicyMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_UpdatePolicy)"
+        explainText="$(string.Explain_AutoUpdateMicrosoftEdgeCanary)"
+        presentation="$(presentation.Pol_UpdatePolicy)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_GoogleUpdate1_2_145_5" />
+      <elements>
+        <enum id="Part_UpdatePolicy"
+             valueName="Update{65C35B14-6C1D-4122-AC46-7148CC9D6497}" required="true">
+          <item displayName="$(string.Name_UpdatesEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_ManualUpdatesOnly)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_AutomaticUpdatesOnly)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UpdatesDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_CreateDesktopShortcutMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_CreateDesktopShortcut)"
+        explainText="$(string.Explain_CreateDesktopShortcut)"
+        presentation="$(presentation.Pol_CreateDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="CreateDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_128_0" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_RemoveDesktopShortcutMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_RemoveDesktopShortcut)"
+        explainText="$(string.Explain_RemoveDesktopShortcut)"
+        presentation="$(presentation.Pol_RemoveDesktopShortcut)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RemoveDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_155_1" />
+      <elements>
+        <enum id="Part_RemoveDesktopShortcut" key="Software\Policies\Microsoft\EdgeUpdate"
+            valueName="RemoveDesktopShortcut{65C35B14-6C1D-4122-AC46-7148CC9D6497}" required="true">
+          <item displayName="$(string.Name_DeleteSystemDesktopShortcuts)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DeleteAllDesktopShortcuts)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_DesktopShortcutDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_TargetVersionPrefixMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_TargetVersionPrefix)"
+        explainText="$(string.Explain_TargetVersionPrefixMicrosoftEdgeCanary)"
+        presentation="$(presentation.Pol_TargetVersionPrefix)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_119_43" />
+      <elements>
+        <text id="Part_TargetVersionPrefix"
+            valueName="TargetVersionPrefix{65C35B14-6C1D-4122-AC46-7148CC9D6497}" />
+      </elements>
+    </policy>
+
+    <policy name="Pol_RollbackToTargetVersionMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_RollbackToTargetVersion)"
+        explainText="$(string.Explain_RollbackToTargetVersionMicrosoftEdgeCanary)"
+        presentation="$(presentation.Pol_RollbackToTargetVersion)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="RollbackToTargetVersion{65C35B14-6C1D-4122-AC46-7148CC9D6497}">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_133_3" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="Pol_MeteredUpdatesMicrosoftEdgeCanary" class="Machine"
+        displayName="$(string.Pol_MeteredUpdates)"
+        explainText="$(string.Explain_MeteredUpdatesPolicyMicrosoftEdgeCanary)"
+        presentation="$(presentation.Pol_MeteredUpdates)"
+        key="Software\Policies\Microsoft\EdgeUpdate"
+        valueName="MeteredUpdates{65C35B14-6C1D-4122-AC46-7148CC9D6497}">
+      <parentCategory ref="Cat_MicrosoftEdgeCanary" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_179_5" />
+      <elements>
+        <enum id="Part_MeteredUpdatesPolicy"
+             valueName="MeteredUpdates{65C35B14-6C1D-4122-AC46-7148CC9D6497}" required="true">
+          <item displayName="$(string.Name_MeteredUpdatesDisabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_MeteredUpdatesEnabled)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+
+    <policy name="Pol_AllowInstallationMicrosoftEdgeWebView" class="Machine"
+        displayName="$(string.Pol_AllowInstallation)"
+        explainText="$(string.Explain_WebView_Install)"
+        presentation="$(presentation.Pol_AllowInstallation)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_WebView" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_127_1" />
+      <elements>
+        <enum id="Part_InstallPolicy"
+             valueName="Install{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" required="true">
+          <item displayName="$(string.Name_InstallsEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          
+          <item displayName="$(string.Name_ForceInstallsMachine)">
+            <value>
+              <decimal value="5" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_InstallsEnabledMachineOnly)">
+            <value>
+              <decimal value="4" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="Pol_UpdatePolicyMicrosoftEdgeWebView" class="Machine"
+        displayName="$(string.Pol_UpdatePolicy)"
+        explainText="$(string.Explain_WebView_AutoUpdate)"
+        presentation="$(presentation.Pol_UpdatePolicy)"
+        key="Software\Policies\Microsoft\EdgeUpdate">
+      <parentCategory ref="Cat_WebView" />
+      <supportedOn ref="Sup_EdgeUpdate1_3_127_1" />
+      <elements>
+        <enum id="Part_UpdatePolicy"
+             valueName="Update{F3017226-FE2A-4295-8BDF-00C3A9A7E4C5}" required="true">
+          <item displayName="$(string.Name_UpdatesEnabled)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.Name_UpdatesDisabled)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

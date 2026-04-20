@@ -66,12 +66,20 @@ function App() {
               Discover Primo →
             </a>
             <a
-              href={primoUrl("cta_mdm", "/mdm")}
+              href={primoUrl("cta_mdm", "/product-page/mdm")}
               target="_blank"
               rel="noopener"
               className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent"
             >
               See Primo for MDM
+            </a>
+            <a
+              href={primoUrl("cta_demo", "/request-a-demo")}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent"
+            >
+              Book a demo
             </a>
           </div>
         </section>
@@ -92,7 +100,7 @@ function App() {
             </a>
             {" · "}
             <a
-              href={primoUrl("footer_mdm", "/mdm")}
+              href={primoUrl("footer_mdm", "/product-page/mdm")}
               target="_blank"
               rel="noopener"
               className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
@@ -101,21 +109,21 @@ function App() {
             </a>
             {" · "}
             <a
-              href={primoUrl("footer_onboarding", "/onboarding")}
+              href={primoUrl("footer_pricing", "/pricing")}
               target="_blank"
               rel="noopener"
               className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
             >
-              Onboarding
+              Pricing
             </a>
             {" · "}
             <a
-              href={primoUrl("footer_saas", "/saas")}
+              href={primoUrl("footer_demo", "/request-a-demo")}
               target="_blank"
               rel="noopener"
               className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
             >
-              SaaS
+              Book a demo
             </a>
           </div>
         </div>

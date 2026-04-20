@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://csp-builder.getprimo.com/sitemap.xml

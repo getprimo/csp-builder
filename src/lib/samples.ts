@@ -21,6 +21,12 @@ import wordAdmx from "../samples/word/word16.admx?raw";
 import wordAdml from "../samples/word/en-US/word16.adml?raw";
 import outlookAdmx from "../samples/outlook/outlk16.admx?raw";
 import outlookAdml from "../samples/outlook/en-US/outlk16.adml?raw";
+import braveAdmx from "../samples/brave/brave.admx?raw";
+import braveAdml from "../samples/brave/en-US/brave.adml?raw";
+import wingetAdmx from "../samples/winget/DesktopAppInstaller.admx?raw";
+import wingetAdml from "../samples/winget/en-US/DesktopAppInstaller.adml?raw";
+import fslogixAdmx from "../samples/fslogix/fslogix.admx?raw";
+import fslogixAdml from "../samples/fslogix/en-US/fslogix.adml?raw";
 
 export interface SampleBundle {
   id: string;
@@ -142,5 +148,37 @@ export const SAMPLES: SampleBundle[] = [
     admlContent: outlookAdml,
     source:
       "github.com/iothacker/Microsoft-Office-365-Business-Group-Policy-ADMX-Templates",
+  },
+  {
+    id: "brave",
+    name: "Brave Browser",
+    vendor: "Brave Software",
+    admxFileName: "brave.admx",
+    admlFileName: "brave.adml",
+    admxContent: braveAdmx,
+    admlContent: braveAdml,
+    source:
+      "github.com/brave/brave-browser/releases (official policy_templates.zip)",
+  },
+  {
+    id: "winget",
+    name: "Windows Package Manager (winget)",
+    vendor: "Microsoft",
+    admxFileName: "DesktopAppInstaller.admx",
+    admlFileName: "DesktopAppInstaller.adml",
+    admxContent: wingetAdmx,
+    admlContent: wingetAdml,
+    source:
+      "github.com/microsoft/winget-cli/releases (official DesktopAppInstallerPolicies.zip)",
+  },
+  {
+    id: "fslogix",
+    name: "Microsoft FSLogix",
+    vendor: "Microsoft",
+    admxFileName: "fslogix.admx",
+    admlFileName: "fslogix.adml",
+    admxContent: fslogixAdmx,
+    admlContent: fslogixAdml,
+    source: "aka.ms/fslogix/download (official FSLogix Apps package)",
   },
 ];

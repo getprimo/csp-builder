@@ -89,10 +89,27 @@ npm run build:og-image   # rsvg-convert scripts/og-image.svg → public/og-image
 ### Regenerate the CSP catalog
 
 ```bash
-npm run build:csp-catalog
-# Reads scripts/csp-ddf/DDFv2Feb2026.zip and writes
-# src/lib/csp-native/catalog.json (~1.5 MB, committed)
+npm run fetch:admx-pack    # one-off: mirror the Windows PolicyDefinitions folder
+npm run build:csp-catalog  # parse DDF + ADMX, write src/lib/csp-native/catalog.json
 ```
+
+The catalog is committed (~4.3 MB), so CI/end users never need to run this.
+Maintainers only run it after:
+- refreshing `scripts/csp-ddf/DDFv2Feb2026.zip` (the Microsoft DDF), or
+- refreshing the Windows ADMX mirror (for element schemas on ADMX-backed CSPs).
+
+`fetch:admx-pack` pulls from the community mirror
+[jozefizso/sysvol-centralstore](https://github.com/jozefizso/sysvol-centralstore)
+into `scripts/admx-windows/` (gitignored).
+
+**Prefer the official Microsoft pack** for the freshest policies: download
+[Administrative Templates (.admx) for Windows 11 25H2](https://www.microsoft.com/en-us/download/details.aspx?id=108394)
+(or the newer equivalent), and copy its `PolicyDefinitions/*.admx` +
+`PolicyDefinitions/en-US/*.adml` into `scripts/admx-windows/` (replacing the
+community mirror output). Then run `npm run build:csp-catalog`.
+
+About 1,480 ADMX-backed CSPs get their element schema attached this way; the
+rest fall back to a textarea editor with inline help.
 
 **Stack:** React 19 · TypeScript · Vite · TailwindCSS 3 · shadcn-style components · fast-xml-parser · Zustand · react-dropzone · lucide-react · Radix primitives.
 
@@ -100,29 +117,33 @@ npm run build:csp-catalog
 
 ## Pre-filled ADMX samples
 
-The **"Pre-filled samples"** button loads any combination of 10 ADMX bundles (official sources, UTF-8 normalised for `?raw` bundling):
+The **"Pre-filled samples"** button loads any combination of 13 ADMX bundles (official sources, UTF-8 normalised for `?raw` bundling):
 
-| ID            | Vendor     | Source                                                                    |
-|---------------|------------|---------------------------------------------------------------------------|
-| `chrome`      | Google     | `dl.google.com/.../policy_templates.zip` (official)                       |
-| `edge`        | Microsoft  | `edgeupdates.microsoft.com` — `MicrosoftEdgePolicyTemplates` CAB          |
-| `edge-update` | Microsoft  | same CAB                                                                  |
-| `firefox`     | Mozilla    | `github.com/mozilla/policy-templates` (official release asset)            |
-| `onedrive`    | Microsoft  | `github.com/bastienperez/admx-onedrive` (community mirror)                |
-| `acrobat-dc`  | Adobe      | `github.com/systmworks/Adobe-DC-ADMX` (community template)                |
-| `reader-dc`   | Adobe      | `github.com/nsacyber/Windows-Secure-Host-Baseline`                        |
-| `office`      | Microsoft  | `github.com/iothacker/Microsoft-Office-365-Business-Group-Policy-ADMX…`   |
-| `word`        | Microsoft  | same repo (`word16-365`)                                                  |
-| `outlook`     | Microsoft  | same repo (`outlk16-365`)                                                 |
+| ID            | Vendor           | Source                                                                    |
+|---------------|------------------|---------------------------------------------------------------------------|
+| `chrome`      | Google           | `dl.google.com/.../policy_templates.zip` (official)                       |
+| `edge`        | Microsoft        | `edgeupdates.microsoft.com` — `MicrosoftEdgePolicyTemplates` CAB          |
+| `edge-update` | Microsoft        | same CAB                                                                  |
+| `firefox`     | Mozilla          | `github.com/mozilla/policy-templates` (official release asset)            |
+| `brave`       | Brave Software   | `github.com/brave/brave-browser/releases` (official `policy_templates.zip`) |
+| `onedrive`    | Microsoft        | `github.com/bastienperez/admx-onedrive` (community mirror)                |
+| `acrobat-dc`  | Adobe            | `github.com/systmworks/Adobe-DC-ADMX` (community template)                |
+| `reader-dc`   | Adobe            | `github.com/nsacyber/Windows-Secure-Host-Baseline`                        |
+| `office`      | Microsoft        | `github.com/iothacker/Microsoft-Office-365-Business-Group-Policy-ADMX…`   |
+| `word`        | Microsoft        | same repo (`word16-365`)                                                  |
+| `outlook`     | Microsoft        | same repo (`outlk16-365`)                                                 |
+| `winget`      | Microsoft        | `github.com/microsoft/winget-cli/releases` (DesktopAppInstallerPolicies.zip) |
+| `fslogix`     | Microsoft        | `aka.ms/fslogix/download` (official FSLogix Apps)                         |
 
-With all samples selected, the app loads **≈ 4,000 ADMX policies** of which **≈ 2,400 pass the CSP filter**.
+Selection of sources is inspired by [msfreaks/EvergreenAdmx](https://github.com/msfreaks/EvergreenAdmx), which maintains download URLs for the most-used third-party ADMX templates. With all samples selected, the app loads **≈ 5,500 ADMX policies** of which **≈ 3,200 pass the CSP filter**.
 
 ---
 
 ## Native Policy CSP catalog
 
-- **Source:** [DDFv2 Feb 2026](https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf) — Microsoft's official zip of 313 XML definition files.
-- **Build step:** `npm run build:csp-catalog` reads the zip, walks every area under `./Device/Vendor/MSFT/Policy/Config` and `./User/…`, merges same-path entries into a single `scope: "Both"` record, and writes `src/lib/csp-native/catalog.json` (~1.5 MB, committed so the regular build doesn't re-parse the DDF).
+- **Source:** [DDFv2 Feb 2026](https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf) — Microsoft's official zip of 313 XML definition files, plus a mirror of the Windows PolicyDefinitions folder ([jozefizso/sysvol-centralstore](https://github.com/jozefizso/sysvol-centralstore)) for the ADMX element schemas.
+- **Build step:** `npm run build:csp-catalog` reads the DDF zip + ADMX mirror, walks every area under `./Device/Vendor/MSFT/Policy/Config` and `./User/…`, merges same-path entries into a single `scope: "Both"` record, matches each ADMX-backed CSP to its source ADMX policy to attach element definitions (types, labels, enum items, ranges), and writes `src/lib/csp-native/catalog.json` (~4.3 MB, committed so the regular build doesn't re-parse either source).
+- **ADMX-backed settings:** ~1,450 out of ~2,060 ADMX-backed CSPs get a structured editor (enum dropdowns, text inputs, bool switches, number fields). The rest fall back to a textarea where you write the `<enabled/><data…/>` payload by hand (with a help panel showing the expected structure).
 - **Coverage:** ~3,000 settings across 260+ areas — AboveLock, Authentication, BitLocker, Browser, DeviceLock, Experience, Privacy, Update, WindowsDefenderSecurityCenter, …
 - **Value editors** are format-aware: enum → Select, bool → Switch, int → number (with DDF-declared min/max), chr → text, xml → monospace textarea, b64 → textarea.
 

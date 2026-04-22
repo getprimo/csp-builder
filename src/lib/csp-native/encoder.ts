@@ -1,6 +1,11 @@
-import type { PolicyScope } from "@/lib/admx/types";
+import type { ElementValue, PolicyScope } from "@/lib/admx/types";
 import { xmlEscape } from "@/lib/csp/encoder";
-import type { CspSetting, CspValue } from "./types";
+import type {
+  ConfiguredCsp,
+  CspAdmxElement,
+  CspSetting,
+  CspValue,
+} from "./types";
 
 const POLICY_BASE_DEVICE = "./Device/Vendor/MSFT/Policy/Config";
 const POLICY_BASE_USER = "./User/Vendor/MSFT/Policy/Config";
@@ -34,7 +39,116 @@ export function cspDataPayload(
   }
 }
 
+export function isAdmxBackedCsp(setting: CspSetting): boolean {
+  return setting.allowed?.kind === "admx-backed";
+}
+
+/** An ADMX-backed CSP that also carries a structured element schema. */
+export function hasAdmxSchema(
+  setting: CspSetting
+): setting is CspSetting & { admx: NonNullable<CspSetting["admx"]> } {
+  return !!setting.admx && setting.admx.elements.length >= 0;
+}
+
+/** Default value for a single ADMX element, used to seed the store on first interaction. */
+export function defaultAdmxElementValue(el: CspAdmxElement): ElementValue {
+  switch (el.type) {
+    case "boolean":
+      return { type: "boolean", value: false };
+    case "decimal":
+      return { type: "decimal", value: el.minValue ?? 0 };
+    case "text":
+      return { type: "text", value: "" };
+    case "multiText":
+      return { type: "multiText", value: [] };
+    case "enum":
+      return { type: "enum", value: 0 };
+    case "list":
+      return { type: "list", value: [] };
+  }
+}
+
+function attrEscape(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/"/g, "&quot;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+/**
+ * Encode an ElementValue into the string that goes into the
+ * `<data id="…" value="…"/>` attribute of an ADMX-backed CSP payload.
+ */
+function encodeAdmxElementValue(
+  el: CspAdmxElement,
+  v: ElementValue | undefined
+): string {
+  switch (el.type) {
+    case "boolean": {
+      const checked = v?.type === "boolean" ? v.value : false;
+      return checked ? el.trueValue : el.falseValue;
+    }
+    case "decimal": {
+      const n = v?.type === "decimal" ? v.value : (el.minValue ?? 0);
+      return String(n);
+    }
+    case "text":
+      return v?.type === "text" ? v.value : "";
+    case "multiText": {
+      const lines = v?.type === "multiText" ? v.value : [];
+      return lines.join("\n");
+    }
+    case "enum": {
+      const idx = v?.type === "enum" ? v.value : 0;
+      const item = el.items[idx] ?? el.items[0];
+      return item?.value ?? "";
+    }
+    case "list": {
+      // List elements in ADMX-backed CSPs are rare; join with U+F000 like the
+      // uploaded-ADMX encoder does. Users editing these today fall back to the
+      // textarea path; this branch is here for completeness.
+      const entries = v?.type === "list" ? v.value : [];
+      const DELIM = "\uF000";
+      if (el.explicitValue) {
+        return entries.map((e) => `${e.name ?? ""}${DELIM}${e.data ?? ""}`).join(DELIM);
+      }
+      return entries.map((e) => e.name ?? "").join(DELIM);
+    }
+  }
+}
+
+/**
+ * Build the SyncML command for an ADMX-backed CSP with a structured schema.
+ * Returns:
+ *   - { kind: "delete" }           when the policy is NotConfigured (emit `<Delete>`)
+ *   - { kind: "replace", data: … } when Enabled or Disabled (emit `<Replace>` with chr data)
+ *   - undefined                    when the configuration doesn't request anything
+ */
+export function buildCspAdmxCommand(
+  setting: CspSetting,
+  cfg: ConfiguredCsp | undefined
+): { kind: "replace"; data: string } | { kind: "delete" } | undefined {
+  if (!setting.admx) return undefined;
+  const state = cfg?.admxState ?? "notConfigured";
+  if (state === "notConfigured") return { kind: "delete" };
+  if (state === "disabled") return { kind: "replace", data: "<disabled/>" };
+
+  let inner = "<enabled/>";
+  for (const el of setting.admx.elements) {
+    const raw = encodeAdmxElementValue(el, cfg?.admxElements?.[el.id]);
+    inner += `<data id="${attrEscape(el.id)}" value="${attrEscape(raw)}"/>`;
+  }
+  return { kind: "replace", data: inner };
+}
+
 export function defaultCspValue(setting: CspSetting): CspValue {
+  if (isAdmxBackedCsp(setting)) {
+    // ADMX-backed CSPs expect an <enabled/> or <disabled/> marker plus
+    // optional <data id=… value=…/> children. Seed a sensible starting point
+    // so users don't ship a raw value that Windows will reject.
+    return { format: "chr", value: "<enabled/>" };
+  }
   switch (setting.format) {
     case "bool":
       return { format: "bool", value: parseBoolDefault(setting.defaultValue) };

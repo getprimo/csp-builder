@@ -4,3 +4,8 @@ node_modules/
 dist/
 
 .DS_Store
+
+# Windows PolicyDefinitions mirror used only to regenerate catalog.json.
+# Fetch with `npm run fetch:admx-pack` — the committed catalog.json has the
+# merged element schemas, so this folder is not needed for runtime or CI builds.
+scripts/admx-windows/

@@ -7,6 +7,7 @@ import type {
 import type { ConfiguredCsp } from "@/lib/csp-native/types";
 import { getCspSetting } from "@/lib/csp-native/catalog";
 import {
+  buildCspAdmxCommand,
   cspDataPayload,
   cspLocUri,
   defaultCspValue,
@@ -220,8 +221,40 @@ export function buildSyncML(
     if (!cfg.apply) continue;
     const setting = getCspSetting(cfg.settingId);
     if (!setting) continue;
-    const value = cfg.value ?? defaultCspValue(setting);
     const uri = cspLocUri(setting, cfg.scope);
+
+    // ADMX-backed CSPs with a bundled schema emit a proper
+    // `<enabled/><data…/>` / `<disabled/>` payload (or a `<Delete>` when the
+    // user selects Not Configured).
+    const admxCmd = buildCspAdmxCommand(setting, cfg);
+    if (admxCmd) {
+      if (admxCmd.kind === "delete") {
+        parts.push(
+          commandXml({
+            cmdId: cmdId++,
+            locUri: uri,
+            format: "chr",
+            kind: "Delete",
+          })
+        );
+      } else {
+        parts.push(
+          commandXml({
+            cmdId: cmdId++,
+            locUri: uri,
+            format: "chr",
+            data: xmlEscape(admxCmd.data),
+            kind: "Replace",
+          })
+        );
+      }
+      continue;
+    }
+
+    // Regular native CSPs (+ ADMX-backed without a bundled schema — falls back
+    // to the chr textarea path where the user writes the `<enabled/>…` payload
+    // themselves).
+    const value = cfg.value ?? defaultCspValue(setting);
     const { format, data } = cspDataPayload(value, setting);
     parts.push(
       commandXml({

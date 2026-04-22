@@ -1,0 +1,1670 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" revision="1.0" schemaVersion="1.0" xmlns="http://www.microsoft.com/GroupPolicy/PolicyDefinitions">
+  <policyNamespaces>
+    <target prefix="FSLogix" namespace="FSLogix.Policies" />
+  </policyNamespaces>
+  <supersededAdm fileName="fslogixODFC2.2.adm" />
+  <supersededAdm fileName="fslogixODFC2.5.adm" />
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="v2105" displayName="$(string.v2105_Definition)" />
+      <definition name="v2210" displayName="$(string.v2210_Definition)" />
+      <definition name="v2210HF1" displayName="$(string.v2210HF1_Definition)" />
+      <definition name="v2210HF4" displayName="$(string.v2210HF4_Definition)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="FSLogix" displayName="$(string.FSLogix_Category)" />
+    <category name="CCD" displayName="$(string.CCD_Category)">
+      <parentCategory ref="FSLogix" />
+    </category>
+    <category name="Logging" displayName="$(string.Logging_Category)">
+      <parentCategory ref="FSLogix" />
+    </category>
+    <category name="ODFC" displayName="$(string.ODFC_Category)">
+      <parentCategory ref="FSLogix" />
+    </category>
+    <category name="ODFC_CCD" displayName="$(string.ODFC_CCD_Category)">
+      <parentCategory ref="ODFC" />
+    </category>
+    <category name="ODFC_ContainerandDirectoryNaming" displayName="$(string.ODFC_ContainerandDirectoryNaming_Category)">
+      <parentCategory ref="ODFC" />
+    </category>
+    <category name="Profiles" displayName="$(string.Profiles_Category)">
+      <parentCategory ref="FSLogix" />
+    </category>
+    <category name="Profiles_CCD" displayName="$(string.Profiles_CCD_Category)">
+      <parentCategory ref="Profiles" />
+    </category>
+    <category name="Profiles_ContainerandDirectoryNaming" displayName="$(string.Profiles_ContainerandDirectoryNaming_Category)">
+      <parentCategory ref="Profiles" />
+    </category>
+  </categories>
+  <policies>
+    <policy name="CleanupInvalidSessions" class="Machine" displayName="$(string.CleanupInvalidSessions_Display)" explainText="$(string.CleanupInvalidSessions_Explain)" presentation="$(presentation.CleanupInvalidSessions)" key="Software\FSLogix\Apps">
+      <parentCategory ref="FSLogix" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="CleanupInvalidSessions" key="Software\FSLogix\Apps" valueName="CleanupInvalidSessions">
+          <item displayName="$(string.CleanupInvalidSessions_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.CleanupInvalidSessions_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="VHDCompactDisk" class="Machine" displayName="$(string.VHDCompactDisk_Display)" explainText="$(string.VHDCompactDisk_Explain)" presentation="$(presentation.VHDCompactDisk)" key="Software\FSLogix\Apps">
+      <parentCategory ref="FSLogix" />
+      <supportedOn ref="v2210" />
+      <elements>
+        <enum id="VHDCompactDisk" key="Software\FSLogix\Apps" valueName="VHDCompactDisk">
+          <item displayName="$(string.VHDCompactDisk_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.VHDCompactDisk_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="RoamRecycleBin" class="Machine" displayName="$(string.RoamRecycleBin_Display)" explainText="$(string.RoamRecycleBin_Explain)" presentation="$(presentation.RoamRecycleBin)" key="Software\FSLogix\Apps">
+      <parentCategory ref="FSLogix" />
+      <supportedOn ref="v2210" />
+      <elements>
+        <enum id="RoamRecycleBin" key="Software\FSLogix\Apps" valueName="RoamRecycleBin">
+          <item displayName="$(string.RoamRecycleBin_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.RoamRecycleBin_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="CCDCacheDirectory" class="Machine" displayName="$(string.CCDCacheDirectory_Display)" explainText="$(string.CCDCacheDirectory_Explain)" presentation="$(presentation.CCDCacheDirectory)" key="SYSTEM\CurrentControlSet\Services\frxccd\Parameters">
+      <parentCategory ref="CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="CCDCacheDirectory" key="SYSTEM\CurrentControlSet\Services\frxccd\Parameters" valueName="CacheDirectory" required="true" />
+      </elements>
+    </policy>
+    <policy name="CCDProxyDirectory" class="Machine" displayName="$(string.CCDProxyDirectory_Display)" explainText="$(string.CCDProxyDirectory_Explain)" presentation="$(presentation.CCDProxyDirectory)" key="SYSTEM\CurrentControlSet\Services\frxccds\Parameters">
+      <parentCategory ref="CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="CCDProxyDirectory" key="SYSTEM\CurrentControlSet\Services\frxccds\Parameters" valueName="ProxyDirectory" required="true" />
+      </elements>
+    </policy>
+    <policy name="CCDWriteCacheDirectory" class="Machine" displayName="$(string.CCDWriteCacheDirectory_Display)" explainText="$(string.CCDWriteCacheDirectory_Explain)" presentation="$(presentation.CCDWriteCacheDirectory)" key="SYSTEM\CurrentControlSet\Services\frxccds\Parameters">
+      <parentCategory ref="CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="CCDWriteCacheDirectory" key="SYSTEM\CurrentControlSet\Services\frxccds\Parameters" valueName="WriteCacheDirectory" required="true" />
+      </elements>
+    </policy>
+    <policy name="LoggingADComputerGroupProcess" class="Machine" displayName="$(string.LoggingADComputerGroupProcess_Display)" explainText="$(string.LoggingADComputerGroupProcess_Explain)" presentation="$(presentation.LoggingADComputerGroupProcess)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingADComputerGroupProcess" key="Software\FSLogix\Logging" valueName="AdsComputerGroup">
+          <item displayName="$(string.LoggingADComputerGroupProcess_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingADComputerGroupProcess_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingDriverInterface" class="Machine" displayName="$(string.LoggingDriverInterface_Display)" explainText="$(string.LoggingDriverInterface_Explain)" presentation="$(presentation.LoggingDriverInterface)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingDriverInterface" key="Software\FSLogix\Logging" valueName="DriverInterface">
+          <item displayName="$(string.LoggingDriverInterface_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingDriverInterface_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingEnabled" class="Machine" displayName="$(string.LoggingEnabled_Display)" explainText="$(string.LoggingEnabled_Explain)" presentation="$(presentation.LoggingEnabled)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingEnabled" key="Software\FSLogix\Logging" valueName="LoggingEnabled">
+          <item displayName="$(string.LoggingEnabled_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingEnabled_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingEnabled_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingFontVisibility" class="Machine" displayName="$(string.LoggingFontVisibility_Display)" explainText="$(string.LoggingFontVisibility_Explain)" presentation="$(presentation.LoggingFontVisibility)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingFontVisibility" key="Software\FSLogix\Logging" valueName="Font">
+          <item displayName="$(string.LoggingFontVisibility_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingFontVisibility_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingLogDirectory" class="Machine" displayName="$(string.LoggingLogDirectory_Display)" explainText="$(string.LoggingLogDirectory_Explain)" presentation="$(presentation.LoggingLogDirectory)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="LoggingLogDirectory" key="Software\FSLogix\Logging" valueName="LogDir" required="true" />
+      </elements>
+    </policy>
+    <policy name="LoggingLogKeepingPeriod" class="Machine" displayName="$(string.LoggingLogKeepingPeriod_Display)" explainText="$(string.LoggingLogKeepingPeriod_Explain)" presentation="$(presentation.LoggingLogKeepingPeriod)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="LoggingLogKeepingPeriod" key="Software\FSLogix\Logging" valueName="LogFileKeepingPeriod" required="true" maxValue="180" />
+      </elements>
+    </policy>
+    <policy name="LoggingNetwork" class="Machine" displayName="$(string.LoggingNetwork_Display)" explainText="$(string.LoggingNetwork_Explain)" presentation="$(presentation.LoggingNetwork)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingNetwork" key="Software\FSLogix\Logging" valueName="Network">
+          <item displayName="$(string.LoggingNetwork_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingNetwork_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingODFCContainer" class="Machine" displayName="$(string.LoggingODFCContainer_Display)" explainText="$(string.LoggingODFCContainer_Explain)" presentation="$(presentation.LoggingODFCContainer)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingODFCContainer" key="Software\FSLogix\Logging" valueName="ODFC">
+          <item displayName="$(string.LoggingODFCContainer_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingODFCContainer_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingPrinterVisibility" class="Machine" displayName="$(string.LoggingPrinterVisibility_Display)" explainText="$(string.LoggingPrinterVisibility_Explain)" presentation="$(presentation.LoggingPrinterVisibility)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingPrinterVisibility" key="Software\FSLogix\Logging" valueName="Printer">
+          <item displayName="$(string.LoggingPrinterVisibility_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingPrinterVisibility_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingProcessStart" class="Machine" displayName="$(string.LoggingProcessStart_Display)" explainText="$(string.LoggingProcessStart_Explain)" presentation="$(presentation.LoggingProcessStart)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingProcessStart" key="Software\FSLogix\Logging" valueName="ProcessStart">
+          <item displayName="$(string.LoggingProcessStart_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingProcessStart_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingProfileContainer" class="Machine" displayName="$(string.LoggingProfileContainer_Display)" explainText="$(string.LoggingProfileContainer_Explain)" presentation="$(presentation.LoggingProfileContainer)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingProfileContainer" key="Software\FSLogix\Logging" valueName="Profile">
+          <item displayName="$(string.LoggingProfileContainer_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingProfileContainer_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingRuleCompilation" class="Machine" displayName="$(string.LoggingRuleCompilation_Display)" explainText="$(string.LoggingRuleCompilation_Explain)" presentation="$(presentation.LoggingRuleCompilation)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingRuleCompilation" key="Software\FSLogix\Logging" valueName="RuleCompilation">
+          <item displayName="$(string.LoggingRuleCompilation_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingRuleCompilation_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingRuleEditor" class="Machine" displayName="$(string.LoggingRuleEditor_Display)" explainText="$(string.LoggingRuleEditor_Explain)" presentation="$(presentation.LoggingRuleEditor)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingRuleEditor" key="Software\FSLogix\Logging" valueName="RuleEditor">
+          <item displayName="$(string.LoggingRuleEditor_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingRuleEditor_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingSearchPlugin" class="Machine" displayName="$(string.LoggingSearchPlugin_Display)" explainText="$(string.LoggingSearchPlugin_Explain)" presentation="$(presentation.LoggingSearchPlugin)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingSearchPlugin" key="Software\FSLogix\Logging" valueName="SearchPlugin">
+          <item displayName="$(string.LoggingSearchPlugin_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingSearchPlugin_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingSearchRoaming" class="Machine" displayName="$(string.LoggingSearchRoaming_Display)" explainText="$(string.LoggingSearchRoaming_Explain)" presentation="$(presentation.LoggingSearchRoaming)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingSearchRoaming" key="Software\FSLogix\Logging" valueName="Search">
+          <item displayName="$(string.LoggingSearchRoaming_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingSearchRoaming_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="LoggingServices" class="Machine" displayName="$(string.LoggingServices_Display)" explainText="$(string.LoggingServices_Explain)" presentation="$(presentation.LoggingServices)" key="Software\FSLogix\Logging">
+      <parentCategory ref="Logging" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="LoggingServices" key="Software\FSLogix\Logging" valueName="Service">
+          <item displayName="$(string.LoggingServices_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.LoggingServices_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcAccessNetworkasComputer" class="Machine" displayName="$(string.OdfcAccessNetworkasComputer_Display)" explainText="$(string.OdfcAccessNetworkasComputer_Explain)" presentation="$(presentation.OdfcAccessNetworkasComputer)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcAccessNetworkasComputer" key="Software\Policies\FSLogix\ODFC" valueName="AccessNetworkAsComputerObject">
+          <item displayName="$(string.OdfcAccessNetworkasComputer_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcAccessNetworkasComputer_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcAttachedVHDSDDL" class="Machine" displayName="$(string.OdfcAttachedVHDSDDL_Display)" explainText="$(string.OdfcAttachedVHDSDDL_Explain)" presentation="$(presentation.OdfcAttachedVHDSDDL)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcAttachedVHDSDDL" key="Software\Policies\FSLogix\ODFC" valueName="AttachVHDSDDL" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcODFCEnabled" class="Machine" displayName="$(string.OdfcODFCEnabled_Display)" explainText="$(string.OdfcODFCEnabled_Explain)" presentation="$(presentation.OdfcODFCEnabled)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcODFCEnabled" key="Software\Policies\FSLogix\ODFC" valueName="Enabled">
+          <item displayName="$(string.OdfcODFCEnabled_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcODFCEnabled_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeOfficeActivation" class="Machine" displayName="$(string.OdfcIncludeOfficeActivation_Display)" explainText="$(string.OdfcIncludeOfficeActivation_Explain)" presentation="$(presentation.OdfcIncludeOfficeActivation)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeOfficeActivation" key="Software\Policies\FSLogix\ODFC" valueName="IncludeOfficeActivation">
+          <item displayName="$(string.OdfcIncludeOfficeActivation_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeOfficeActivation_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeOneDrive" class="Machine" displayName="$(string.OdfcIncludeOneDrive_Display)" explainText="$(string.OdfcIncludeOneDrive_Explain)" presentation="$(presentation.OdfcIncludeOneDrive)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeOneDrive" key="Software\Policies\FSLogix\ODFC" valueName="IncludeOneDrive">
+          <item displayName="$(string.OdfcIncludeOneDrive_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeOneDrive_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeOneNote" class="Machine" displayName="$(string.OdfcIncludeOneNote_Display)" explainText="$(string.OdfcIncludeOneNote_Explain)" presentation="$(presentation.OdfcIncludeOneNote)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeOneNote" key="Software\Policies\FSLogix\ODFC" valueName="IncludeOneNote">
+          <item displayName="$(string.OdfcIncludeOneNote_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeOneNote_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeOneNoteUWP" class="Machine" displayName="$(string.OdfcIncludeOneNoteUWP_Display)" explainText="$(string.OdfcIncludeOneNoteUWP_Explain)" presentation="$(presentation.OdfcIncludeOneNoteUWP)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeOneNoteUWP" key="Software\Policies\FSLogix\ODFC" valueName="IncludeOneNote_UWP">
+          <item displayName="$(string.OdfcIncludeOneNoteUWP_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeOneNoteUWP_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeOutlook" class="Machine" displayName="$(string.OdfcIncludeOutlook_Display)" explainText="$(string.OdfcIncludeOutlook_Explain)" presentation="$(presentation.OdfcIncludeOutlook)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeOutlook" key="Software\Policies\FSLogix\ODFC" valueName="IncludeOutlook">
+          <item displayName="$(string.OdfcIncludeOutlook_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeOutlook_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeOutlookPersonalization" class="Machine" displayName="$(string.OdfcIncludeOutlookPersonalization_Display)" explainText="$(string.OdfcIncludeOutlookPersonalization_Explain)" presentation="$(presentation.OdfcIncludeOutlookPersonalization)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeOutlookPersonalization" key="Software\Policies\FSLogix\ODFC" valueName="IncludeOutlookPersonalization">
+          <item displayName="$(string.OdfcIncludeOutlookPersonalization_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeOutlookPersonalization_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeSharepoint" class="Machine" displayName="$(string.OdfcIncludeSharepoint_Display)" explainText="$(string.OdfcIncludeSharepoint_Explain)" presentation="$(presentation.OdfcIncludeSharepoint)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeSharepoint" key="Software\Policies\FSLogix\ODFC" valueName="IncludeSharepoint">
+          <item displayName="$(string.OdfcIncludeSharepoint_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeSharepoint_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeSkype" class="Machine" displayName="$(string.OdfcIncludeSkype_Display)" explainText="$(string.OdfcIncludeSkype_Explain)" presentation="$(presentation.OdfcIncludeSkype)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeSkype" key="Software\Policies\FSLogix\ODFC" valueName="IncludeSkype">
+          <item displayName="$(string.OdfcIncludeSkype_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeSkype_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIncludeTeams" class="Machine" displayName="$(string.OdfcIncludeTeams_Display)" explainText="$(string.OdfcIncludeTeams_Explain)" presentation="$(presentation.OdfcIncludeTeams)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIncludeTeams" key="Software\Policies\FSLogix\ODFC" valueName="IncludeTeams">
+          <item displayName="$(string.OdfcIncludeTeams_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIncludeTeams_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcIsDynamicVHD" class="Machine" displayName="$(string.OdfcIsDynamicVHD_Display)" explainText="$(string.OdfcIsDynamicVHD_Explain)" presentation="$(presentation.OdfcIsDynamicVHD)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcIsDynamicVHD" key="Software\Policies\FSLogix\ODFC" valueName="IsDynamic">
+          <item displayName="$(string.OdfcIsDynamicVHD_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcIsDynamicVHD_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcLockedRetryCount" class="Machine" displayName="$(string.OdfcLockedRetryCount_Display)" explainText="$(string.OdfcLockedRetryCount_Explain)" presentation="$(presentation.OdfcLockedRetryCount)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcLockedRetryCount" key="Software\Policies\FSLogix\ODFC" valueName="LockedRetryCount" required="true" maxValue="600" />
+      </elements>
+    </policy>
+    <policy name="OdfcLockedRetryInterval" class="Machine" displayName="$(string.OdfcLockedRetryInterval_Display)" explainText="$(string.OdfcLockedRetryInterval_Explain)" presentation="$(presentation.OdfcLockedRetryInterval)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcLockedRetryInterval" key="Software\Policies\FSLogix\ODFC" valueName="LockedRetryInterval" required="true" maxValue="600" />
+      </elements>
+    </policy>
+    <policy name="OdfcMirrorLocalOSTToVHD" class="Machine" displayName="$(string.OdfcMirrorLocalOSTToVHD_Display)" explainText="$(string.OdfcMirrorLocalOSTToVHD_Explain)" presentation="$(presentation.OdfcMirrorLocalOSTToVHD)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcMirrorLocalOSTToVHD" key="Software\Policies\FSLogix\ODFC" valueName="MirrorLocalOSTToVHD">
+          <item displayName="$(string.OdfcMirrorLocalOSTToVHD_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcMirrorLocalOSTToVHD_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcMirrorLocalOSTToVHD_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcNumberSessionVHDsToKeep" class="Machine" displayName="$(string.OdfcNumberSessionVHDsToKeep_Display)" explainText="$(string.OdfcNumberSessionVHDsToKeep_Explain)" presentation="$(presentation.OdfcNumberSessionVHDsToKeep)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcNumberSessionVHDsToKeep" key="Software\Policies\FSLogix\ODFC" valueName="NumSessionVHDsToKeep" required="true" maxValue="10" />
+      </elements>
+    </policy>
+    <policy name="OdfcOutlookCachedMode" class="Machine" displayName="$(string.OdfcOutlookCachedMode_Display)" explainText="$(string.OdfcOutlookCachedMode_Explain)" presentation="$(presentation.OdfcOutlookCachedMode)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcOutlookCachedMode" key="Software\Policies\FSLogix\ODFC" valueName="OutlookCachedMode">
+          <item displayName="$(string.OdfcOutlookCachedMode_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcOutlookCachedMode_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcOutlookFolderPath" class="Machine" displayName="$(string.OdfcOutlookFolderPath_Display)" explainText="$(string.OdfcOutlookFolderPath_Explain)" presentation="$(presentation.OdfcOutlookFolderPath)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcOutlookFolderPath" key="Software\Policies\FSLogix\ODFC" valueName="OutlookFolderPath" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcPreventLoginWithFailure" class="Machine" displayName="$(string.OdfcPreventLoginWithFailure_Display)" explainText="$(string.OdfcPreventLoginWithFailure_Explain)" presentation="$(presentation.OdfcPreventLoginWithFailure)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcPreventLoginWithFailure" key="Software\Policies\FSLogix\ODFC" valueName="PreventLoginWithFailure">
+          <item displayName="$(string.OdfcPreventLoginWithFailure_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcPreventLoginWithFailure_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcPreventLoginWithTempProfile" class="Machine" displayName="$(string.OdfcPreventLoginWithTempProfile_Display)" explainText="$(string.OdfcPreventLoginWithTempProfile_Explain)" presentation="$(presentation.OdfcPreventLoginWithTempProfile)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcPreventLoginWithTempProfile" key="Software\Policies\FSLogix\ODFC" valueName="PreventLoginWithTempProfile">
+          <item displayName="$(string.OdfcPreventLoginWithTempProfile_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcPreventLoginWithTempProfile_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcReattachCount" class="Machine" displayName="$(string.OdfcReattachCount_Display)" explainText="$(string.OdfcReattachCount_Explain)" presentation="$(presentation.OdfcReattachCount)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcReattachCount" key="Software\Policies\FSLogix\ODFC" valueName="ReAttachRetryCount" required="true" maxValue="600" />
+      </elements>
+    </policy>
+    <policy name="OdfcReattachInterval" class="Machine" displayName="$(string.OdfcReattachInterval_Display)" explainText="$(string.OdfcReattachInterval_Explain)" presentation="$(presentation.OdfcReattachInterval)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcReattachInterval" key="Software\Policies\FSLogix\ODFC" valueName="ReAttachIntervalSeconds" required="true" minValue="1" maxValue="60" />
+      </elements>
+    </policy>
+    <policy name="OdfcRedirectType" class="Machine" displayName="$(string.OdfcRedirectType_Display)" explainText="$(string.OdfcRedirectType_Explain)" presentation="$(presentation.OdfcRedirectType)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcRedirectType" key="Software\Policies\FSLogix\ODFC" valueName="RedirectType">
+          <item displayName="$(string.OdfcRedirectType_0_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcRedirectType_1_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcRefreshUserPolicy" class="Machine" displayName="$(string.OdfcRefreshUserPolicy_Display)" explainText="$(string.OdfcRefreshUserPolicy_Explain)" presentation="$(presentation.OdfcRefreshUserPolicy)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcRefreshUserPolicy" key="Software\Policies\FSLogix\ODFC" valueName="RefreshUserPolicy">
+          <item displayName="$(string.OdfcRefreshUserPolicy_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcRefreshUserPolicy_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcRemoveOrphanedOSTFilesOnLogoff" class="Machine" displayName="$(string.OdfcRemoveOrphanedOSTFilesOnLogoff_Display)" explainText="$(string.OdfcRemoveOrphanedOSTFilesOnLogoff_Explain)" presentation="$(presentation.OdfcRemoveOrphanedOSTFilesOnLogoff)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcRemoveOrphanedOSTFilesOnLogoff" key="Software\Policies\FSLogix\ODFC" valueName="RemoveOrphanedOSTFilesOnLogoff">
+          <item displayName="$(string.OdfcRemoveOrphanedOSTFilesOnLogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcRemoveOrphanedOSTFilesOnLogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcRoamSearch" class="Machine" displayName="$(string.OdfcRoamSearch_Display)" explainText="$(string.OdfcRoamSearch_Explain)" presentation="$(presentation.OdfcRoamSearch)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcRoamSearch" key="Software\Policies\FSLogix\ODFC" valueName="RoamSearch">
+          <item displayName="$(string.OdfcRoamSearch_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcRoamSearch_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcRoamSearch_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcSizeInMBs" class="Machine" displayName="$(string.OdfcSizeInMBs_Display)" explainText="$(string.OdfcSizeInMBs_Explain)" presentation="$(presentation.OdfcSizeInMBs)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcSizeInMBs" key="Software\Policies\FSLogix\ODFC" valueName="SizeInMBs" required="true" minValue="500" maxValue="1000000" />
+      </elements>
+    </policy>
+    <policy name="OdfcVHDAccessMode" class="Machine" displayName="$(string.OdfcVHDAccessMode_Display)" explainText="$(string.OdfcVHDAccessMode_Explain)" presentation="$(presentation.OdfcVHDAccessMode)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcVHDAccessMode" key="Software\Policies\FSLogix\ODFC" valueName="VHDAccessMode">
+          <item displayName="$(string.OdfcVHDAccessMode_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcVHDAccessMode_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcVHDAccessMode_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcVHDAccessMode_3_Enum)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcVHDLocations" class="Machine" displayName="$(string.OdfcVHDLocations_Display)" explainText="$(string.OdfcVHDLocations_Explain)" presentation="$(presentation.OdfcVHDLocations)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcVHDLocations" key="Software\Policies\FSLogix\ODFC" valueName="VHDLocations" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcVHDXSectorSize" class="Machine" displayName="$(string.OdfcVHDXSectorSize_Display)" explainText="$(string.OdfcVHDXSectorSize_Explain)" presentation="$(presentation.OdfcVHDXSectorSize)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcVHDXSectorSize" key="Software\Policies\FSLogix\ODFC" valueName="VHDXSectorSize">
+          <item displayName="$(string.OdfcVHDXSectorSize_0_Enum)">
+            <value>
+              <decimal value="512" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcVHDXSectorSize_1_Enum)">
+            <value>
+              <decimal value="4096" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcVolumeTypeVHDorVHDX" class="Machine" displayName="$(string.OdfcVolumeTypeVHDorVHDX_Display)" explainText="$(string.OdfcVolumeTypeVHDorVHDX_Explain)" presentation="$(presentation.OdfcVolumeTypeVHDorVHDX)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcVolumeTypeVHDorVHDX" key="Software\Policies\FSLogix\ODFC" valueName="VolumeType">
+          <item displayName="$(string.OdfcVolumeTypeVHDorVHDX_0_Enum)">
+            <value>
+              <string>VHD</string>
+            </value>
+          </item>
+          <item displayName="$(string.OdfcVolumeTypeVHDorVHDX_1_Enum)">
+            <value>
+              <string>VHDX</string>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcVolumeWaitTimemilliseconds" class="Machine" displayName="$(string.OdfcVolumeWaitTimemilliseconds_Display)" explainText="$(string.OdfcVolumeWaitTimemilliseconds_Explain)" presentation="$(presentation.OdfcVolumeWaitTimemilliseconds)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcVolumeWaitTimemilliseconds" key="Software\Policies\FSLogix\ODFC" valueName="VolumeWaitTimeMS" required="true" minValue="1000" maxValue="1000000" />
+      </elements>
+    </policy>
+    <policy name="OdfcCCDLocations" class="Machine" displayName="$(string.OdfcCCDLocations_Display)" explainText="$(string.OdfcCCDLocations_Explain)" presentation="$(presentation.OdfcCCDLocations)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcCCDLocations" key="Software\Policies\FSLogix\ODFC" valueName="CCDLocations" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcCCDMaxCacheSizeinMBs" class="Machine" displayName="$(string.OdfcCCDMaxCacheSizeinMBs_Display)" explainText="$(string.OdfcCCDMaxCacheSizeinMBs_Explain)" presentation="$(presentation.OdfcCCDMaxCacheSizeinMBs)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcCCDMaxCacheSizeinMBs" key="Software\Policies\FSLogix\ODFC" valueName="CcdMaxCacheSizeInMBs" required="true" maxValue="10000000" />
+      </elements>
+    </policy>
+    <policy name="OdfcCCDUnregisterTimeout" class="Machine" displayName="$(string.OdfcCCDUnregisterTimeout_Display)" explainText="$(string.OdfcCCDUnregisterTimeout_Explain)" presentation="$(presentation.OdfcCCDUnregisterTimeout)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcCCDUnregisterTimeout" key="Software\Policies\FSLogix\ODFC" valueName="CCDUnregisterTimeout" required="true" maxValue="10000000" />
+      </elements>
+    </policy>
+    <policy name="OdfcClearCacheOnForcedUnregister" class="Machine" displayName="$(string.OdfcClearCacheOnForcedUnregister_Display)" explainText="$(string.OdfcClearCacheOnForcedUnregister_Explain)" presentation="$(presentation.OdfcClearCacheOnForcedUnregister)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcClearCacheOnForcedUnregister" key="Software\Policies\FSLogix\ODFC" valueName="ClearCacheOnForcedUnregister">
+          <item displayName="$(string.OdfcClearCacheOnForcedUnregister_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcClearCacheOnForcedUnregister_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcClearCacheOnLogoff" class="Machine" displayName="$(string.OdfcClearCacheOnLogoff_Display)" explainText="$(string.OdfcClearCacheOnLogoff_Explain)" presentation="$(presentation.OdfcClearCacheOnLogoff)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcClearCacheOnLogoff" key="Software\Policies\FSLogix\ODFC" valueName="ClearCacheOnLogoff">
+          <item displayName="$(string.OdfcClearCacheOnLogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcClearCacheOnLogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcHealthyProvidersRequiredForRegister" class="Machine" displayName="$(string.OdfcHealthyProvidersRequiredForRegister_Display)" explainText="$(string.OdfcHealthyProvidersRequiredForRegister_Explain)" presentation="$(presentation.OdfcHealthyProvidersRequiredForRegister)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcHealthyProvidersRequiredForRegister" key="Software\Policies\FSLogix\ODFC" valueName="HealthyProvidersRequiredForRegister" required="true" maxValue="4" />
+      </elements>
+    </policy>
+    <policy name="OdfcHealthyProvidersRequiredForUnregister" class="Machine" displayName="$(string.OdfcHealthyProvidersRequiredForUnregister_Display)" explainText="$(string.OdfcHealthyProvidersRequiredForUnregister_Explain)" presentation="$(presentation.OdfcHealthyProvidersRequiredForUnregister)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="OdfcHealthyProvidersRequiredForUnregister" key="Software\Policies\FSLogix\ODFC" valueName="HealthyProvidersRequiredForUnregister" required="true" maxValue="4" />
+      </elements>
+    </policy>
+    <policy name="OdfcDiffDiskParentFolderPath" class="Machine" displayName="$(string.OdfcDiffDiskParentFolderPath_Display)" explainText="$(string.OdfcDiffDiskParentFolderPath_Explain)" presentation="$(presentation.OdfcDiffDiskParentFolderPath)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcDiffDiskParentFolderPath" key="Software\Policies\FSLogix\ODFC" valueName="DiffDiskParentFolderPath" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcFlipFlopProfileDirectoryName" class="Machine" displayName="$(string.OdfcFlipFlopProfileDirectoryName_Display)" explainText="$(string.OdfcFlipFlopProfileDirectoryName_Explain)" presentation="$(presentation.OdfcFlipFlopProfileDirectoryName)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcFlipFlopProfileDirectoryName" key="Software\Policies\FSLogix\ODFC" valueName="FlipFlopProfileDirectoryName">
+          <item displayName="$(string.OdfcFlipFlopProfileDirectoryName_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcFlipFlopProfileDirectoryName_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcNoProfileContainingFolder" class="Machine" displayName="$(string.OdfcNoProfileContainingFolder_Display)" explainText="$(string.OdfcNoProfileContainingFolder_Explain)" presentation="$(presentation.OdfcNoProfileContainingFolder)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="OdfcNoProfileContainingFolder" key="Software\Policies\FSLogix\ODFC" valueName="NoProfileContainingFolder">
+          <item displayName="$(string.OdfcNoProfileContainingFolder_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.OdfcNoProfileContainingFolder_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="OdfcSIDDirectoryNameMatch" class="Machine" displayName="$(string.OdfcSIDDirectoryNameMatch_Display)" explainText="$(string.OdfcSIDDirectoryNameMatch_Explain)" presentation="$(presentation.OdfcSIDDirectoryNameMatch)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcSIDDirectoryNameMatch" key="Software\Policies\FSLogix\ODFC" valueName="SIDDirNameMatch" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcSIDDirectoryNamePattern" class="Machine" displayName="$(string.OdfcSIDDirectoryNamePattern_Display)" explainText="$(string.OdfcSIDDirectoryNamePattern_Explain)" presentation="$(presentation.OdfcSIDDirectoryNamePattern)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcSIDDirectoryNamePattern" key="Software\Policies\FSLogix\ODFC" valueName="SIDDirNamePattern" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcVHDNameMatch" class="Machine" displayName="$(string.OdfcVHDNameMatch_Display)" explainText="$(string.OdfcVHDNameMatch_Explain)" presentation="$(presentation.OdfcVHDNameMatch)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcVHDNameMatch" key="Software\Policies\FSLogix\ODFC" valueName="VHDNameMatch" required="true" />
+      </elements>
+    </policy>
+    <policy name="OdfcVHDNamePattern" class="Machine" displayName="$(string.OdfcVHDNamePattern_Display)" explainText="$(string.OdfcVHDNamePattern_Explain)" presentation="$(presentation.OdfcVHDNamePattern)" key="Software\Policies\FSLogix\ODFC">
+      <parentCategory ref="ODFC_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="OdfcVHDNamePattern" key="Software\Policies\FSLogix\ODFC" valueName="VHDNamePattern" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesAccessNetworkasComputer" class="Machine" displayName="$(string.ProfilesAccessNetworkasComputer_Display)" explainText="$(string.ProfilesAccessNetworkasComputer_Explain)" presentation="$(presentation.ProfilesAccessNetworkasComputer)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesAccessNetworkasComputer" key="Software\FSLogix\Profiles" valueName="AccessNetworkAsComputerObject">
+          <item displayName="$(string.ProfilesAccessNetworkasComputer_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesAccessNetworkasComputer_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesAttachedVHDSDDL" class="Machine" displayName="$(string.ProfilesAttachedVHDSDDL_Display)" explainText="$(string.ProfilesAttachedVHDSDDL_Explain)" presentation="$(presentation.ProfilesAttachedVHDSDDL)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesAttachedVHDSDDL" key="Software\FSLogix\Profiles" valueName="AttachVHDSDDL" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesCleanOutNotifications" class="Machine" displayName="$(string.ProfilesCleanOutNotifications_Display)" explainText="$(string.ProfilesCleanOutNotifications_Explain)" presentation="$(presentation.ProfilesCleanOutNotifications)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesCleanOutNotifications" key="Software\FSLogix\Profiles" valueName="CleanOutNotifications">
+          <item displayName="$(string.ProfilesCleanOutNotifications_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesCleanOutNotifications_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesDeleteLocalProfileWhenVHDShouldApply" class="Machine" displayName="$(string.ProfilesDeleteLocalProfileWhenVHDShouldApply_Display)" explainText="$(string.ProfilesDeleteLocalProfileWhenVHDShouldApply_Explain)" presentation="$(presentation.ProfilesDeleteLocalProfileWhenVHDShouldApply)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesDeleteLocalProfileWhenVHDShouldApply" key="Software\FSLogix\Profiles" valueName="DeleteLocalProfileWhenVHDShouldApply">
+          <item displayName="$(string.ProfilesDeleteLocalProfileWhenVHDShouldApply_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesDeleteLocalProfileWhenVHDShouldApply_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesEnabled" class="Machine" displayName="$(string.ProfilesEnabled_Display)" explainText="$(string.ProfilesEnabled_Explain)" presentation="$(presentation.ProfilesEnabled)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesEnabled" key="Software\FSLogix\Profiles" valueName="Enabled">
+          <item displayName="$(string.ProfilesEnabled_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesEnabled_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesInstallAppxPackages" class="Machine" displayName="$(string.ProfilesInstallAppxPackages_Display)" explainText="$(string.ProfilesInstallAppxPackages_Explain)" presentation="$(presentation.ProfilesInstallAppxPackages)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2210" />
+      <elements>
+        <enum id="ProfilesInstallAppxPackages" key="Software\FSLogix\Profiles" valueName="InstallAppxPackages">
+          <item displayName="$(string.ProfilesInstallAppxPackages_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesInstallAppxPackages_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesIsDynamicVHD" class="Machine" displayName="$(string.ProfilesIsDynamicVHD_Display)" explainText="$(string.ProfilesIsDynamicVHD_Explain)" presentation="$(presentation.ProfilesIsDynamicVHD)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesIsDynamicVHD" key="Software\FSLogix\Profiles" valueName="IsDynamic">
+          <item displayName="$(string.ProfilesIsDynamicVHD_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesIsDynamicVHD_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesKeepLocalDirectoryafterlogoff" class="Machine" displayName="$(string.ProfilesKeepLocalDirectoryafterlogoff_Display)" explainText="$(string.ProfilesKeepLocalDirectoryafterlogoff_Explain)" presentation="$(presentation.ProfilesKeepLocalDirectoryafterlogoff)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesKeepLocalDirectoryafterlogoff" key="Software\FSLogix\Profiles" valueName="KeepLocalDir">
+          <item displayName="$(string.ProfilesKeepLocalDirectoryafterlogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesKeepLocalDirectoryafterlogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesLockedRetryCount" class="Machine" displayName="$(string.ProfilesLockedRetryCount_Display)" explainText="$(string.ProfilesLockedRetryCount_Explain)" presentation="$(presentation.ProfilesLockedRetryCount)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesLockedRetryCount" key="Software\FSLogix\Profiles" valueName="LockedRetryCount" required="true" maxValue="600" />
+      </elements>
+    </policy>
+    <policy name="ProfilesLockedRetryInterval" class="Machine" displayName="$(string.ProfilesLockedRetryInterval_Display)" explainText="$(string.ProfilesLockedRetryInterval_Explain)" presentation="$(presentation.ProfilesLockedRetryInterval)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesLockedRetryInterval" key="Software\FSLogix\Profiles" valueName="LockedRetryInterval" required="true" maxValue="600" />
+      </elements>
+    </policy>
+    <policy name="ProfilesOutlookCachedMode" class="Machine" displayName="$(string.ProfilesOutlookCachedMode_Display)" explainText="$(string.ProfilesOutlookCachedMode_Explain)" presentation="$(presentation.ProfilesOutlookCachedMode)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesOutlookCachedMode" key="Software\FSLogix\Profiles" valueName="OutlookCachedMode">
+          <item displayName="$(string.ProfilesOutlookCachedMode_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesOutlookCachedMode_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesPreventLoginWithFailure" class="Machine" displayName="$(string.ProfilesPreventLoginWithFailure_Display)" explainText="$(string.ProfilesPreventLoginWithFailure_Explain)" presentation="$(presentation.ProfilesPreventLoginWithFailure)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesPreventLoginWithFailure" key="Software\FSLogix\Profiles" valueName="PreventLoginWithFailure">
+          <item displayName="$(string.ProfilesPreventLoginWithFailure_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesPreventLoginWithFailure_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesPreventLoginWithTempProfile" class="Machine" displayName="$(string.ProfilesPreventLoginWithTempProfile_Display)" explainText="$(string.ProfilesPreventLoginWithTempProfile_Explain)" presentation="$(presentation.ProfilesPreventLoginWithTempProfile)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesPreventLoginWithTempProfile" key="Software\FSLogix\Profiles" valueName="PreventLoginWithTempProfile">
+          <item displayName="$(string.ProfilesPreventLoginWithTempProfile_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesPreventLoginWithTempProfile_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesProfileDirectorySDDL" class="Machine" displayName="$(string.ProfilesProfileDirectorySDDL_Display)" explainText="$(string.ProfilesProfileDirectorySDDL_Explain)" presentation="$(presentation.ProfilesProfileDirectorySDDL)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesProfileDirectorySDDL" key="Software\FSLogix\Profiles" valueName="ProfileDirSDDL" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesProfileType" class="Machine" displayName="$(string.ProfilesProfileType_Display)" explainText="$(string.ProfilesProfileType_Explain)" presentation="$(presentation.ProfilesProfileType)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesProfileType" key="Software\FSLogix\Profiles" valueName="ProfileType">
+          <item displayName="$(string.ProfilesProfileType_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesProfileType_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesProfileType_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesProfileType_3_Enum)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesReattachCount" class="Machine" displayName="$(string.ProfilesReattachCount_Display)" explainText="$(string.ProfilesReattachCount_Explain)" presentation="$(presentation.ProfilesReattachCount)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesReattachCount" key="Software\FSLogix\Profiles" valueName="ReAttachRetryCount" required="true" maxValue="600" />
+      </elements>
+    </policy>
+    <policy name="ProfilesReattachInterval" class="Machine" displayName="$(string.ProfilesReattachInterval_Display)" explainText="$(string.ProfilesReattachInterval_Explain)" presentation="$(presentation.ProfilesReattachInterval)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesReattachInterval" key="Software\FSLogix\Profiles" valueName="ReAttachIntervalSeconds" required="true" minValue="1" maxValue="60" />
+      </elements>
+    </policy>
+    <policy name="ProfilesRebootOnUserLogoff" class="Machine" displayName="$(string.ProfilesRebootOnUserLogoff_Display)" explainText="$(string.ProfilesRebootOnUserLogoff_Explain)" presentation="$(presentation.ProfilesRebootOnUserLogoff)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesRebootOnUserLogoff" key="Software\FSLogix\Profiles" valueName="RebootOnUserLogoff">
+          <item displayName="$(string.ProfilesRebootOnUserLogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRebootOnUserLogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRebootOnUserLogoff_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesRedirectType" class="Machine" displayName="$(string.ProfilesRedirectType_Display)" explainText="$(string.ProfilesRedirectType_Explain)" presentation="$(presentation.ProfilesRedirectType)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesRedirectType" key="Software\FSLogix\Profiles" valueName="RedirectType">
+          <item displayName="$(string.ProfilesRedirectType_0_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRedirectType_1_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesRedirectionXMLSourceFolder" class="Machine" displayName="$(string.ProfilesRedirectionXMLSourceFolder_Display)" explainText="$(string.ProfilesRedirectionXMLSourceFolder_Explain)" presentation="$(presentation.ProfilesRedirectionXMLSourceFolder)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesRedirectionXMLSourceFolder" key="Software\FSLogix\Profiles" valueName="RedirXMLSourceFolder" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesRemoveOrphanedOSTFilesOnLogoff" class="Machine" displayName="$(string.ProfilesRemoveOrphanedOSTFilesOnLogoff_Display)" explainText="$(string.ProfilesRemoveOrphanedOSTFilesOnLogoff_Explain)" presentation="$(presentation.ProfilesRemoveOrphanedOSTFilesOnLogoff)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesRemoveOrphanedOSTFilesOnLogoff" key="Software\FSLogix\Profiles" valueName="RemoveOrphanedOSTFilesOnLogoff">
+          <item displayName="$(string.ProfilesRemoveOrphanedOSTFilesOnLogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRemoveOrphanedOSTFilesOnLogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesRoamIdentity" class="Machine" displayName="$(string.ProfilesRoamIdentity_Display)" explainText="$(string.ProfilesRoamIdentity_Explain)" presentation="$(presentation.ProfilesRoamIdentity)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2210HF1" />
+      <elements>
+        <enum id="ProfilesRoamIdentity" key="Software\FSLogix\Profiles" valueName="RoamIdentity">
+          <item displayName="$(string.ProfilesRoamIdentity_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRoamIdentity_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesRoamSearch" class="Machine" displayName="$(string.ProfilesRoamSearch_Display)" explainText="$(string.ProfilesRoamSearch_Explain)" presentation="$(presentation.ProfilesRoamSearch)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesRoamSearch" key="Software\FSLogix\Profiles" valueName="RoamSearch">
+          <item displayName="$(string.ProfilesRoamSearch_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRoamSearch_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRoamSearch_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesRoamGroupPolicyState" class="Machine" displayName="$(string.ProfilesRoamGroupPolicyState_Display)" explainText="$(string.ProfilesRoamGroupPolicyState_Explain)" presentation="$(presentation.ProfilesRoamGroupPolicyState)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2210HF4" />
+      <elements>
+        <enum id="ProfilesRoamGroupPolicyState" key="Software\FSLogix\Profiles" valueName="GroupPolicyState">
+          <item displayName="$(string.ProfilesRoamGroupPolicyState_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesRoamGroupPolicyState_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesSetTempFolderstoLocalPath" class="Machine" displayName="$(string.ProfilesSetTempFolderstoLocalPath_Display)" explainText="$(string.ProfilesSetTempFolderstoLocalPath_Explain)" presentation="$(presentation.ProfilesSetTempFolderstoLocalPath)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesSetTempFolderstoLocalPath" key="Software\FSLogix\Profiles" valueName="SetTempToLocalPath">
+          <item displayName="$(string.ProfilesSetTempFolderstoLocalPath_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesSetTempFolderstoLocalPath_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesSetTempFolderstoLocalPath_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesSetTempFolderstoLocalPath_3_Enum)">
+            <value>
+              <decimal value="3" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesShutdownOnUserLogoff" class="Machine" displayName="$(string.ProfilesShutdownOnUserLogoff_Display)" explainText="$(string.ProfilesShutdownOnUserLogoff_Explain)" presentation="$(presentation.ProfilesShutdownOnUserLogoff)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesShutdownOnUserLogoff" key="Software\FSLogix\Profiles" valueName="ShutdownOnUserLogoff">
+          <item displayName="$(string.ProfilesShutdownOnUserLogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesShutdownOnUserLogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesShutdownOnUserLogoff_2_Enum)">
+            <value>
+              <decimal value="2" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesSIDDirectorySDDL" class="Machine" displayName="$(string.ProfilesSIDDirectorySDDL_Display)" explainText="$(string.ProfilesSIDDirectorySDDL_Explain)" presentation="$(presentation.ProfilesSIDDirectorySDDL)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesSIDDirectorySDDL" key="Software\FSLogix\Profiles" valueName="SIDDirSDDL" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesSizeInMBs" class="Machine" displayName="$(string.ProfilesSizeInMBs_Display)" explainText="$(string.ProfilesSizeInMBs_Explain)" presentation="$(presentation.ProfilesSizeInMBs)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesSizeInMBs" key="Software\FSLogix\Profiles" valueName="SizeInMBs" required="true" minValue="500" maxValue="1000000" />
+      </elements>
+    </policy>
+    <policy name="ProfilesVHDLocations" class="Machine" displayName="$(string.ProfilesVHDLocations_Display)" explainText="$(string.ProfilesVHDLocations_Explain)" presentation="$(presentation.ProfilesVHDLocations)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesVHDLocations" key="Software\FSLogix\Profiles" valueName="VHDLocations" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesVHDXSectorSize" class="Machine" displayName="$(string.ProfilesVHDXSectorSize_Display)" explainText="$(string.ProfilesVHDXSectorSize_Explain)" presentation="$(presentation.ProfilesVHDXSectorSize)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesVHDXSectorSize" key="Software\FSLogix\Profiles" valueName="VHDXSectorSize">
+          <item displayName="$(string.ProfilesVHDXSectorSize_0_Enum)">
+            <value>
+              <decimal value="512" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesVHDXSectorSize_1_Enum)">
+            <value>
+              <decimal value="4096" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesVolumeWaitTimemilliseconds" class="Machine" displayName="$(string.ProfilesVolumeWaitTimemilliseconds_Display)" explainText="$(string.ProfilesVolumeWaitTimemilliseconds_Explain)" presentation="$(presentation.ProfilesVolumeWaitTimemilliseconds)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesVolumeWaitTimemilliseconds" key="Software\FSLogix\Profiles" valueName="VolumeWaitTimeMS" required="true" minValue="1000" maxValue="1000000" />
+      </elements>
+    </policy>
+    <policy name="ProfilesCCDLocations" class="Machine" displayName="$(string.ProfilesCCDLocations_Display)" explainText="$(string.ProfilesCCDLocations_Explain)" presentation="$(presentation.ProfilesCCDLocations)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesCCDLocations" key="Software\FSLogix\Profiles" valueName="CCDLocations" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesCCDMaxCacheSizeinMBs" class="Machine" displayName="$(string.ProfilesCCDMaxCacheSizeinMBs_Display)" explainText="$(string.ProfilesCCDMaxCacheSizeinMBs_Explain)" presentation="$(presentation.ProfilesCCDMaxCacheSizeinMBs)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesCCDMaxCacheSizeinMBs" key="Software\FSLogix\Profiles" valueName="CcdMaxCacheSizeInMBs" required="true" maxValue="10000000" />
+      </elements>
+    </policy>
+    <policy name="ProfilesCCDUnregisterTimeout" class="Machine" displayName="$(string.ProfilesCCDUnregisterTimeout_Display)" explainText="$(string.ProfilesCCDUnregisterTimeout_Explain)" presentation="$(presentation.ProfilesCCDUnregisterTimeout)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesCCDUnregisterTimeout" key="Software\FSLogix\Profiles" valueName="CcdUnregisterTimeout" required="true" maxValue="10000000" />
+      </elements>
+    </policy>
+    <policy name="ProfilesClearCacheonForcedUnregister" class="Machine" displayName="$(string.ProfilesClearCacheonForcedUnregister_Display)" explainText="$(string.ProfilesClearCacheonForcedUnregister_Explain)" presentation="$(presentation.ProfilesClearCacheonForcedUnregister)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesClearCacheonForcedUnregister" key="Software\FSLogix\Profiles" valueName="ClearCacheOnForcedUnregister">
+          <item displayName="$(string.ProfilesClearCacheonForcedUnregister_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesClearCacheonForcedUnregister_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesClearCacheonLogoff" class="Machine" displayName="$(string.ProfilesClearCacheonLogoff_Display)" explainText="$(string.ProfilesClearCacheonLogoff_Explain)" presentation="$(presentation.ProfilesClearCacheonLogoff)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesClearCacheonLogoff" key="Software\FSLogix\Profiles" valueName="ClearCacheOnLogoff">
+          <item displayName="$(string.ProfilesClearCacheonLogoff_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesClearCacheonLogoff_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesHealthyProvidersRequiredForRegister" class="Machine" displayName="$(string.ProfilesHealthyProvidersRequiredForRegister_Display)" explainText="$(string.ProfilesHealthyProvidersRequiredForRegister_Explain)" presentation="$(presentation.ProfilesHealthyProvidersRequiredForRegister)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesHealthyProvidersRequiredForRegister" key="Software\FSLogix\Profiles" valueName="HealthyProvidersRequiredForRegister" required="true" maxValue="4" />
+      </elements>
+    </policy>
+    <policy name="ProfilesHealthyProvidersRequiredForUnregister" class="Machine" displayName="$(string.ProfilesHealthyProvidersRequiredForUnregister_Display)" explainText="$(string.ProfilesHealthyProvidersRequiredForUnregister_Explain)" presentation="$(presentation.ProfilesHealthyProvidersRequiredForUnregister)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_CCD" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <decimal id="ProfilesHealthyProvidersRequiredForUnregister" key="Software\FSLogix\Profiles" valueName="HealthyProvidersRequiredForUnregister" required="true" maxValue="4" />
+      </elements>
+    </policy>
+    <policy name="ProfilesDiffDiskParentFolderPath" class="Machine" displayName="$(string.ProfilesDiffDiskParentFolderPath_Display)" explainText="$(string.ProfilesDiffDiskParentFolderPath_Explain)" presentation="$(presentation.ProfilesDiffDiskParentFolderPath)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesDiffDiskParentFolderPath" key="Software\FSLogix\Profiles" valueName="DiffDiskParentFolderPath" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesFlipFlopProfileDirectoryName" class="Machine" displayName="$(string.ProfilesFlipFlopProfileDirectoryName_Display)" explainText="$(string.ProfilesFlipFlopProfileDirectoryName_Explain)" presentation="$(presentation.ProfilesFlipFlopProfileDirectoryName)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesFlipFlopProfileDirectoryName" key="Software\FSLogix\Profiles" valueName="FlipFlopProfileDirectoryName">
+          <item displayName="$(string.ProfilesFlipFlopProfileDirectoryName_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesFlipFlopProfileDirectoryName_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesNoProfileContainingFolder" class="Machine" displayName="$(string.ProfilesNoProfileContainingFolder_Display)" explainText="$(string.ProfilesNoProfileContainingFolder_Explain)" presentation="$(presentation.ProfilesNoProfileContainingFolder)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesNoProfileContainingFolder" key="Software\FSLogix\Profiles" valueName="NoProfileContainingFolder">
+          <item displayName="$(string.ProfilesNoProfileContainingFolder_0_Enum)">
+            <value>
+              <decimal value="0" />
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesNoProfileContainingFolder_1_Enum)">
+            <value>
+              <decimal value="1" />
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="ProfilesSIDDirectoryNameMatch" class="Machine" displayName="$(string.ProfilesSIDDirectoryNameMatch_Display)" explainText="$(string.ProfilesSIDDirectoryNameMatch_Explain)" presentation="$(presentation.ProfilesSIDDirectoryNameMatch)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesSIDDirectoryNameMatch" key="Software\FSLogix\Profiles" valueName="SIDDirNameMatch" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesSIDDirectoryNamePattern" class="Machine" displayName="$(string.ProfilesSIDDirectoryNamePattern_Display)" explainText="$(string.ProfilesSIDDirectoryNamePattern_Explain)" presentation="$(presentation.ProfilesSIDDirectoryNamePattern)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesSIDDirectoryNamePattern" key="Software\FSLogix\Profiles" valueName="SIDDirNamePattern" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesVHDNameMatch" class="Machine" displayName="$(string.ProfilesVHDNameMatch_Display)" explainText="$(string.ProfilesVHDNameMatch_Explain)" presentation="$(presentation.ProfilesVHDNameMatch)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesVHDNameMatch" key="Software\FSLogix\Profiles" valueName="VHDNameMatch" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesVHDNamePattern" class="Machine" displayName="$(string.ProfilesVHDNamePattern_Display)" explainText="$(string.ProfilesVHDNamePattern_Explain)" presentation="$(presentation.ProfilesVHDNamePattern)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <text id="ProfilesVHDNamePattern" key="Software\FSLogix\Profiles" valueName="VHDNamePattern" required="true" />
+      </elements>
+    </policy>
+    <policy name="ProfilesVolumeTypeVHDorVHDX" class="Machine" displayName="$(string.ProfilesVolumeTypeVHDorVHDX_Display)" explainText="$(string.ProfilesVolumeTypeVHDorVHDX_Explain)" presentation="$(presentation.ProfilesVolumeTypeVHDorVHDX)" key="Software\FSLogix\Profiles">
+      <parentCategory ref="Profiles_ContainerandDirectoryNaming" />
+      <supportedOn ref="v2105" />
+      <elements>
+        <enum id="ProfilesVolumeTypeVHDorVHDX" key="Software\FSLogix\Profiles" valueName="VolumeType">
+          <item displayName="$(string.ProfilesVolumeTypeVHDorVHDX_0_Enum)">
+            <value>
+              <string>VHD</string>
+            </value>
+          </item>
+          <item displayName="$(string.ProfilesVolumeTypeVHDorVHDX_1_Enum)">
+            <value>
+              <string>VHDX</string>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

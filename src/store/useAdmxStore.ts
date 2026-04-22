@@ -9,6 +9,7 @@ import type {
 } from "@/lib/admx/types";
 import type { ConfiguredCsp, CspValue } from "@/lib/csp-native/types";
 import { getCspSetting } from "@/lib/csp-native/catalog";
+import { defaultAdmxElementValue } from "@/lib/csp-native/encoder";
 
 interface AdmxStoreState {
   files: AdmxFile[];
@@ -54,6 +55,12 @@ interface AdmxStoreState {
   setCspValue(settingId: string, value: CspValue): void;
   setCspScope(settingId: string, scope: PolicyScope): void;
   setCspApply(settingId: string, apply: boolean): void;
+  setCspAdmxState(settingId: string, state: PolicyState): void;
+  setCspAdmxElement(
+    settingId: string,
+    elementId: string,
+    value: ElementValue
+  ): void;
 }
 
 export function defaultScopeFor(cls: PolicyClass): PolicyScope {
@@ -98,12 +105,20 @@ function upsertCsp(
   const existing = s[settingId];
   if (existing) return existing;
   const setting = getCspSetting(settingId);
-  return {
+  const base: ConfiguredCsp = {
     settingId,
     scope: defaultCspScope(setting?.scope ?? "Device"),
     value: undefined,
     apply: false,
   };
+  if (setting?.admx) {
+    base.admxState = "enabled";
+    base.admxElements = {};
+    for (const el of setting.admx.elements) {
+      base.admxElements[el.id] = defaultAdmxElementValue(el);
+    }
+  }
+  return base;
 }
 
 export const useAdmxStore = create<AdmxStoreState>((set) => ({
@@ -220,6 +235,32 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
         configuredCsp: {
           ...s.configuredCsp,
           [settingId]: { ...existing, apply },
+        },
+      };
+    }),
+
+  setCspAdmxState: (settingId, state) =>
+    set((s) => {
+      const existing = upsertCsp(s.configuredCsp, settingId);
+      return {
+        configuredCsp: {
+          ...s.configuredCsp,
+          [settingId]: { ...existing, admxState: state, apply: true },
+        },
+      };
+    }),
+
+  setCspAdmxElement: (settingId, elementId, value) =>
+    set((s) => {
+      const existing = upsertCsp(s.configuredCsp, settingId);
+      return {
+        configuredCsp: {
+          ...s.configuredCsp,
+          [settingId]: {
+            ...existing,
+            admxElements: { ...existing.admxElements, [elementId]: value },
+            apply: true,
+          },
         },
       };
     }),

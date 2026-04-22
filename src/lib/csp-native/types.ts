@@ -1,6 +1,62 @@
-import type { PolicyScope } from "@/lib/admx/types";
+import type { ElementValue, PolicyScope, PolicyState } from "@/lib/admx/types";
 
 export type CspFormat = "bool" | "int" | "chr" | "xml" | "b64";
+
+/**
+ * Payload-ready element schema for an ADMX-backed native CSP.
+ * All `value` fields here are already the strings that go into
+ * `<data id="…" value="…"/>` — no further resolution needed at emit time.
+ */
+interface CspAdmxElementBase {
+  id: string;
+  label?: string;
+  required?: boolean;
+}
+
+export interface CspAdmxBooleanElement extends CspAdmxElementBase {
+  type: "boolean";
+  trueValue: string;
+  falseValue: string;
+}
+
+export interface CspAdmxDecimalElement extends CspAdmxElementBase {
+  type: "decimal";
+  minValue?: number;
+  maxValue?: number;
+}
+
+export interface CspAdmxTextElement extends CspAdmxElementBase {
+  type: "text";
+  maxLength?: number;
+}
+
+export interface CspAdmxMultiTextElement extends CspAdmxElementBase {
+  type: "multiText";
+}
+
+export interface CspAdmxEnumElement extends CspAdmxElementBase {
+  type: "enum";
+  items: { displayName: string; value: string }[];
+}
+
+export interface CspAdmxListElement extends CspAdmxElementBase {
+  type: "list";
+  explicitValue?: boolean;
+}
+
+export type CspAdmxElement =
+  | CspAdmxBooleanElement
+  | CspAdmxDecimalElement
+  | CspAdmxTextElement
+  | CspAdmxMultiTextElement
+  | CspAdmxEnumElement
+  | CspAdmxListElement;
+
+export interface CspAdmxMeta {
+  elements: CspAdmxElement[];
+  explainText?: string;
+  displayName?: string;
+}
 
 export interface CspEnumItem {
   value: string;
@@ -36,6 +92,13 @@ export interface CspSetting {
   applicability?: CspApplicability;
   deprecated?: boolean;
   osBuildDeprecated?: string;
+  /**
+   * ADMX policy schema matched from the Windows PolicyDefinitions mirror.
+   * Present only for ADMX-backed CSPs whose area was resolved to a bundled
+   * ADMX file. When present, the UI renders structured inputs and the
+   * exporter emits a proper `<enabled/><data…/>` payload.
+   */
+  admx?: CspAdmxMeta;
 }
 
 export interface CspCatalog {
@@ -55,6 +118,21 @@ export type CspValue =
 export interface ConfiguredCsp {
   settingId: string;
   scope: PolicyScope;
+  /**
+   * Scalar value for regular native CSPs (bool / int / chr / xml / b64) and
+   * fallback for ADMX-backed CSPs without a bundled ADMX schema.
+   */
   value?: CspValue;
+  /**
+   * Enabled / Disabled / Not Configured state for ADMX-backed CSPs that have
+   * a bundled ADMX schema (`setting.admx` present).
+   */
+  admxState?: PolicyState;
+  /**
+   * Per-element values (keyed by element id) for ADMX-backed CSPs with a
+   * bundled ADMX schema. Uses the same `ElementValue` union as the uploaded
+   * ADMX flow so the editor can share input components.
+   */
+  admxElements?: Record<string, ElementValue>;
   apply: boolean;
 }

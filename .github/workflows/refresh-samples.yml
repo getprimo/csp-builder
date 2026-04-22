@@ -1,0 +1,56 @@
+name: Refresh ADMX samples
+
+on:
+  schedule:
+    # First day of every month at 06:00 UTC
+    - cron: "0 6 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Run refresh script
+        run: npm run refresh:samples
+        env:
+          # `gh api` auth for GitHub-hosted releases (Brave, Winget, Firefox).
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify samples still parse + build
+        run: npm run build
+
+      - name: Open PR on diff
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: "chore(samples): refresh ADMX from upstream"
+          branch: chore/refresh-admx-samples
+          delete-branch: true
+          title: "chore(samples): refresh ADMX from upstream"
+          body: |
+            Automated monthly refresh of the pre-filled ADMX samples from their
+            upstream sources.
+
+            Sources covered by this workflow:
+            - **Chrome** — `dl.google.com/.../policy_templates.zip`
+            - **Firefox** — `github.com/mozilla/policy-templates` latest release
+            - **Brave** — `github.com/brave/brave-browser` latest release
+            - **Winget** — `github.com/microsoft/winget-cli` latest release
+            - **FSLogix** — `aka.ms/fslogix/download`
+
+            Review the diff, then merge to ship the refreshed samples.
+          labels: |
+            dependencies
+            samples

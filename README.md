@@ -137,6 +137,17 @@ The **"Pre-filled samples"** button loads any combination of 13 ADMX bundles (of
 
 Selection of sources is inspired by [msfreaks/EvergreenAdmx](https://github.com/msfreaks/EvergreenAdmx), which maintains download URLs for the most-used third-party ADMX templates. With all samples selected, the app loads **≈ 5,500 ADMX policies** of which **≈ 3,200 pass the CSP filter**.
 
+### Auto-refresh
+
+Five of the samples (chrome, firefox, brave, winget, fslogix) have stable automated URLs — they're refreshed **monthly** by [`.github/workflows/refresh-samples.yml`](./.github/workflows/refresh-samples.yml), which opens a PR when any upstream content changes. You can also run it locally:
+
+```bash
+npm run refresh:samples          # refresh all automated samples
+npm run refresh:samples brave    # refresh just one
+```
+
+The other samples (edge, office/word/outlook, acrobat-dc, reader-dc, onedrive) ship via paths that need extra tooling (CAB extraction, HTML scraping, Microsoft download gates) — refresh them manually when needed.
+
 ---
 
 ## Native Policy CSP catalog

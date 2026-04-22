@@ -76,14 +76,27 @@ export interface CspApplicability {
 }
 
 export interface CspSetting {
-  /** e.g. "AboveLock/AllowActionCenterNotifications" (scope-agnostic). */
+  /**
+   * Scope-agnostic id. For policy CSPs this is e.g. "AboveLock/AllowActionCenterNotifications".
+   * For standalone CSPs it's prefixed with "std::" to avoid collisions
+   * (e.g. "std::Personalization/DesktopImageUrl").
+   */
   id: string;
-  /** Top-level area, e.g. "AboveLock". */
+  /** Top-level area, e.g. "AboveLock" or "Personalization". */
   area: string;
   /** Leaf node name. */
   name: string;
-  /** Path segments below `./{Device,User}/Vendor/MSFT/Policy/Config`. */
+  /**
+   * Path segments below the CSP root. For `family === "policy"` the root is
+   * `./{Device,User}/Vendor/MSFT/Policy/Config`; for `"standalone"` it's
+   * `./{Device,User}/Vendor/MSFT`.
+   */
   path: string[];
+  /**
+   * Which CSP family this setting belongs to — determines how the LocURI is
+   * assembled and what badge/icon is shown in the UI.
+   */
+  family: "policy" | "standalone";
   scope: PolicyScope | "Both";
   format: CspFormat;
   description?: string;

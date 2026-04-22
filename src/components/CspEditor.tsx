@@ -73,8 +73,15 @@ export function CspEditor({ setting }: Props) {
             <CardTitle className="truncate">{setting.name}</CardTitle>
             <CardDescription className="break-all">
               <span className="font-mono text-xs">
-                Policy/{setting.path.join("/")}
+                {setting.family === "standalone" ? "" : "Policy/"}
+                {setting.path.join("/")}
               </span>{" "}
+              · family{" "}
+              <Badge variant="outline" className="align-middle">
+                {setting.family === "standalone"
+                  ? "standalone"
+                  : "Policy CSP"}
+              </Badge>{" "}
               · scope{" "}
               <Badge variant="outline" className="align-middle">
                 {setting.scope}
@@ -112,7 +119,8 @@ export function CspEditor({ setting }: Props) {
           <div>
             <span className="font-semibold">LocURI: </span>
             <code>
-              {scope === "User" ? "./User" : "./Device"}/Vendor/MSFT/Policy/Config/
+              {scope === "User" ? "./User" : "./Device"}/Vendor/MSFT
+              {setting.family === "standalone" ? "/" : "/Policy/Config/"}
               {setting.path.join("/")}
             </code>
           </div>

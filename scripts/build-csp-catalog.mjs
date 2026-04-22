@@ -81,6 +81,35 @@ function detectFormat(dfFormat) {
   return "chr";
 }
 
+/**
+ * Collapse the raw DDF format into the 5 formats the UI understands.
+ * `node` leaves are already filtered by the walker; `null` format signals an
+ * action-only node (Install/Enroll/Unenroll) with no data payload — those are
+ * filtered out here. `bin` and `time` are remapped to the nearest usable
+ * encoding (Base64 textarea / chr text input).
+ */
+function normalizeFormat(raw) {
+  switch (raw) {
+    case "bool":
+    case "int":
+    case "chr":
+    case "xml":
+    case "b64":
+      return raw;
+    case "bin":
+      return "b64";
+    case "time":
+    case "date":
+    case "float":
+      return "chr";
+    case "null":
+    case "node":
+      return null; // drop
+    default:
+      return "chr";
+  }
+}
+
 function parseAllowedValues(av) {
   if (!av || typeof av !== "object") return undefined;
   const valueType = av["@_ValueType"];
@@ -119,6 +148,17 @@ function looseBuild(applicability) {
   return out;
 }
 
+/**
+ * A leaf is writable if its AccessType declares any of Add/Replace/Exec.
+ * Get-only leaves (status readbacks) cannot be pushed via MDM and are skipped
+ * from the catalog.
+ */
+function isWritableLeaf(props) {
+  const at = props?.AccessType;
+  if (!at || typeof at !== "object") return true; // default to writable if unspecified
+  return "Add" in at || "Replace" in at || "Exec" in at;
+}
+
 function walk(node, uriParts, areaChain, emit) {
   if (!node) return;
   const nodeName = textOf(node.NodeName) ?? "";
@@ -134,6 +174,9 @@ function walk(node, uriParts, areaChain, emit) {
     return;
   }
   if (format === "node") return;
+  if (!isWritableLeaf(props)) return;
+  const uiFormat = normalizeFormat(format);
+  if (!uiFormat) return; // drop actions / unknown formats
 
   const locUri = nextUri.join("/");
   emit({
@@ -141,7 +184,7 @@ function walk(node, uriParts, areaChain, emit) {
     pathSegments: nextUri,
     areaChain: nextArea,
     name: nodeName,
-    format,
+    format: uiFormat,
     description: textOf(props.Description),
     defaultValue: textOf(props.DefaultValue),
     allowed: parseAllowedValues(props.AllowedValues),
@@ -446,14 +489,41 @@ function main() {
       totalTopNodes++;
       const topPath = normalizeTopPath(textOf(top.Path));
       const areaName = textOf(top.NodeName) ?? "";
+      // Classify the top-level tree.
+      //   family = "policy"       → `./{scope}/Vendor/MSFT/Policy/Config/<area>`
+      //   family = "standalone"   → `./{scope}/Vendor/MSFT/<area>` (BitLocker, Personalization, WiFi, …)
+      // scope   = Device | User | Both (for `./Vendor/MSFT` roots, Windows lets
+      //          the caller pick the prefix, so we treat them as Both).
       let scope;
-      if (topPath === "./Device/Vendor/MSFT/Policy/Config") scope = "Device";
-      else if (topPath === "./User/Vendor/MSFT/Policy/Config") scope = "User";
-      else continue;
+      let family;
+      if (topPath === "./Device/Vendor/MSFT/Policy/Config") {
+        scope = "Device";
+        family = "policy";
+      } else if (topPath === "./User/Vendor/MSFT/Policy/Config") {
+        scope = "User";
+        family = "policy";
+      } else if (topPath === "./Device/Vendor/MSFT") {
+        scope = "Device";
+        family = "standalone";
+      } else if (topPath === "./User/Vendor/MSFT") {
+        scope = "User";
+        family = "standalone";
+      } else if (topPath === "./Vendor/MSFT" || topPath === "./Vendor/MSFT/") {
+        scope = "Both";
+        family = "standalone";
+      } else {
+        continue; // Root nodes we don't target (./, ./SyncML, etc.)
+      }
       policyTopNodes++;
 
       walk(top, [topPath], [], (leaf) => {
-        const bareId = leaf.pathSegments.slice(1).join("/");
+        // For policy CSPs, id drops the `./…/Policy/Config` prefix so Device+User entries merge.
+        // For standalone CSPs, id drops the `./{scope}/Vendor/MSFT` prefix with `std::` namespace
+        // to avoid accidental collisions with same-named policy CSPs.
+        const bareId =
+          family === "policy"
+            ? leaf.pathSegments.slice(1).join("/")
+            : `std::${leaf.pathSegments.slice(1).join("/")}`;
         const existing = byId.get(bareId);
         if (existing) {
           existing.scope = "Both";
@@ -466,6 +536,7 @@ function main() {
             area: areaName,
             name: leaf.name,
             path: leaf.pathSegments.slice(1),
+            family,
             scope,
             format: leaf.format,
             description: leaf.description,

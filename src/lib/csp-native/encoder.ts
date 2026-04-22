@@ -9,9 +9,18 @@ import type {
 
 const POLICY_BASE_DEVICE = "./Device/Vendor/MSFT/Policy/Config";
 const POLICY_BASE_USER = "./User/Vendor/MSFT/Policy/Config";
+const STANDALONE_BASE_DEVICE = "./Device/Vendor/MSFT";
+const STANDALONE_BASE_USER = "./User/Vendor/MSFT";
 
 export function cspLocUri(setting: CspSetting, scope: PolicyScope): string {
-  const base = scope === "User" ? POLICY_BASE_USER : POLICY_BASE_DEVICE;
+  const base =
+    setting.family === "standalone"
+      ? scope === "User"
+        ? STANDALONE_BASE_USER
+        : STANDALONE_BASE_DEVICE
+      : scope === "User"
+        ? POLICY_BASE_USER
+        : POLICY_BASE_DEVICE;
   return `${base}/${setting.path.join("/")}`;
 }
 

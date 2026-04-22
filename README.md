@@ -1,6 +1,6 @@
 <div align="center">
 
-# ADMX → SyncML Builder
+# CSP Builder
 
 **Free online generator to convert Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for FleetDM, Intune, and any MDM.**
 
@@ -10,7 +10,7 @@
 
 [**🚀 Open the tool**](https://csp-builder.getprimo.com?utm_source=github&utm_medium=readme&utm_campaign=csp_builder&utm_content=hero_cta) · [**Built by Primo — Modern MDM →**](https://www.getprimo.com/product-page/mdm?utm_source=github&utm_medium=readme&utm_campaign=csp_builder&utm_content=hero_pitch)
 
-![ADMX to SyncML Generator — built by Primo](public/og-image.png)
+![CSP Builder — built by Primo](public/og-image.png)
 
 </div>
 

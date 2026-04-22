@@ -13,7 +13,7 @@ function App() {
       <header className="border-b">
         <div className="container py-5">
           <h1 className="text-2xl font-semibold tracking-tight">
-            ADMX → SyncML Builder
+            CSP Builder
           </h1>
           <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
             Free online generator to turn Windows ADMX/ADML templates and the

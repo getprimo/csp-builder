@@ -33,12 +33,13 @@
 
   <!-- main title -->
   <g font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" fill="#ffffff">
-    <text x="72" y="220" font-size="78" font-weight="700" letter-spacing="-2">
-      <tspan>ADMX</tspan>
-      <tspan fill="url(#accent)" dx="16">→</tspan>
-      <tspan dx="16">SyncML</tspan>
+    <text x="72" y="220" font-size="104" font-weight="700" letter-spacing="-2">
+      <tspan>CSP</tspan>
+      <tspan fill="url(#accent)" dx="24">Builder</tspan>
     </text>
-    <text x="72" y="310" font-size="78" font-weight="700" letter-spacing="-2">Generator</text>
+    <text x="72" y="310" font-size="32" font-weight="500" fill="#ffffff" fill-opacity="0.85">
+      ADMX → SyncML for Windows MDM
+    </text>
   </g>
 
   <!-- subtitle -->

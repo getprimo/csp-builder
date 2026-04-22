@@ -1,4 +1,6 @@
-# ADMX → SyncML Builder — Project Handoff
+# CSP Builder — Project Handoff
+
+(Formerly "ADMX → SyncML Builder" — renamed to CSP Builder.)
 
 ## What it is
 

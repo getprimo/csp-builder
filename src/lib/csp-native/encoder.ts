@@ -12,7 +12,39 @@ const POLICY_BASE_USER = "./User/Vendor/MSFT/Policy/Config";
 const STANDALONE_BASE_DEVICE = "./Device/Vendor/MSFT";
 const STANDALONE_BASE_USER = "./User/Vendor/MSFT";
 
-export function cspLocUri(setting: CspSetting, scope: PolicyScope): string {
+/**
+ * Return the positions (in `setting.path`) of the parameterised segments
+ * that need a user-supplied name. Each position maps 1:1 to an entry in
+ * `ConfiguredCsp.instanceNames`.
+ */
+export function instanceSlots(
+  setting: CspSetting
+): Array<{ pathIndex: number; label: string; slotIndex: number }> {
+  const slots: Array<{ pathIndex: number; label: string; slotIndex: number }> = [];
+  let slotIndex = 0;
+  for (let i = 0; i < setting.path.length; i++) {
+    if (setting.path[i] !== "") continue;
+    // Label heuristic: use the last non-empty segment before this slot.
+    // e.g. "Profile/<instance>" → "Profile name", "Accounts/<instance>" → "Accounts name".
+    let parent = "";
+    for (let j = i - 1; j >= 0; j--) {
+      if (setting.path[j]) {
+        parent = setting.path[j];
+        break;
+      }
+    }
+    const label = parent ? `${parent} name` : `Instance ${slotIndex + 1}`;
+    slots.push({ pathIndex: i, label, slotIndex });
+    slotIndex++;
+  }
+  return slots;
+}
+
+export function cspLocUri(
+  setting: CspSetting,
+  scope: PolicyScope,
+  instanceNames?: string[]
+): string {
   const base =
     setting.family === "standalone"
       ? scope === "User"
@@ -21,7 +53,17 @@ export function cspLocUri(setting: CspSetting, scope: PolicyScope): string {
       : scope === "User"
         ? POLICY_BASE_USER
         : POLICY_BASE_DEVICE;
-  return `${base}/${setting.path.join("/")}`;
+  // Substitute parameterised segments with user-supplied names. Missing
+  // values leave the segment empty — the resulting `//` URI is intentionally
+  // visible so the user notices their profile name slot isn't filled.
+  let slot = 0;
+  const resolved = setting.path.map((seg) => {
+    if (seg !== "") return seg;
+    const name = instanceNames?.[slot];
+    slot++;
+    return name ?? "";
+  });
+  return `${base}/${resolved.join("/")}`;
 }
 
 /**

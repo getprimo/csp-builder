@@ -79,6 +79,11 @@ interface AdmxStoreState {
     elementId: string,
     value: ElementValue
   ): void;
+  setCspInstanceName(
+    settingId: string,
+    slotIndex: number,
+    name: string
+  ): void;
 }
 
 export function defaultScopeFor(cls: PolicyClass): PolicyScope {
@@ -290,6 +295,19 @@ export const useAdmxStore = create<AdmxStoreState>()(
             admxElements: { ...existing.admxElements, [elementId]: value },
             apply: true,
           },
+        },
+      };
+    }),
+
+  setCspInstanceName: (settingId, slotIndex, name) =>
+    set((s) => {
+      const existing = upsertCsp(s.configuredCsp, settingId);
+      const next = [...(existing.instanceNames ?? [])];
+      next[slotIndex] = name;
+      return {
+        configuredCsp: {
+          ...s.configuredCsp,
+          [settingId]: { ...existing, instanceNames: next, apply: true },
         },
       };
     }),

@@ -221,7 +221,7 @@ export function buildSyncML(
     if (!cfg.apply) continue;
     const setting = getCspSetting(cfg.settingId);
     if (!setting) continue;
-    const uri = cspLocUri(setting, cfg.scope);
+    const uri = cspLocUri(setting, cfg.scope, cfg.instanceNames);
 
     // ADMX-backed CSPs with a bundled schema emit a proper
     // `<enabled/><data…/>` / `<disabled/>` payload (or a `<Delete>` when the

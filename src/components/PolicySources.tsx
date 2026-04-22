@@ -200,30 +200,10 @@ export function PolicySources() {
 
         {/* Bundled ADMX samples */}
         <div>
-          <div className="mb-1 flex items-center justify-between">
+          <div className="mb-1">
             <span className="text-xs font-medium text-muted-foreground">
               Bundled ADMX templates
             </span>
-            <div className="flex gap-2 text-xs">
-              <button
-                type="button"
-                className="underline text-muted-foreground hover:text-foreground"
-                onClick={() => {
-                  for (const s of SAMPLES) toggleSample(s, true);
-                }}
-              >
-                All
-              </button>
-              <button
-                type="button"
-                className="underline text-muted-foreground hover:text-foreground"
-                onClick={() => {
-                  for (const s of SAMPLES) toggleSample(s, false);
-                }}
-              >
-                None
-              </button>
-            </div>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
             {SAMPLES.map((s) => {

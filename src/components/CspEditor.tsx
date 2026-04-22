@@ -34,8 +34,10 @@ import type {
   CspValue,
 } from "@/lib/csp-native/types";
 import {
+  cspLocUri,
   defaultAdmxElementValue,
   defaultCspValue,
+  instanceSlots,
   isAdmxBackedCsp,
 } from "@/lib/csp-native/encoder";
 import { Plus, Trash2 } from "lucide-react";
@@ -52,6 +54,7 @@ export function CspEditor({ setting }: Props) {
   const setCspApply = useAdmxStore((s) => s.setCspApply);
   const setCspAdmxState = useAdmxStore((s) => s.setCspAdmxState);
   const setCspAdmxElement = useAdmxStore((s) => s.setCspAdmxElement);
+  const setCspInstanceName = useAdmxStore((s) => s.setCspInstanceName);
 
   const apply = cfg?.apply ?? false;
   const scope: PolicyScope =
@@ -118,11 +121,7 @@ export function CspEditor({ setting }: Props) {
         <div className="text-xs text-muted-foreground space-y-1 break-all">
           <div>
             <span className="font-semibold">LocURI: </span>
-            <code>
-              {scope === "User" ? "./User" : "./Device"}/Vendor/MSFT
-              {setting.family === "standalone" ? "/" : "/Policy/Config/"}
-              {setting.path.join("/")}
-            </code>
+            <code>{cspLocUri(setting, scope, cfg?.instanceNames)}</code>
           </div>
           {setting.defaultValue !== undefined && (
             <div>
@@ -154,6 +153,60 @@ export function CspEditor({ setting }: Props) {
         </div>
 
         <div className={cn("space-y-5 transition-opacity", !apply && "opacity-60")}>
+          {instanceSlots(setting).length > 0 && (
+            <div className="space-y-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
+              <div className="font-semibold">
+                Path parameters
+                <span className="ml-2 text-xs font-normal">
+                  Microsoft DDF marks this CSP as parameterised — fill the name
+                  of each instance so the LocURI is complete.
+                </span>
+              </div>
+              {instanceSlots(setting).map((slot) => {
+                const value = cfg?.instanceNames?.[slot.slotIndex] ?? "";
+                return (
+                  <div key={slot.slotIndex} className="space-y-1">
+                    <Label
+                      htmlFor={`${setting.id}-inst-${slot.slotIndex}`}
+                      className="text-xs"
+                    >
+                      {slot.label}
+                    </Label>
+                    <Input
+                      id={`${setting.id}-inst-${slot.slotIndex}`}
+                      value={value}
+                      placeholder={
+                        slot.label.toLowerCase().includes("profile")
+                          ? "e.g. Primo-Corp"
+                          : "name / id"
+                      }
+                      className="bg-white"
+                      onChange={(e) =>
+                        setCspInstanceName(
+                          setting.id,
+                          slot.slotIndex,
+                          e.target.value
+                        )
+                      }
+                    />
+                  </div>
+                );
+              })}
+              {(() => {
+                const missing = instanceSlots(setting).some(
+                  (s) => !cfg?.instanceNames?.[s.slotIndex]
+                );
+                if (!missing) return null;
+                return (
+                  <p className="text-xs">
+                    ⚠ At least one name is empty — the generated URI will
+                    contain <code>//</code> and Windows will reject it.
+                  </p>
+                );
+              })()}
+            </div>
+          )}
+
           <div>
             <Label className="mb-2 block">
               CSP scope{scopeFixed ? " (fixed by DDF scope)" : ""}

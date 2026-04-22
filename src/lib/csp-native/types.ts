@@ -147,5 +147,16 @@ export interface ConfiguredCsp {
    * ADMX flow so the editor can share input components.
    */
   admxElements?: Record<string, ElementValue>;
+  /**
+   * User-supplied values for the parameterised segments of a CSP path
+   * (rendered as `<instance>` folders in the policy list, produced when the
+   * Microsoft DDF marks a segment with no `NodeName`). For example
+   * `WiFi/Profile//WlanXml` has one slot — the WiFi profile name — so
+   * `instanceNames = ["Primo-Corp"]` substitutes into the LocURI as
+   * `./Device/Vendor/MSFT/WiFi/Profile/Primo-Corp/WlanXml`.
+   *
+   * Indexed by slot position (left-to-right in the path).
+   */
+  instanceNames?: string[];
   apply: boolean;
 }

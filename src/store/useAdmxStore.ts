@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
 import type {
   AdmxFile,
   ConfiguredPolicy,
@@ -16,10 +17,23 @@ interface AdmxStoreState {
   configured: Record<string, ConfiguredPolicy>;
   configuredCsp: Record<string, ConfiguredCsp>;
   selectedKey?: string;
+  /**
+   * Whether the bundled Microsoft Policy CSP catalog is surfaced in the
+   * Policies list. Defaults to true — users can un-check it if they only
+   * want to work with their own ADMX. Persisted.
+   */
+  cspCatalogEnabled: boolean;
+  /**
+   * IDs of pre-filled ADMX samples the user has checked in the "Policy
+   * sources" panel. Persisted so samples re-hydrate on reload.
+   */
+  enabledSampleIds: string[];
 
   addFile(file: AdmxFile): void;
   removeFile(id: string): void;
   clearFiles(): void;
+  setCspCatalogEnabled(v: boolean): void;
+  setEnabledSampleIds(ids: string[]): void;
 
   /** Select an ADMX policy for editing. */
   selectPolicy(admxId: string, policyName: string): void;
@@ -55,6 +69,10 @@ interface AdmxStoreState {
   setCspValue(settingId: string, value: CspValue): void;
   setCspScope(settingId: string, scope: PolicyScope): void;
   setCspApply(settingId: string, apply: boolean): void;
+
+  /** Clear every configured / applied policy in one shot. Keeps loaded ADMX
+   *  files intact — only the user's per-policy choices are reset. */
+  resetConfigurations(): void;
   setCspAdmxState(settingId: string, state: PolicyState): void;
   setCspAdmxElement(
     settingId: string,
@@ -121,11 +139,15 @@ function upsertCsp(
   return base;
 }
 
-export const useAdmxStore = create<AdmxStoreState>((set) => ({
+export const useAdmxStore = create<AdmxStoreState>()(
+  persist(
+    (set) => ({
   files: [],
   configured: {},
   configuredCsp: {},
   selectedKey: undefined,
+  cspCatalogEnabled: true,
+  enabledSampleIds: [],
 
   addFile: (file) =>
     set((s) => ({
@@ -148,6 +170,10 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
 
   clearFiles: () =>
     set({ files: [], configured: {}, selectedKey: undefined }),
+
+  setCspCatalogEnabled: (v) => set({ cspCatalogEnabled: v }),
+
+  setEnabledSampleIds: (ids) => set({ enabledSampleIds: ids }),
 
   selectPolicy: (admxId, policyName) =>
     set({ selectedKey: policyKey(admxId, policyName) }),
@@ -239,6 +265,9 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
       };
     }),
 
+  resetConfigurations: () =>
+    set({ configured: {}, configuredCsp: {}, selectedKey: undefined }),
+
   setCspAdmxState: (settingId, state) =>
     set((s) => {
       const existing = upsertCsp(s.configuredCsp, settingId);
@@ -264,4 +293,29 @@ export const useAdmxStore = create<AdmxStoreState>((set) => ({
         },
       };
     }),
-}));
+    }),
+    {
+      name: "csp-builder-store",
+      version: 1,
+      storage: createJSONStorage(() => localStorage),
+      // Only persist the user's configured policies — not the (large,
+      // derivable) `files` array nor the transient `selectedKey`. Sample ADMX
+      // re-hydrate from ?raw imports when the user re-checks them.
+      partialize: (s) => ({
+        configured: s.configured,
+        configuredCsp: s.configuredCsp,
+        cspCatalogEnabled: s.cspCatalogEnabled,
+        enabledSampleIds: s.enabledSampleIds,
+      }),
+      // `files` is intentionally not persisted (too large, re-parsed from the
+      // bundled samples at mount). Without the custom merge below, zustand's
+      // default shallow-merge would leave `files` at its initial `[]` — which
+      // is actually what we want here, so the default works. This callback
+      // ensures the initial state is completely overridden by what was stored.
+      merge: (persisted, current) => ({
+        ...current,
+        ...(persisted as object),
+      }),
+    }
+  )
+);

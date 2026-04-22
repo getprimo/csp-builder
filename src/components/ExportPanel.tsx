@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Download, FileJson, Copy, Check } from "lucide-react";
+import { Download, FileJson, Copy, Check, RotateCcw } from "lucide-react";
 import {
   Card,
   CardContent,
@@ -23,6 +23,7 @@ export function ExportPanel() {
   const files = useAdmxStore((s) => s.files);
   const configured = useAdmxStore((s) => s.configured);
   const configuredCsp = useAdmxStore((s) => s.configuredCsp);
+  const resetConfigurations = useAdmxStore((s) => s.resetConfigurations);
   const [mode, setMode] = useState<ExportMode>("fleetdm");
   const [copied, setCopied] = useState(false);
 
@@ -60,6 +61,18 @@ export function ExportPanel() {
       setTimeout(() => setCopied(false), 1500);
     } catch {
       // no-op
+    }
+  };
+
+  const totalApplied = configuredCount + deleteCount + cspApplyCount;
+
+  const onReset = () => {
+    const msg =
+      totalApplied === 1
+        ? "Reset the 1 applied policy? This clears its state and value. The ADMX templates stay loaded."
+        : `Reset ${totalApplied} applied policies? This clears their state and values. The ADMX templates stay loaded.`;
+    if (window.confirm(msg)) {
+      resetConfigurations();
     }
   };
 
@@ -101,7 +114,7 @@ export function ExportPanel() {
           </pre>
         </div>
 
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <Button
             onClick={onDownload}
             disabled={files.length === 0 && cspApplyCount === 0}
@@ -119,6 +132,16 @@ export function ExportPanel() {
               <Copy className="h-4 w-4 mr-2" />
             )}
             {copied ? "Copied" : "Copy"}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onReset}
+            disabled={totalApplied === 0}
+            className="ml-auto text-destructive hover:bg-destructive/10 hover:text-destructive"
+            title="Reset all applied policies"
+          >
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Reset
           </Button>
         </div>
       </CardContent>

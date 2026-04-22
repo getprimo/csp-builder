@@ -1,4 +1,4 @@
-import { FileUploader } from "@/components/FileUploader";
+import { PolicySources } from "@/components/PolicySources";
 import { PolicyList } from "@/components/PolicyList";
 import { PolicyEditor } from "@/components/PolicyEditor";
 import { ExportPanel } from "@/components/ExportPanel";
@@ -36,7 +36,7 @@ function App() {
       </header>
 
       <main className="container py-6 space-y-6">
-        <FileUploader />
+        <PolicySources />
 
         <div className="grid grid-cols-1 lg:grid-cols-[420px_minmax(0,1fr)] gap-6 items-start">
           <PolicyList />

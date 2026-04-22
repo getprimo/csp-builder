@@ -121,9 +121,10 @@ export function PolicyList() {
   const selectPolicy = useAdmxStore((s) => s.selectPolicy);
   const selectCsp = useAdmxStore((s) => s.selectCsp);
   const selectedKey = useAdmxStore((s) => s.selectedKey);
+  const cspCatalogEnabled = useAdmxStore((s) => s.cspCatalogEnabled);
   const [query, setQuery] = useState("");
   const [showIncompatible, setShowIncompatible] = useState(false);
-  const [showCsp, setShowCsp] = useState(true);
+  const [onlyApplied, setOnlyApplied] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
 
   const admxGroups: AdmxGroup[] = useMemo(() => {
@@ -175,8 +176,8 @@ export function PolicyList() {
   }, []);
 
   const allGroups: Group[] = useMemo(
-    () => [...admxGroups, ...(showCsp ? cspGroups : [])],
-    [admxGroups, cspGroups, showCsp]
+    () => [...admxGroups, ...(cspCatalogEnabled ? cspGroups : [])],
+    [admxGroups, cspGroups, cspCatalogEnabled]
   );
 
   const q = query.trim().toLowerCase();
@@ -187,6 +188,12 @@ export function PolicyList() {
         const keep = (e: LeafEntry): boolean => {
           if (e.kind === "admx") {
             if (!showIncompatible && !e.ingestable) return false;
+            if (onlyApplied) {
+              const fileIdForGroup = g.kind === "admx" ? g.file.id : "";
+              const cfg =
+                configured[policyKey(fileIdForGroup, e.policy.name)];
+              if (!cfg?.apply) return false;
+            }
             if (!q) return true;
             return (
               e.policy.name.toLowerCase().includes(q) ||
@@ -196,6 +203,10 @@ export function PolicyList() {
                 .toLowerCase()
                 .includes(q)
             );
+          }
+          if (onlyApplied) {
+            const cfg = configuredCsp[e.setting.id];
+            if (!cfg?.apply) return false;
           }
           if (!q) return true;
           return (
@@ -211,7 +222,7 @@ export function PolicyList() {
       .filter((g) => !!g.filteredRoot) as Array<
       Group & { filteredRoot: TreeNode }
     >;
-  }, [allGroups, q, showIncompatible]);
+  }, [allGroups, q, showIncompatible, onlyApplied, configured, configuredCsp]);
 
   const toggleNode = (id: string) =>
     setExpanded((prev) => {
@@ -254,9 +265,11 @@ export function PolicyList() {
     return m;
   }, [configuredCsp]);
 
-  // Expand every folder automatically when searching so matches are visible.
+  // Expand every folder automatically when searching or when the "Only
+  // applied" filter is on, so matches/applied items are visible without
+  // having to hand-expand the tree.
   const effectiveExpanded = useMemo(() => {
-    if (!q) return expanded;
+    if (!q && !onlyApplied) return expanded;
     const all = new Set(expanded);
     const addAll = (gid: string, node: TreeNode) => {
       all.add(gid);
@@ -269,7 +282,7 @@ export function PolicyList() {
     };
     for (const g of filteredGroups) addAll(g.id, g.filteredRoot);
     return all;
-  }, [expanded, q, filteredGroups]);
+  }, [expanded, q, onlyApplied, filteredGroups]);
 
   if (files.length === 0 && cspGroups.length === 0) return null;
 
@@ -307,18 +320,18 @@ export function PolicyList() {
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={showIncompatible}
-              onChange={(e) => setShowIncompatible(e.target.checked)}
+              checked={onlyApplied}
+              onChange={(e) => setOnlyApplied(e.target.checked)}
             />
-            Show incompatible ADMX
+            Only applied ({totalApplied})
           </label>
           <label className="flex items-center gap-2">
             <input
               type="checkbox"
-              checked={showCsp}
-              onChange={(e) => setShowCsp(e.target.checked)}
+              checked={showIncompatible}
+              onChange={(e) => setShowIncompatible(e.target.checked)}
             />
-            Show native CSP areas ({cspGroups.length})
+            Show incompatible ADMX
           </label>
         </div>
 
@@ -328,10 +341,19 @@ export function PolicyList() {
             const visibleCount = countLeaves(g.filteredRoot);
             if (q && visibleCount === 0) return null;
 
-            const countLabel =
-              g.kind === "admx" && showIncompatible
-                ? `${visibleCount}/${g.totalCount}`
-                : `${visibleCount}`;
+            // When "Show incompatible" is on, the left number must still be
+            // the *compatible* count — not the total — otherwise incompatible
+            // entries inflate the number and the chip becomes misleading.
+            // The right number (post-slash) shows the total so users can see
+            // the ratio at a glance. Under search, the left number is the
+            // matched count (compatible matches only when showIncompatible is
+            // off, all matches when it's on).
+            const countLabel = (() => {
+              if (g.kind !== "admx") return `${visibleCount}`;
+              if (!showIncompatible) return `${visibleCount}`;
+              if (q) return `${visibleCount}/${g.totalCount}`;
+              return `${g.compatCount}/${g.totalCount}`;
+            })();
 
             const appliedInGroup =
               g.kind === "admx"

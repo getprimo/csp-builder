@@ -1,5 +1,12 @@
 import { useMemo, useState } from "react";
-import { Download, FileJson, Copy, Check, RotateCcw } from "lucide-react";
+import {
+  Download,
+  FileJson,
+  Copy,
+  Check,
+  RotateCcw,
+  ExternalLink,
+} from "lucide-react";
 import {
   Card,
   CardContent,
@@ -18,6 +25,9 @@ import {
 } from "@/components/ui/select";
 import { useAdmxStore } from "@/store/useAdmxStore";
 import { buildSyncML, EXPORT_MODES, type ExportMode } from "@/lib/csp/syncml";
+
+const PRIMO_CUSTOMFILE_URL =
+  "https://app.getprimo.com/mdm-controls/customfile_windows/add";
 
 export function ExportPanel() {
   const files = useAdmxStore((s) => s.files);
@@ -62,6 +72,17 @@ export function ExportPanel() {
     } catch {
       // no-op
     }
+  };
+
+  const onLoadToPrimo = () => {
+    const bytes = new TextEncoder().encode(xml);
+    let binary = "";
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    const b64 = btoa(binary);
+    const url = `${PRIMO_CUSTOMFILE_URL}?xml_file_b64=${encodeURIComponent(b64)}`;
+    window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const totalApplied = configuredCount + deleteCount + cspApplyCount;
@@ -132,6 +153,13 @@ export function ExportPanel() {
               <Copy className="h-4 w-4 mr-2" />
             )}
             {copied ? "Copied" : "Copy"}
+          </Button>
+          <Button
+            variant="outline"
+            onClick={onLoadToPrimo}
+            disabled={files.length === 0 && cspApplyCount === 0}
+          >
+            <ExternalLink className="h-4 w-4 mr-2" /> Load to Primo
           </Button>
           <Button
             variant="outline"

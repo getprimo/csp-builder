@@ -4,7 +4,6 @@ import type {
   ConfiguredPolicy,
   ElementValue,
   ListValue,
-  PolicyDefinition,
   PolicyElement,
   PolicyScope,
 } from "@/lib/admx/types";

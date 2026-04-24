@@ -122,9 +122,10 @@ export function PolicyList() {
   const selectCsp = useAdmxStore((s) => s.selectCsp);
   const selectedKey = useAdmxStore((s) => s.selectedKey);
   const cspCatalogEnabled = useAdmxStore((s) => s.cspCatalogEnabled);
+  const onlyApplied = useAdmxStore((s) => s.onlyApplied);
+  const setOnlyApplied = useAdmxStore((s) => s.setOnlyApplied);
   const [query, setQuery] = useState("");
   const [showIncompatible, setShowIncompatible] = useState(false);
-  const [onlyApplied, setOnlyApplied] = useState(false);
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
 
   const admxGroups: AdmxGroup[] = useMemo(() => {

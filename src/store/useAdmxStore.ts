@@ -11,6 +11,7 @@ import type {
 import type { ConfiguredCsp, CspValue } from "@/lib/csp-native/types";
 import { getCspSetting } from "@/lib/csp-native/catalog";
 import { defaultAdmxElementValue } from "@/lib/csp-native/encoder";
+import type { ParsedSyncml } from "@/lib/csp/parseSyncml";
 
 interface AdmxStoreState {
   files: AdmxFile[];
@@ -28,12 +29,20 @@ interface AdmxStoreState {
    * sources" panel. Persisted so samples re-hydrate on reload.
    */
   enabledSampleIds: string[];
+  /**
+   * Whether the Policies list is filtered to only applied policies. Not
+   * persisted — defaults back to false on each session, matching the prior
+   * local-state behaviour. Lifted into the store so `useLoadFromUrl` can
+   * flip it on after a round-trip load.
+   */
+  onlyApplied: boolean;
 
   addFile(file: AdmxFile): void;
   removeFile(id: string): void;
   clearFiles(): void;
   setCspCatalogEnabled(v: boolean): void;
   setEnabledSampleIds(ids: string[]): void;
+  setOnlyApplied(v: boolean): void;
 
   /** Select an ADMX policy for editing. */
   selectPolicy(admxId: string, policyName: string): void;
@@ -84,6 +93,15 @@ interface AdmxStoreState {
     slotIndex: number,
     name: string
   ): void;
+
+  /**
+   * Replace the configured policies with the result of reverse-parsing a
+   * SyncML payload (e.g. from a Primo round-trip URL). ADMX files that are
+   * already loaded are reused; newly-ingested files are added. Configured
+   * policies that reference URL-ingested files are remapped to existing file
+   * ids when an ADMX with matching targetPrefix+targetNamespace is present.
+   */
+  loadFromSyncml(parsed: ParsedSyncml): void;
 }
 
 export function defaultScopeFor(cls: PolicyClass): PolicyScope {
@@ -153,6 +171,7 @@ export const useAdmxStore = create<AdmxStoreState>()(
   selectedKey: undefined,
   cspCatalogEnabled: true,
   enabledSampleIds: [],
+  onlyApplied: false,
 
   addFile: (file) =>
     set((s) => ({
@@ -179,6 +198,8 @@ export const useAdmxStore = create<AdmxStoreState>()(
   setCspCatalogEnabled: (v) => set({ cspCatalogEnabled: v }),
 
   setEnabledSampleIds: (ids) => set({ enabledSampleIds: ids }),
+
+  setOnlyApplied: (v) => set({ onlyApplied: v }),
 
   selectPolicy: (admxId, policyName) =>
     set({ selectedKey: policyKey(admxId, policyName) }),
@@ -309,6 +330,45 @@ export const useAdmxStore = create<AdmxStoreState>()(
           ...s.configuredCsp,
           [settingId]: { ...existing, instanceNames: next, apply: true },
         },
+      };
+    }),
+
+  loadFromSyncml: (parsed) =>
+    set((s) => {
+      const identityOf = (f: AdmxFile) =>
+        `${f.targetPrefix}::${f.targetNamespace}`;
+      const existingByIdentity = new Map<string, AdmxFile>();
+      for (const f of s.files) existingByIdentity.set(identityOf(f), f);
+
+      const remap = new Map<string, string>();
+      const nextFiles = [...s.files];
+      for (const f of parsed.ingestedAdmx) {
+        const key = identityOf(f);
+        const existing = existingByIdentity.get(key);
+        if (existing) {
+          remap.set(f.id, existing.id);
+          continue;
+        }
+        existingByIdentity.set(key, f);
+        nextFiles.push(f);
+      }
+
+      const nextConfigured: Record<string, ConfiguredPolicy> = {};
+      for (const c of parsed.configured) {
+        const admxId = remap.get(c.admxId) ?? c.admxId;
+        nextConfigured[policyKey(admxId, c.policyName)] = { ...c, admxId };
+      }
+
+      const nextConfiguredCsp: Record<string, ConfiguredCsp> = {};
+      for (const c of parsed.configuredCsp) {
+        nextConfiguredCsp[c.settingId] = c;
+      }
+
+      return {
+        files: nextFiles,
+        configured: nextConfigured,
+        configuredCsp: nextConfiguredCsp,
+        selectedKey: undefined,
       };
     }),
     }),

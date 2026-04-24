@@ -40,6 +40,7 @@ import {
   instanceSlots,
   isAdmxBackedCsp,
 } from "@/lib/csp-native/encoder";
+import { summarizeEditions } from "@/lib/csp-native/editions";
 import { Plus, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -63,6 +64,7 @@ export function CspEditor({ setting }: Props) {
   const effectiveValue = cfg?.value ?? defaultCspValue(setting);
   const admxState: PolicyState = cfg?.admxState ?? "enabled";
   const hasStructuredAdmx = !!setting.admx;
+  const editions = summarizeEditions(setting.applicability?.editionAllowList);
 
   const handleValueChange = (next: CspValue) => {
     setCspValue(setting.id, next);
@@ -139,6 +141,31 @@ export function CspEditor({ setting }: Props) {
                   <span className="font-semibold">CSP: </span>
                   <code>{setting.applicability.cspVersion}</code>
                 </>
+              )}
+            </div>
+          )}
+          {editions && (
+            <div
+              title={editions.editions
+                .map((e) => `${e.code} — ${e.label}`)
+                .join("\n")}
+            >
+              <span className="font-semibold">Windows editions: </span>
+              <span className="inline-flex flex-wrap gap-1 align-middle">
+                {editions.families.map((f) => (
+                  <Badge
+                    key={f}
+                    variant="secondary"
+                    className="font-normal"
+                  >
+                    {f}
+                  </Badge>
+                ))}
+              </span>
+              {!editions.homeSupported && (
+                <span className="ml-2 text-muted-foreground">
+                  (not available on Home)
+                </span>
               )}
             </div>
           )}

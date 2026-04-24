@@ -73,6 +73,12 @@ export type CspAllowed =
 export interface CspApplicability {
   osBuild?: string;
   cspVersion?: string;
+  /**
+   * Raw `MSFT:EditionAllowList` hex codes from the DDF (e.g.
+   * `["0x4", "0x30", "0x79"]`). Resolve to human labels via
+   * `summarizeEditions` in `./editions.ts`.
+   */
+  editionAllowList?: string[];
 }
 
 export interface CspSetting {

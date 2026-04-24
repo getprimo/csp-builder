@@ -137,14 +137,26 @@ function parseAllowedValues(av) {
   return { kind: "other", raw: valueType ?? "unknown" };
 }
 
+function parseEditionList(raw) {
+  const text = textOf(raw);
+  if (!text) return undefined;
+  const codes = text
+    .split(";")
+    .map((c) => c.trim())
+    .filter(Boolean);
+  return codes.length > 0 ? codes : undefined;
+}
+
 function looseBuild(applicability) {
   if (!applicability || typeof applicability !== "object") return undefined;
   const osBuild = textOf(applicability.OsBuildVersion);
   const cspVersion = textOf(applicability.CspVersion);
-  if (!osBuild && !cspVersion) return undefined;
+  const editionAllowList = parseEditionList(applicability.EditionAllowList);
+  if (!osBuild && !cspVersion && !editionAllowList) return undefined;
   const out = {};
   if (osBuild) out.osBuild = osBuild;
   if (cspVersion) out.cspVersion = cspVersion;
+  if (editionAllowList) out.editionAllowList = editionAllowList;
   return out;
 }
 

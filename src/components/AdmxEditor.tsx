@@ -45,6 +45,12 @@ export function AdmxEditor({ file, policy }: Props) {
   const scope: PolicyScope = cfg?.scope ?? defaultScopeFor(policy.class);
   const scopeFixed = policy.class !== "Both";
 
+  const supportedOnText = policy.supportedOn
+    ? file.supportedOn.find(
+        (d) => d.name === policy.supportedOn?.split(":").pop()
+      )?.displayName
+    : undefined;
+
   return (
     <Card>
       <CardHeader>
@@ -100,6 +106,12 @@ export function AdmxEditor({ file, policy }: Props) {
             <div>
               <span className="font-semibold">Category path: </span>
               <code>{policy.categoryPath.join(" → ")}</code>
+            </div>
+          )}
+          {supportedOnText && (
+            <div>
+              <span className="font-semibold">Supported on: </span>
+              <span>{supportedOnText}</span>
             </div>
           )}
         </div>

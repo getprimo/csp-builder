@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
@@ -24,6 +25,7 @@ interface ElementInputProps {
 }
 
 export function ElementInput({ element, value, onChange }: ElementInputProps) {
+  const { t } = useTranslation();
   const labelText = element.label ?? element.id;
 
   switch (element.type) {
@@ -82,7 +84,7 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
           />
           {element.maxLength !== undefined && (
             <p className="text-xs text-muted-foreground">
-              max {element.maxLength} chars
+              {t("elementInput.maxChars", { count: element.maxLength })}
             </p>
           )}
         </div>
@@ -103,7 +105,7 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
                 value: e.target.value.split("\n"),
               })
             }
-            placeholder="One value per line"
+            placeholder={t("elementInput.onePerLine")}
           />
         </div>
       );
@@ -120,12 +122,13 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
             }
           >
             <SelectTrigger>
-              <SelectValue placeholder="Choose…" />
+              <SelectValue placeholder={t("cspEditor.choosePlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {element.items.map((item, i) => (
                 <SelectItem key={i} value={String(i)}>
-                  {item.displayName || `Option ${i}`}
+                  {item.displayName ||
+                    t("elementInput.optionFallback", { index: i })}
                 </SelectItem>
               ))}
             </SelectContent>
@@ -143,14 +146,18 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
           <div className="border rounded-md divide-y">
             <div className="grid grid-cols-[1fr_auto] gap-2 p-2 text-xs font-semibold text-muted-foreground">
               <div className="grid grid-cols-[1fr_1fr] gap-2">
-                <span>Name{explicit ? "" : " (value)"}</span>
-                {explicit && <span>Data</span>}
+                <span>
+                  {explicit
+                    ? t("elementInput.name")
+                    : t("elementInput.nameValue")}
+                </span>
+                {explicit && <span>{t("elementInput.data")}</span>}
               </div>
               <span />
             </div>
             {entries.length === 0 && (
               <p className="p-3 text-sm text-muted-foreground">
-                No entries yet. Click Add.
+                {t("elementInput.noEntries")}
               </p>
             )}
             {entries.map((entry, i) => (
@@ -161,7 +168,7 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
                 <div className="grid grid-cols-[1fr_1fr] gap-2">
                   <Input
                     value={entry.name}
-                    placeholder="Name"
+                    placeholder={t("elementInput.name")}
                     onChange={(e) => {
                       const next = [...entries];
                       next[i] = { ...next[i], name: e.target.value };
@@ -171,7 +178,7 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
                   {explicit && (
                     <Input
                       value={entry.data ?? ""}
-                      placeholder="Data"
+                      placeholder={t("elementInput.data")}
                       onChange={(e) => {
                         const next = [...entries];
                         next[i] = { ...next[i], data: e.target.value };
@@ -184,7 +191,7 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
                   variant="ghost"
                   size="icon"
                   onClick={() => update(entries.filter((_, j) => j !== i))}
-                  aria-label="Remove"
+                  aria-label={t("elementInput.remove")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -197,11 +204,12 @@ export function ElementInput({ element, value, onChange }: ElementInputProps) {
             size="sm"
             onClick={() => update([...entries, { name: "", data: "" }])}
           >
-            <Plus className="h-4 w-4 mr-1" /> Add
+            <Plus className="h-4 w-4 mr-1" /> {t("elementInput.add")}
           </Button>
           {element.valuePrefix && (
             <p className="text-xs text-muted-foreground">
-              Registry prefix: <code>{element.valuePrefix}</code>
+              {t("elementInput.registryPrefix")}{" "}
+              <code>{element.valuePrefix}</code>
             </p>
           )}
         </div>

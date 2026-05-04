@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   AlertTriangle,
   CheckCircle2,
@@ -115,6 +116,7 @@ function filterTree(
 }
 
 export function PolicyList() {
+  const { t } = useTranslation();
   const files = useAdmxStore((s) => s.files);
   const configured = useAdmxStore((s) => s.configured);
   const configuredCsp = useAdmxStore((s) => s.configuredCsp);
@@ -291,17 +293,22 @@ export function PolicyList() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between gap-2 flex-wrap">
-          <span>Policies</span>
+          <span>{t("policyList.title")}</span>
           <div className="flex gap-2 flex-wrap">
             {totalApplied > 0 && (
-              <Badge variant="success">{totalApplied} Applied</Badge>
+              <Badge variant="success">
+                {t("policyList.applied", { count: totalApplied })}
+              </Badge>
             )}
             <Badge variant="outline">
-              {admxTotals.compat} ADMX · {cspTotal} CSP
+              {t("policyList.stats", {
+                admx: admxTotals.compat,
+                csp: cspTotal,
+              })}
             </Badge>
             {admxTotals.excluded > 0 && (
               <Badge variant="destructive">
-                {admxTotals.excluded} excluded
+                {t("policyList.excluded", { count: admxTotals.excluded })}
               </Badge>
             )}
           </div>
@@ -313,7 +320,7 @@ export function PolicyList() {
           <Input
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search by name, category or description…"
+            placeholder={t("policyList.searchPlaceholder")}
             className="pl-8"
           />
         </div>
@@ -324,7 +331,7 @@ export function PolicyList() {
               checked={onlyApplied}
               onChange={(e) => setOnlyApplied(e.target.checked)}
             />
-            Only applied ({totalApplied})
+            {t("policyList.onlyApplied", { count: totalApplied })}
           </label>
           <label className="flex items-center gap-2">
             <input
@@ -332,7 +339,7 @@ export function PolicyList() {
               checked={showIncompatible}
               onChange={(e) => setShowIncompatible(e.target.checked)}
             />
-            Show incompatible ADMX
+            {t("policyList.showIncompatible")}
           </label>
         </div>
 
@@ -387,7 +394,7 @@ export function PolicyList() {
                   </Badge>
                   {appliedInGroup > 0 && (
                     <Badge variant="success" className="text-[11px]">
-                      {appliedInGroup} Applied
+                      {t("policyList.applied", { count: appliedInGroup })}
                     </Badge>
                   )}
                 </button>
@@ -413,7 +420,7 @@ export function PolicyList() {
           })}
           {q && filteredGroups.length === 0 && (
             <div className="p-4 text-sm text-muted-foreground">
-              No policy matches the search.
+              {t("policyList.noMatches")}
             </div>
           )}
         </div>
@@ -564,6 +571,7 @@ function AdmxRow({
   depth,
   onSelect,
 }: AdmxRowProps) {
+  const { t } = useTranslation();
   const key = policyKey(admxId, entry.policy.name);
   const isSelected = key === selectedKey;
   return (
@@ -590,7 +598,7 @@ function AdmxRow({
             </span>
             {applied && (
               <Badge variant="success" className="text-[10px]">
-                Apply
+                {t("policyList.applyBadge")}
               </Badge>
             )}
           </div>
@@ -626,6 +634,7 @@ function CspRow({
   depth,
   onSelect,
 }: CspRowProps) {
+  const { t } = useTranslation();
   const key = cspKey(entry.setting.id);
   const isSelected = key === selectedKey;
   return (
@@ -647,7 +656,7 @@ function CspRow({
             </span>
             {applied && (
               <Badge variant="success" className="text-[10px]">
-                Apply
+                {t("policyList.applyBadge")}
               </Badge>
             )}
           </div>

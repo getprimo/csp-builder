@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   Download,
   FileJson,
@@ -29,7 +30,16 @@ import { buildSyncML, EXPORT_MODES, type ExportMode } from "@/lib/csp/syncml";
 const PRIMO_CUSTOMFILE_URL =
   "https://app.getprimo.com/mdm-controls/customfile_windows/add";
 
+const MODE_I18N_KEY: Record<ExportMode, string> = {
+  fleetdm: "exportModes.fleetdm",
+  "envelope-with-ingestion": "exportModes.envelopeWithIngestion",
+  "body-with-ingestion": "exportModes.bodyWithIngestion",
+  "envelope-only": "exportModes.envelopeOnly",
+  "body-only": "exportModes.bodyOnly",
+};
+
 export function ExportPanel() {
+  const { t } = useTranslation();
   const files = useAdmxStore((s) => s.files);
   const configured = useAdmxStore((s) => s.configured);
   const configuredCsp = useAdmxStore((s) => s.configuredCsp);
@@ -90,8 +100,8 @@ export function ExportPanel() {
   const onReset = () => {
     const msg =
       totalApplied === 1
-        ? "Reset the 1 applied policy? This clears its state and value. The ADMX templates stay loaded."
-        : `Reset ${totalApplied} applied policies? This clears their state and values. The ADMX templates stay loaded.`;
+        ? t("exportPanel.resetConfirmOne")
+        : t("exportPanel.resetConfirmMany", { count: totalApplied });
     if (window.confirm(msg)) {
       resetConfigurations();
     }
@@ -101,16 +111,20 @@ export function ExportPanel() {
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <FileJson className="h-5 w-5" /> Export
+          <FileJson className="h-5 w-5" /> {t("exportPanel.title")}
         </CardTitle>
         <CardDescription>
-          {configuredCount} ADMX · {cspApplyCount} CSP · {deleteCount} reset ·{" "}
-          {files.length} ADMX files loaded
+          {t("exportPanel.summary", {
+            admx: configuredCount,
+            csp: cspApplyCount,
+            reset: deleteCount,
+            files: files.length,
+          })}
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="space-y-1">
-          <Label className="text-xs">Format</Label>
+          <Label className="text-xs">{t("exportPanel.format")}</Label>
           <Select value={mode} onValueChange={(v) => setMode(v as ExportMode)}>
             <SelectTrigger>
               <SelectValue />
@@ -118,18 +132,18 @@ export function ExportPanel() {
             <SelectContent>
               {EXPORT_MODES.map((m) => (
                 <SelectItem key={m.id} value={m.id}>
-                  {m.label}
+                  {t(`${MODE_I18N_KEY[m.id]}.label`)}
                 </SelectItem>
               ))}
             </SelectContent>
           </Select>
           <p className="text-xs text-muted-foreground pt-1">
-            {selectedMode.description}
+            {t(`${MODE_I18N_KEY[selectedMode.id]}.description`)}
           </p>
         </div>
 
         <div>
-          <Label className="text-xs">Preview</Label>
+          <Label className="text-xs">{t("exportPanel.preview")}</Label>
           <pre className="mt-1 max-h-[480px] overflow-auto rounded-md border bg-muted/40 p-3 text-xs font-mono whitespace-pre">
             {xml}
           </pre>
@@ -140,7 +154,7 @@ export function ExportPanel() {
             onClick={onDownload}
             disabled={files.length === 0 && cspApplyCount === 0}
           >
-            <Download className="h-4 w-4 mr-2" /> Download .xml
+            <Download className="h-4 w-4 mr-2" /> {t("exportPanel.download")}
           </Button>
           <Button
             variant="outline"
@@ -152,24 +166,24 @@ export function ExportPanel() {
             ) : (
               <Copy className="h-4 w-4 mr-2" />
             )}
-            {copied ? "Copied" : "Copy"}
+            {copied ? t("exportPanel.copied") : t("exportPanel.copy")}
           </Button>
           <Button
             variant="outline"
             onClick={onLoadToPrimo}
             disabled={files.length === 0 && cspApplyCount === 0}
           >
-            <ExternalLink className="h-4 w-4 mr-2" /> Load to Primo
+            <ExternalLink className="h-4 w-4 mr-2" /> {t("exportPanel.loadToPrimo")}
           </Button>
           <Button
             variant="outline"
             onClick={onReset}
             disabled={totalApplied === 0}
             className="ml-auto text-destructive hover:bg-destructive/10 hover:text-destructive"
-            title="Reset all applied policies"
+            title={t("exportPanel.resetTitle")}
           >
             <RotateCcw className="h-4 w-4 mr-2" />
-            Reset
+            {t("exportPanel.reset")}
           </Button>
         </div>
       </CardContent>

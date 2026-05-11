@@ -145,6 +145,8 @@
     "copy": "Copy",
     "copied": "Copied",
     "loadToPrimo": "Load to Primo",
+    "loadToPrimoUpdate": "Update control Primo",
+    "loadToPrimoAdd": "Create new control in Primo",
     "reset": "Reset",
     "resetTitle": "Reset all applied policies",
     "resetConfirmOne": "Reset the 1 applied policy? This clears its state and value. The ADMX templates stay loaded.",

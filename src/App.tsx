@@ -42,6 +42,20 @@ function parseSampleById(s: SampleBundle): AdmxFile {
   return file;
 }
 
+function readControleIdFromSearchParams(
+  params: URLSearchParams
+): string | undefined {
+  const raw =
+    params.get("controle_id") ?? params.get("control_id") ?? undefined;
+  const trimmed = raw?.trim();
+  return trimmed || undefined;
+}
+
+function stripControleIdParams(params: URLSearchParams): void {
+  params.delete("controle_id");
+  params.delete("control_id");
+}
+
 function useLoadFromUrl() {
   const files = useAdmxStore((s) => s.files);
   const enabledSampleIds = useAdmxStore((s) => s.enabledSampleIds);
@@ -50,12 +64,26 @@ function useLoadFromUrl() {
   const setEnabledSampleIds = useAdmxStore((s) => s.setEnabledSampleIds);
   const setCspCatalogEnabled = useAdmxStore((s) => s.setCspCatalogEnabled);
   const setOnlyApplied = useAdmxStore((s) => s.setOnlyApplied);
+  const setControleId = useAdmxStore((s) => s.setControleId);
   const done = useRef(false);
 
   useEffect(() => {
     if (done.current) return;
     const params = new URLSearchParams(window.location.search);
+    const controleId = readControleIdFromSearchParams(params);
     const b64 = params.get("xml_file_b64");
+
+    if (controleId) {
+      setControleId(controleId);
+      stripControleIdParams(params);
+      const qs = params.toString();
+      const url =
+        window.location.pathname +
+        (qs ? `?${qs}` : "") +
+        window.location.hash;
+      window.history.replaceState({}, "", url);
+    }
+
     if (!b64) {
       done.current = true;
       return;
@@ -128,6 +156,7 @@ function useLoadFromUrl() {
       console.error("[CSP Builder] Failed to load xml_file_b64 from URL:", e);
     } finally {
       params.delete("xml_file_b64");
+      stripControleIdParams(params);
       const qs = params.toString();
       const url =
         window.location.pathname +
@@ -143,6 +172,7 @@ function useLoadFromUrl() {
     setEnabledSampleIds,
     setCspCatalogEnabled,
     setOnlyApplied,
+    setControleId,
   ]);
 }
 

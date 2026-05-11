@@ -36,6 +36,11 @@ interface AdmxStoreState {
    * flip it on after a round-trip load.
    */
   onlyApplied: boolean;
+  /**
+   * Optional Primo / fleet context id from `?controle_id=` or `?control_id=`.
+   * Persisted with configured policies so it stays tied to the in-progress edit session.
+   */
+  controleId?: string;
 
   addFile(file: AdmxFile): void;
   removeFile(id: string): void;
@@ -43,6 +48,7 @@ interface AdmxStoreState {
   setCspCatalogEnabled(v: boolean): void;
   setEnabledSampleIds(ids: string[]): void;
   setOnlyApplied(v: boolean): void;
+  setControleId(id: string | undefined): void;
 
   /** Select an ADMX policy for editing. */
   selectPolicy(admxId: string, policyName: string): void;
@@ -172,6 +178,7 @@ export const useAdmxStore = create<AdmxStoreState>()(
   cspCatalogEnabled: true,
   enabledSampleIds: [],
   onlyApplied: false,
+  controleId: undefined,
 
   addFile: (file) =>
     set((s) => ({
@@ -200,6 +207,8 @@ export const useAdmxStore = create<AdmxStoreState>()(
   setEnabledSampleIds: (ids) => set({ enabledSampleIds: ids }),
 
   setOnlyApplied: (v) => set({ onlyApplied: v }),
+
+  setControleId: (id) => set({ controleId: id }),
 
   selectPolicy: (admxId, policyName) =>
     set({ selectedKey: policyKey(admxId, policyName) }),
@@ -292,7 +301,12 @@ export const useAdmxStore = create<AdmxStoreState>()(
     }),
 
   resetConfigurations: () =>
-    set({ configured: {}, configuredCsp: {}, selectedKey: undefined }),
+    set({
+      configured: {},
+      configuredCsp: {},
+      selectedKey: undefined,
+      controleId: undefined,
+    }),
 
   setCspAdmxState: (settingId, state) =>
     set((s) => {
@@ -384,6 +398,7 @@ export const useAdmxStore = create<AdmxStoreState>()(
         configuredCsp: s.configuredCsp,
         cspCatalogEnabled: s.cspCatalogEnabled,
         enabledSampleIds: s.enabledSampleIds,
+        controleId: s.controleId,
       }),
       // `files` is intentionally not persisted (too large, re-parsed from the
       // bundled samples at mount). Without the custom merge below, zustand's

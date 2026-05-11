@@ -27,8 +27,15 @@ import {
 import { useAdmxStore } from "@/store/useAdmxStore";
 import { buildSyncML, EXPORT_MODES, type ExportMode } from "@/lib/csp/syncml";
 
-const PRIMO_CUSTOMFILE_URL =
-  "https://app.getprimo.com/mdm-controls/customfile_windows/add";
+const PRIMO_CUSTOMFILE_BASE =
+  "https://app.getprimo.com/mdm-controls/customfile_windows";
+
+function primoCustomFileOpenUrl(controleId: string | undefined): string {
+  if (controleId) {
+    return `${PRIMO_CUSTOMFILE_BASE}/edit/${encodeURIComponent(controleId)}`;
+  }
+  return `${PRIMO_CUSTOMFILE_BASE}/add`;
+}
 
 const MODE_I18N_KEY: Record<ExportMode, string> = {
   fleetdm: "exportModes.fleetdm",
@@ -43,6 +50,7 @@ export function ExportPanel() {
   const files = useAdmxStore((s) => s.files);
   const configured = useAdmxStore((s) => s.configured);
   const configuredCsp = useAdmxStore((s) => s.configuredCsp);
+  const controleId = useAdmxStore((s) => s.controleId);
   const resetConfigurations = useAdmxStore((s) => s.resetConfigurations);
   const [mode, setMode] = useState<ExportMode>("fleetdm");
   const [copied, setCopied] = useState(false);
@@ -84,18 +92,24 @@ export function ExportPanel() {
     }
   };
 
-  const onLoadToPrimo = () => {
+  const onLoadToPrimo = (forceAdd: boolean = false) => () => {
     const bytes = new TextEncoder().encode(xml);
     let binary = "";
     for (let i = 0; i < bytes.length; i++) {
       binary += String.fromCharCode(bytes[i]);
     }
     const b64 = btoa(binary);
-    const url = `${PRIMO_CUSTOMFILE_URL}?xml_file_b64=${encodeURIComponent(b64)}`;
+    const base = forceAdd ? primoCustomFileOpenUrl(undefined) : primoCustomFileOpenUrl(controleId);
+    const url = `${base}?xml_file_b64=${encodeURIComponent(b64)}`;
     window.open(url, "_blank", "noopener,noreferrer");
   };
 
   const totalApplied = configuredCount + deleteCount + cspApplyCount;
+
+
+  const disabledReset = useMemo(() => {
+    return totalApplied === 0 && !controleId;
+  }, [totalApplied, controleId]);
 
   const onReset = () => {
     const msg =
@@ -168,17 +182,39 @@ export function ExportPanel() {
             )}
             {copied ? t("exportPanel.copied") : t("exportPanel.copy")}
           </Button>
-          <Button
-            variant="outline"
-            onClick={onLoadToPrimo}
-            disabled={files.length === 0 && cspApplyCount === 0}
-          >
-            <ExternalLink className="h-4 w-4 mr-2" /> {t("exportPanel.loadToPrimo")}
-          </Button>
+          {controleId ? (
+            <>
+              <Button
+                onClick={onLoadToPrimo()}
+                disabled={files.length === 0 && cspApplyCount === 0}
+                >
+                <ExternalLink className="h-4 w-4 mr-2" />{" "}
+                {t("exportPanel.loadToPrimoUpdate")}
+              </Button>
+              <Button
+                variant="outline"
+                onClick={onLoadToPrimo(true)}
+                disabled={files.length === 0 && cspApplyCount === 0}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />{" "}
+                {t("exportPanel.loadToPrimoAdd")}
+              </Button>
+            </>
+            ) : (
+              <Button
+                variant="outline"
+                onClick={onLoadToPrimo()}
+                disabled={files.length === 0 && cspApplyCount === 0}
+              >
+                <ExternalLink className="h-4 w-4 mr-2" />{" "}
+                {t("exportPanel.loadToPrimo")}
+              </Button>
+          )}
+
           <Button
             variant="outline"
             onClick={onReset}
-            disabled={totalApplied === 0}
+            disabled={disabledReset}
             className="ml-auto text-destructive hover:bg-destructive/10 hover:text-destructive"
             title={t("exportPanel.resetTitle")}
           >

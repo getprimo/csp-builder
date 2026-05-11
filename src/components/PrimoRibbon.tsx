@@ -1,6 +1,8 @@
+import { useTranslation } from "react-i18next";
 import { primoUrl } from "@/lib/primo";
 
 export function PrimoRibbon() {
+  const { t } = useTranslation();
   return (
     <div
       aria-hidden="false"
@@ -12,7 +14,7 @@ export function PrimoRibbon() {
         rel="noopener"
         className="pointer-events-auto absolute top-[38px] -right-[58px] w-[240px] rotate-45 bg-primary py-2 text-center text-xs font-semibold tracking-wide text-primary-foreground shadow-lg ring-1 ring-black/10 transition-transform hover:scale-[1.03] focus-visible:scale-[1.03] focus-visible:outline-none"
       >
-        Built by Primo · MDM →
+        {t("primoRibbon.label")}
       </a>
     </div>
   );

@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -49,6 +50,7 @@ interface Props {
 }
 
 export function CspEditor({ setting }: Props) {
+  const { t } = useTranslation();
   const cfg = useAdmxStore((s) => s.configuredCsp[setting.id]);
   const setCspValue = useAdmxStore((s) => s.setCspValue);
   const setCspScope = useAdmxStore((s) => s.setCspScope);
@@ -84,8 +86,8 @@ export function CspEditor({ setting }: Props) {
               · family{" "}
               <Badge variant="outline" className="align-middle">
                 {setting.family === "standalone"
-                  ? "standalone"
-                  : "Policy CSP"}
+                  ? t("cspEditor.familyStandalone")
+                  : t("cspEditor.familyPolicyCsp")}
               </Badge>{" "}
               · scope{" "}
               <Badge variant="outline" className="align-middle">
@@ -104,7 +106,7 @@ export function CspEditor({ setting }: Props) {
                 apply ? "text-foreground" : "text-muted-foreground"
               )}
             >
-              Apply
+              {t("cspEditor.applyLabel")}
             </span>
             <Switch
               checked={apply}
@@ -122,23 +124,23 @@ export function CspEditor({ setting }: Props) {
 
         <div className="text-xs text-muted-foreground space-y-1 break-all">
           <div>
-            <span className="font-semibold">LocURI: </span>
+            <span className="font-semibold">{t("cspEditor.locUri")} </span>
             <code>{cspLocUri(setting, scope, cfg?.instanceNames)}</code>
           </div>
           {setting.defaultValue !== undefined && (
             <div>
-              <span className="font-semibold">Default: </span>
+              <span className="font-semibold">{t("cspEditor.default")} </span>
               <code>{setting.defaultValue}</code>
             </div>
           )}
           {setting.applicability?.osBuild && (
             <div>
-              <span className="font-semibold">OS build: </span>
+              <span className="font-semibold">{t("cspEditor.osBuild")} </span>
               <code>{setting.applicability.osBuild}</code>
               {setting.applicability.cspVersion && (
                 <>
                   {" · "}
-                  <span className="font-semibold">CSP: </span>
+                  <span className="font-semibold">{t("cspEditor.csp")} </span>
                   <code>{setting.applicability.cspVersion}</code>
                 </>
               )}
@@ -150,7 +152,9 @@ export function CspEditor({ setting }: Props) {
                 .map((e) => `${e.code} — ${e.label}`)
                 .join("\n")}
             >
-              <span className="font-semibold">Windows editions: </span>
+              <span className="font-semibold">
+                {t("cspEditor.windowsEditions")}{" "}
+              </span>
               <span className="inline-flex flex-wrap gap-1 align-middle">
                 {editions.families.map((f) => (
                   <Badge
@@ -164,16 +168,18 @@ export function CspEditor({ setting }: Props) {
               </span>
               {!editions.homeSupported && (
                 <span className="ml-2 text-muted-foreground">
-                  (not available on Home)
+                  {t("cspEditor.notOnHome")}
                 </span>
               )}
             </div>
           )}
           {setting.deprecated && (
             <div className="text-amber-700">
-              ⚠ Deprecated
+              {t("cspEditor.deprecated")}
               {setting.osBuildDeprecated
-                ? ` from build ${setting.osBuildDeprecated}`
+                ? t("cspEditor.deprecatedFromBuild", {
+                    build: setting.osBuildDeprecated,
+                  })
                 : ""}
             </div>
           )}
@@ -183,10 +189,9 @@ export function CspEditor({ setting }: Props) {
           {instanceSlots(setting).length > 0 && (
             <div className="space-y-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
               <div className="font-semibold">
-                Path parameters
+                {t("cspEditor.pathParameters.title")}
                 <span className="ml-2 text-xs font-normal">
-                  Microsoft DDF marks this CSP as parameterised — fill the name
-                  of each instance so the LocURI is complete.
+                  {t("cspEditor.pathParameters.hint")}
                 </span>
               </div>
               {instanceSlots(setting).map((slot) => {
@@ -204,8 +209,8 @@ export function CspEditor({ setting }: Props) {
                       value={value}
                       placeholder={
                         slot.label.toLowerCase().includes("profile")
-                          ? "e.g. Primo-Corp"
-                          : "name / id"
+                          ? t("cspEditor.pathParameters.profilePlaceholder")
+                          : t("cspEditor.pathParameters.namePlaceholder")
                       }
                       className="bg-white"
                       onChange={(e) =>
@@ -226,8 +231,10 @@ export function CspEditor({ setting }: Props) {
                 if (!missing) return null;
                 return (
                   <p className="text-xs">
-                    ⚠ At least one name is empty — the generated URI will
-                    contain <code>//</code> and Windows will reject it.
+                    <Trans
+                      i18nKey="cspEditor.pathParameters.missingWarning"
+                      components={{ code: <code /> }}
+                    />
                   </p>
                 );
               })()}
@@ -236,7 +243,9 @@ export function CspEditor({ setting }: Props) {
 
           <div>
             <Label className="mb-2 block">
-              CSP scope{scopeFixed ? " (fixed by DDF scope)" : ""}
+              {scopeFixed
+                ? t("cspEditor.cspScopeFixed")
+                : t("cspEditor.cspScope")}
             </Label>
             <RadioGroup
               value={scope}
@@ -250,7 +259,7 @@ export function CspEditor({ setting }: Props) {
                   disabled={scopeFixed}
                 />
                 <Label htmlFor={`${setting.id}-scope-device`}>
-                  Device (HKLM)
+                  {t("cspEditor.scopeDevice")}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
@@ -259,7 +268,9 @@ export function CspEditor({ setting }: Props) {
                   id={`${setting.id}-scope-user`}
                   disabled={scopeFixed}
                 />
-                <Label htmlFor={`${setting.id}-scope-user`}>User (HKCU)</Label>
+                <Label htmlFor={`${setting.id}-scope-user`}>
+                  {t("cspEditor.scopeUser")}
+                </Label>
               </div>
             </RadioGroup>
           </div>
@@ -267,7 +278,7 @@ export function CspEditor({ setting }: Props) {
           {hasStructuredAdmx ? (
             <>
               <div>
-                <Label className="mb-2 block">State</Label>
+                <Label className="mb-2 block">{t("cspEditor.state")}</Label>
                 <RadioGroup
                   value={apply ? admxState : ""}
                   onValueChange={(v) =>
@@ -280,27 +291,34 @@ export function CspEditor({ setting }: Props) {
                       value="notConfigured"
                       id={`${setting.id}-nc`}
                     />
-                    <Label htmlFor={`${setting.id}-nc`}>Not Configured</Label>
+                    <Label htmlFor={`${setting.id}-nc`}>
+                      {t("cspEditor.stateNotConfigured")}
+                    </Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <RadioGroupItem
                       value="enabled"
                       id={`${setting.id}-en`}
                     />
-                    <Label htmlFor={`${setting.id}-en`}>Enabled</Label>
+                    <Label htmlFor={`${setting.id}-en`}>
+                      {t("cspEditor.stateEnabled")}
+                    </Label>
                   </div>
                   <div className="flex items-center gap-2">
                     <RadioGroupItem
                       value="disabled"
                       id={`${setting.id}-di`}
                     />
-                    <Label htmlFor={`${setting.id}-di`}>Disabled</Label>
+                    <Label htmlFor={`${setting.id}-di`}>
+                      {t("cspEditor.stateDisabled")}
+                    </Label>
                   </div>
                 </RadioGroup>
                 <p className="mt-2 text-xs text-muted-foreground">
-                  Not Configured emits a <code>&lt;Delete&gt;</code>, Enabled an{" "}
-                  <code>&lt;enabled/&gt;</code> payload with the elements below,
-                  Disabled a <code>&lt;disabled/&gt;</code> marker.
+                  <Trans
+                    i18nKey="cspEditor.stateHelp"
+                    components={{ code: <code /> }}
+                  />
                 </p>
               </div>
 
@@ -334,9 +352,10 @@ export function CspEditor({ setting }: Props) {
 
         {!apply && (
           <p className="text-xs text-muted-foreground border-t pt-3">
-            Apply is off — this CSP is <strong>not</strong> emitted in the
-            SyncML payload. Flip the toggle, or change the value above, to
-            include it.
+            <Trans
+              i18nKey="cspEditor.applyOff"
+              components={{ strong: <strong /> }}
+            />
           </p>
         )}
       </CardContent>
@@ -351,6 +370,7 @@ interface ValueInputProps {
 }
 
 function ValueInput({ setting, value, onChange }: ValueInputProps) {
+  const { t } = useTranslation();
   const allowed = setting.allowed;
   const enumItems = allowed?.kind === "enum" ? allowed.items : undefined;
 
@@ -367,7 +387,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
           : "";
     return (
       <div className="space-y-1">
-        <Label>Value</Label>
+        <Label>{t("cspEditor.value")}</Label>
         <Select
           value={current}
           onValueChange={(v) => {
@@ -379,7 +399,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
           }}
         >
           <SelectTrigger>
-            <SelectValue placeholder="Choose…" />
+            <SelectValue placeholder={t("cspEditor.choosePlaceholder")} />
           </SelectTrigger>
           <SelectContent>
             {enumItems.map((it, i) => (
@@ -398,7 +418,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
       const checked = value.format === "bool" ? value.value : false;
       return (
         <div className="flex items-center justify-between gap-4">
-          <Label>Value</Label>
+          <Label>{t("cspEditor.value")}</Label>
           <Switch
             checked={checked}
             onCheckedChange={(v) => onChange({ format: "bool", value: v })}
@@ -411,7 +431,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
       const range = allowed?.kind === "range" ? allowed : undefined;
       return (
         <div className="space-y-1">
-          <Label>Value</Label>
+          <Label>{t("cspEditor.value")}</Label>
           <Input
             type="number"
             min={range?.min}
@@ -436,7 +456,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
       const v = value.format === "chr" ? value.value : "";
       return (
         <div className="space-y-1">
-          <Label>Value</Label>
+          <Label>{t("cspEditor.value")}</Label>
           <Input
             type="text"
             value={v}
@@ -449,7 +469,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
       const v = value.format === "xml" ? value.value : "";
       return (
         <div className="space-y-1">
-          <Label>Value (XML)</Label>
+          <Label>{t("cspEditor.valueXml")}</Label>
           <Textarea
             value={v}
             rows={8}
@@ -463,7 +483,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
       const v = value.format === "b64" ? value.value : "";
       return (
         <div className="space-y-1">
-          <Label>Value (Base64)</Label>
+          <Label>{t("cspEditor.valueBase64")}</Label>
           <Textarea
             value={v}
             rows={5}
@@ -477,6 +497,7 @@ function ValueInput({ setting, value, onChange }: ValueInputProps) {
 }
 
 function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
+  const { t } = useTranslation();
   const current = value.format === "chr" ? value.value : "<enabled/>";
 
   const setPayload = (next: string) => {
@@ -489,11 +510,16 @@ function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
     <div className="space-y-2">
       <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 p-3 text-xs text-amber-900">
         <div className="flex-1 space-y-1">
-          <div className="font-semibold">ADMX-backed CSP — special payload required</div>
+          <div className="font-semibold">
+            {t("cspEditor.admxBacked.title")}
+          </div>
           <p>
-            Unlike regular CSPs, this setting expects an ADMX-style XML payload
-            inside <code className="rounded bg-amber-100 px-1">&lt;Data&gt;</code>,
-            not a raw value. Structure:
+            <Trans
+              i18nKey="cspEditor.admxBacked.intro"
+              components={{
+                code: <code className="rounded bg-amber-100 px-1" />,
+              }}
+            />
           </p>
           <pre className="mt-1 overflow-x-auto rounded bg-amber-100/60 p-2 font-mono">
 {`<enabled/>
@@ -501,16 +527,19 @@ function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
 <data id="ElementId2" value="…"/>`}
           </pre>
           <p>
-            Element <code className="rounded bg-amber-100 px-1">id</code> names
-            come from the underlying ADMX file (e.g. <code className="rounded bg-amber-100 px-1">WallpaperName</code>,
-            <code className="rounded bg-amber-100 px-1">WallpaperStyle</code> for Desktop/Wallpaper).{" "}
+            <Trans
+              i18nKey="cspEditor.admxBacked.elementHint"
+              components={{
+                code: <code className="rounded bg-amber-100 px-1" />,
+              }}
+            />{" "}
             <a
               href={learnMoreUrl}
               target="_blank"
               rel="noopener"
               className="underline decoration-dotted underline-offset-2 hover:decoration-solid"
             >
-              Check Microsoft Learn for this area →
+              {t("cspEditor.admxBacked.learnMore")}
             </a>
           </p>
         </div>
@@ -523,7 +552,7 @@ function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
           size="sm"
           onClick={() => setPayload("<enabled/>")}
         >
-          Insert &lt;enabled/&gt;
+          {t("cspEditor.admxBacked.insertEnabled")}
         </Button>
         <Button
           type="button"
@@ -531,7 +560,7 @@ function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
           size="sm"
           onClick={() => setPayload("<disabled/>")}
         >
-          Insert &lt;disabled/&gt;
+          {t("cspEditor.admxBacked.insertDisabled")}
         </Button>
         <Button
           type="button"
@@ -544,11 +573,11 @@ function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
             )
           }
         >
-          Append &lt;data/&gt;
+          {t("cspEditor.admxBacked.appendData")}
         </Button>
       </div>
 
-      <Label>Payload</Label>
+      <Label>{t("cspEditor.admxBacked.payload")}</Label>
       <Textarea
         value={current}
         rows={6}
@@ -558,8 +587,10 @@ function AdmxBackedInput({ setting, value, onChange }: ValueInputProps) {
         onChange={(e) => setPayload(e.target.value)}
       />
       <p className="text-xs text-muted-foreground">
-        Will be XML-escaped into <code>&lt;Data&gt;…&lt;/Data&gt;</code> on
-        export. Line breaks are preserved.
+        <Trans
+          i18nKey="cspEditor.admxBacked.payloadHelp"
+          components={{ code: <code /> }}
+        />
       </p>
     </div>
   );
@@ -576,6 +607,7 @@ function CspAdmxElementInput({
   value,
   onChange,
 }: CspAdmxElementInputProps) {
+  const { t } = useTranslation();
   const labelText = element.label ?? element.id;
   const inputId = `csp-el-${element.id}`;
 
@@ -643,7 +675,7 @@ function CspAdmxElementInput({
             id={inputId}
             rows={4}
             value={lines.join("\n")}
-            placeholder="One value per line"
+            placeholder={t("elementInput.onePerLine")}
             onChange={(e) =>
               onChange({ type: "multiText", value: e.target.value.split("\n") })
             }
@@ -661,14 +693,15 @@ function CspAdmxElementInput({
             onValueChange={(v) => onChange({ type: "enum", value: Number(v) })}
           >
             <SelectTrigger>
-              <SelectValue placeholder="Choose…" />
+              <SelectValue placeholder={t("cspEditor.choosePlaceholder")} />
             </SelectTrigger>
             <SelectContent>
               {element.items.map((item, i) => (
                 <SelectItem key={i} value={String(i)}>
-                  {item.displayName || `Option ${i}`}
+                  {item.displayName ||
+                    t("elementInput.optionFallback", { index: i })}
                   <span className="ml-2 text-xs text-muted-foreground">
-                    (value {item.value})
+                    {t("elementInput.valueSuffix", { value: item.value })}
                   </span>
                 </SelectItem>
               ))}
@@ -688,7 +721,7 @@ function CspAdmxElementInput({
           <div className="divide-y rounded-md border">
             {entries.length === 0 && (
               <p className="p-3 text-sm text-muted-foreground">
-                No entries yet. Click Add.
+                {t("elementInput.noEntries")}
               </p>
             )}
             {entries.map((entry, i) => (
@@ -699,7 +732,7 @@ function CspAdmxElementInput({
                 <div className="grid grid-cols-[1fr_1fr] gap-2">
                   <Input
                     value={entry.name}
-                    placeholder="Name"
+                    placeholder={t("elementInput.name")}
                     onChange={(e) => {
                       const next = [...entries];
                       next[i] = { ...next[i], name: e.target.value };
@@ -709,7 +742,7 @@ function CspAdmxElementInput({
                   {explicit && (
                     <Input
                       value={entry.data ?? ""}
-                      placeholder="Data"
+                      placeholder={t("elementInput.data")}
                       onChange={(e) => {
                         const next = [...entries];
                         next[i] = { ...next[i], data: e.target.value };
@@ -722,7 +755,7 @@ function CspAdmxElementInput({
                   variant="ghost"
                   size="icon"
                   onClick={() => update(entries.filter((_, j) => j !== i))}
-                  aria-label="Remove"
+                  aria-label={t("elementInput.remove")}
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
@@ -735,7 +768,7 @@ function CspAdmxElementInput({
             size="sm"
             onClick={() => update([...entries, { name: "", data: "" }])}
           >
-            <Plus className="mr-1 h-4 w-4" /> Add
+            <Plus className="mr-1 h-4 w-4" /> {t("elementInput.add")}
           </Button>
         </div>
       );

@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { Trans, useTranslation } from "react-i18next";
 import {
   UploadCloud,
   Shield,
@@ -48,6 +49,7 @@ function parseSample(s: SampleBundle) {
 }
 
 export function PolicySources() {
+  const { t } = useTranslation();
   const files = useAdmxStore((s) => s.files);
   const addFile = useAdmxStore((s) => s.addFile);
   const removeFile = useAdmxStore((s) => s.removeFile);
@@ -89,8 +91,11 @@ export function PolicySources() {
           } catch (e) {
             setError(
               e instanceof Error
-                ? `Failed to parse ${s.name}: ${e.message}`
-                : `Failed to parse ${s.name}`
+                ? t("policySources.errors.failedToParseNamed", {
+                    name: s.name,
+                    message: e.message,
+                  })
+                : t("policySources.errors.failedToParse", { name: s.name })
             );
             return;
           }
@@ -117,11 +122,13 @@ export function PolicySources() {
         addFile(parsed);
       } catch (e) {
         setError(
-          e instanceof Error ? e.message : `Failed to parse ${pair.admx.name}`
+          e instanceof Error
+            ? e.message
+            : t("policySources.errors.failedToParse", { name: pair.admx.name })
         );
       }
     },
-    [addFile]
+    [addFile, t]
   );
 
   const onDrop = useCallback(
@@ -166,9 +173,9 @@ export function PolicySources() {
     <Card>
       <CardHeader className="pb-2">
         <CardTitle className="flex items-center justify-between gap-2">
-          <span>Policy sources</span>
+          <span>{t("policySources.title")}</span>
           <Badge variant="outline" className="text-[11px]">
-            {checkedCount} checked
+            {t("policySources.checked", { count: checkedCount })}
           </Badge>
         </CardTitle>
       </CardHeader>
@@ -185,15 +192,14 @@ export function PolicySources() {
             <div className="flex items-center gap-2">
               <Shield className="h-4 w-4 text-blue-600" />
               <span className="font-medium">
-                Native Windows Policy CSP
+                {t("policySources.nativeCsp.name")}
               </span>
               <Badge variant="secondary" className="text-[10px]">
-                3,940 settings · 306 areas
+                {t("policySources.nativeCsp.stats")}
               </Badge>
             </div>
             <div className="mt-0.5 text-xs text-muted-foreground">
-              Microsoft DDFv2 Feb 2026 catalog + ADMX-backed element schemas.
-              No upload required.
+              {t("policySources.nativeCsp.description")}
             </div>
           </div>
         </label>
@@ -202,7 +208,7 @@ export function PolicySources() {
         <div>
           <div className="mb-1">
             <span className="text-xs font-medium text-muted-foreground">
-              Bundled ADMX templates
+              {t("policySources.bundledTemplates")}
             </span>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
@@ -250,10 +256,12 @@ export function PolicySources() {
               )}
             />
             <UploadCloud className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium">Upload custom ADMX / ADML</span>
+            <span className="font-medium">{t("policySources.uploadCustom")}</span>
             {customFiles.length > 0 && (
               <Badge variant="secondary" className="ml-auto text-[10px]">
-                {customFiles.length} uploaded
+                {t("policySources.uploadedCount", {
+                  count: customFiles.length,
+                })}
               </Badge>
             )}
           </button>
@@ -270,16 +278,21 @@ export function PolicySources() {
                 <input {...getInputProps()} />
                 <UploadCloud className="mx-auto h-8 w-8 text-muted-foreground" />
                 <p className="mt-2 text-sm font-medium">
-                  Drop your <code>.admx</code> and <code>.adml</code> files
+                  <Trans
+                    i18nKey="policySources.dropZone.instruction"
+                    components={{ admx: <code />, adml: <code /> }}
+                  />
                 </p>
                 <p className="text-xs text-muted-foreground mt-1">
-                  or click to browse. Pairs are matched by filename.
+                  {t("policySources.dropZone.or")}
                 </p>
               </div>
 
               {Object.keys(pending).length > 0 && (
                 <p className="text-xs text-muted-foreground">
-                  Waiting on ADMX for: {Object.keys(pending).join(", ")}
+                  {t("policySources.waitingFor", {
+                    names: Object.keys(pending).join(", "),
+                  })}
                 </p>
               )}
 
@@ -299,7 +312,10 @@ export function PolicySources() {
                           <div className="text-[11px] text-muted-foreground truncate">
                             {f.admxFileName}
                             {f.admlFileName ? ` + ${f.admlFileName}` : ""}{" "}
-                            · {f.policies.length} policies
+                            ·{" "}
+                            {t("policySources.policiesCount", {
+                              count: f.policies.length,
+                            })}
                           </div>
                         </div>
                       </div>
@@ -307,7 +323,7 @@ export function PolicySources() {
                         variant="ghost"
                         size="icon"
                         onClick={() => removeFile(f.id)}
-                        aria-label="Remove"
+                        aria-label={t("policySources.remove")}
                       >
                         <Trash2 className="h-4 w-4" />
                       </Button>

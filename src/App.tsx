@@ -1,4 +1,5 @@
 import { useEffect, useRef } from "react";
+import { Trans, useTranslation } from "react-i18next";
 import { PolicySources } from "@/components/PolicySources";
 import { PolicyList } from "@/components/PolicyList";
 import { PolicyEditor } from "@/components/PolicyEditor";
@@ -147,6 +148,7 @@ function useLoadFromUrl() {
 
 function App() {
   useLoadFromUrl();
+  const { t } = useTranslation();
 
   return (
     <div className="min-h-screen bg-background">
@@ -155,24 +157,24 @@ function App() {
       <header className="border-b">
         <div className="container py-5">
           <h1 className="text-2xl font-semibold tracking-tight">
-            CSP Builder
+            {t("app.title")}
           </h1>
           <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-            Free online generator to turn Windows ADMX/ADML templates and the
-            Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for{" "}
-            <strong className="text-foreground">FleetDM</strong>,{" "}
-            <strong className="text-foreground">Intune</strong>, and any MDM
-            that speaks OMA-DM. Built by{" "}
-            <a
-              href={primoUrl("header")}
-              target="_blank"
-              rel="noopener"
-              className="font-medium text-foreground underline decoration-dotted underline-offset-4 hover:decoration-solid"
-            >
-              Primo
-            </a>{" "}
-            — the IT platform for modern teams (device management, onboarding,
-            SaaS, procurement).
+            <Trans
+              i18nKey="app.tagline"
+              components={{
+                fleet: <strong className="text-foreground" />,
+                intune: <strong className="text-foreground" />,
+                primo: (
+                  <a
+                    href={primoUrl("header")}
+                    target="_blank"
+                    rel="noopener"
+                    className="font-medium text-foreground underline decoration-dotted underline-offset-4 hover:decoration-solid"
+                  />
+                ),
+              }}
+            />
           </p>
         </div>
       </header>
@@ -189,14 +191,9 @@ function App() {
         </div>
 
         <section className="rounded-lg border bg-muted/30 p-5">
-          <h2 className="text-base font-semibold">
-            Shipping GPO / CSP policies at scale?
-          </h2>
+          <h2 className="text-base font-semibold">{t("promo.heading")}</h2>
           <p className="mt-1.5 text-sm text-muted-foreground">
-            This builder handles the <em>payload</em>. Primo handles the rest:
-            enroll devices via MDM, push ADMX-backed and native CSP policies,
-            manage macOS, Windows, Linux and iOS fleets from one place, and
-            automate onboarding/offboarding with your HR system.
+            <Trans i18nKey="promo.body" components={{ em: <em /> }} />
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <a
@@ -205,7 +202,7 @@ function App() {
               rel="noopener"
               className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
             >
-              Discover Primo →
+              {t("promo.ctaPrimary")}
             </a>
             <a
               href={primoUrl("cta_mdm", "/product-page/mdm")}
@@ -213,7 +210,7 @@ function App() {
               rel="noopener"
               className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent"
             >
-              See Primo for MDM
+              {t("promo.ctaMdm")}
             </a>
             <a
               href={primoUrl("cta_demo", "/request-a-demo")}
@@ -221,7 +218,7 @@ function App() {
               rel="noopener"
               className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent"
             >
-              Book a demo
+              {t("promo.ctaDemo")}
             </a>
           </div>
         </section>
@@ -229,16 +226,16 @@ function App() {
 
       <footer className="border-t">
         <div className="container flex flex-col gap-2 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <div>Client-only · fast-xml-parser · Tailwind · Zustand</div>
+          <div>{t("footer.stack")}</div>
           <div>
-            A free tool by{" "}
+            {t("footer.byPrimo")}{" "}
             <a
               href={primoUrl("footer")}
               target="_blank"
               rel="noopener"
               className="font-medium text-foreground underline decoration-dotted underline-offset-4 hover:decoration-solid"
             >
-              Primo
+              {t("footer.primo")}
             </a>
             {" · "}
             <a
@@ -247,7 +244,7 @@ function App() {
               rel="noopener"
               className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
             >
-              MDM
+              {t("footer.mdm")}
             </a>
             {" · "}
             <a
@@ -256,7 +253,7 @@ function App() {
               rel="noopener"
               className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
             >
-              Pricing
+              {t("footer.pricing")}
             </a>
             {" · "}
             <a
@@ -265,7 +262,7 @@ function App() {
               rel="noopener"
               className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
             >
-              Book a demo
+              {t("footer.demo")}
             </a>
           </div>
         </div>

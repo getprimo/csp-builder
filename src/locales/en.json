@@ -1,0 +1,175 @@
+{
+  "app": {
+    "title": "CSP Builder",
+    "tagline": "Free online generator to turn Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for <fleet>FleetDM</fleet>, <intune>Intune</intune>, and any MDM that speaks OMA-DM. Built by <primo>Primo</primo> — the IT platform for modern teams (device management, onboarding, SaaS, procurement).",
+    "primoLink": "Primo",
+    "fleetdm": "FleetDM",
+    "intune": "Intune"
+  },
+  "primoRibbon": {
+    "label": "Built by Primo · MDM →"
+  },
+  "promo": {
+    "heading": "Shipping GPO / CSP policies at scale?",
+    "body": "This builder handles the <em>payload</em>. Primo handles the rest: enroll devices via MDM, push ADMX-backed and native CSP policies, manage macOS, Windows, Linux and iOS fleets from one place, and automate onboarding/offboarding with your HR system.",
+    "ctaPrimary": "Discover Primo →",
+    "ctaMdm": "See Primo for MDM",
+    "ctaDemo": "Book a demo"
+  },
+  "footer": {
+    "stack": "Client-only · fast-xml-parser · Tailwind · Zustand",
+    "byPrimo": "A free tool by",
+    "primo": "Primo",
+    "mdm": "MDM",
+    "pricing": "Pricing",
+    "demo": "Book a demo"
+  },
+  "policySources": {
+    "title": "Policy sources",
+    "checked": "{{count}} checked",
+    "nativeCsp": {
+      "name": "Native Windows Policy CSP",
+      "stats": "3,940 settings · 306 areas",
+      "description": "Microsoft DDFv2 Feb 2026 catalog + ADMX-backed element schemas. No upload required."
+    },
+    "bundledTemplates": "Bundled ADMX templates",
+    "uploadCustom": "Upload custom ADMX / ADML",
+    "uploadedCount": "{{count}} uploaded",
+    "dropZone": {
+      "instruction": "Drop your <admx>.admx</admx> and <adml>.adml</adml> files",
+      "or": "or click to browse. Pairs are matched by filename."
+    },
+    "waitingFor": "Waiting on ADMX for: {{names}}",
+    "policiesCount": "{{count}} policies",
+    "remove": "Remove",
+    "errors": {
+      "failedToParseNamed": "Failed to parse {{name}}: {{message}}",
+      "failedToParse": "Failed to parse {{name}}"
+    }
+  },
+  "policyList": {
+    "title": "Policies",
+    "applied": "{{count}} Applied",
+    "stats": "{{admx}} ADMX · {{csp}} CSP",
+    "excluded": "{{count}} excluded",
+    "searchPlaceholder": "Search by name, category or description…",
+    "onlyApplied": "Only applied ({{count}})",
+    "showIncompatible": "Show incompatible ADMX",
+    "noMatches": "No policy matches the search.",
+    "applyBadge": "Apply"
+  },
+  "policyEditor": {
+    "emptyTitle": "Policy editor",
+    "emptyDescription": "Select a policy from the list (ADMX or native CSP) to configure it."
+  },
+  "admxEditor": {
+    "applyLabel": "Apply",
+    "registryKey": "Registry key:",
+    "valueName": "Value name:",
+    "categoryPath": "Category path:",
+    "supportedOn": "Supported on:",
+    "cspScope": "CSP scope",
+    "cspScopeFixed": "CSP scope (fixed by ADMX class)",
+    "scopeDevice": "Device (HKLM)",
+    "scopeUser": "User (HKCU)",
+    "state": "State",
+    "stateNotConfigured": "Not Configured",
+    "stateEnabled": "Enabled",
+    "stateDisabled": "Disabled",
+    "applyOff": "Apply is off — this policy is <strong>not</strong> emitted in the SyncML payload. Flip the toggle, or change any setting above, to include it."
+  },
+  "cspEditor": {
+    "applyLabel": "Apply",
+    "familyStandalone": "standalone",
+    "familyPolicyCsp": "Policy CSP",
+    "locUri": "LocURI:",
+    "default": "Default:",
+    "osBuild": "OS build:",
+    "csp": "CSP:",
+    "windowsEditions": "Windows editions:",
+    "notOnHome": "(not available on Home)",
+    "deprecated": "⚠ Deprecated",
+    "deprecatedFromBuild": " from build {{build}}",
+    "pathParameters": {
+      "title": "Path parameters",
+      "hint": "Microsoft DDF marks this CSP as parameterised — fill the name of each instance so the LocURI is complete.",
+      "profilePlaceholder": "e.g. Primo-Corp",
+      "namePlaceholder": "name / id",
+      "missingWarning": "⚠ At least one name is empty — the generated URI will contain <code>//</code> and Windows will reject it."
+    },
+    "cspScope": "CSP scope",
+    "cspScopeFixed": "CSP scope (fixed by DDF scope)",
+    "scopeDevice": "Device (HKLM)",
+    "scopeUser": "User (HKCU)",
+    "state": "State",
+    "stateNotConfigured": "Not Configured",
+    "stateEnabled": "Enabled",
+    "stateDisabled": "Disabled",
+    "stateHelp": "Not Configured emits a <code>&lt;Delete&gt;</code>, Enabled an <code>&lt;enabled/&gt;</code> payload with the elements below, Disabled a <code>&lt;disabled/&gt;</code> marker.",
+    "applyOff": "Apply is off — this CSP is <strong>not</strong> emitted in the SyncML payload. Flip the toggle, or change the value above, to include it.",
+    "value": "Value",
+    "valueXml": "Value (XML)",
+    "valueBase64": "Value (Base64)",
+    "choosePlaceholder": "Choose…",
+    "admxBacked": {
+      "title": "ADMX-backed CSP — special payload required",
+      "intro": "Unlike regular CSPs, this setting expects an ADMX-style XML payload inside <code><Data></code>, not a raw value. Structure:",
+      "elementHint": "Element <code>id</code> names come from the underlying ADMX file (e.g. <code>WallpaperName</code>, <code>WallpaperStyle</code> for Desktop/Wallpaper).",
+      "learnMore": "Check Microsoft Learn for this area →",
+      "insertEnabled": "Insert <enabled/>",
+      "insertDisabled": "Insert <disabled/>",
+      "appendData": "Append <data/>",
+      "payload": "Payload",
+      "payloadHelp": "Will be XML-escaped into <code>&lt;Data&gt;…&lt;/Data&gt;</code> on export. Line breaks are preserved."
+    }
+  },
+  "elementInput": {
+    "name": "Name",
+    "nameValue": "Name (value)",
+    "data": "Data",
+    "noEntries": "No entries yet. Click Add.",
+    "remove": "Remove",
+    "add": "Add",
+    "registryPrefix": "Registry prefix:",
+    "maxChars": "max {{count}} chars",
+    "optionFallback": "Option {{index}}",
+    "valueSuffix": "(value {{value}})",
+    "onePerLine": "One value per line"
+  },
+  "exportPanel": {
+    "title": "Export",
+    "summary": "{{admx}} ADMX · {{csp}} CSP · {{reset}} reset · {{files}} ADMX files loaded",
+    "format": "Format",
+    "preview": "Preview",
+    "download": "Download .xml",
+    "copy": "Copy",
+    "copied": "Copied",
+    "loadToPrimo": "Load to Primo",
+    "reset": "Reset",
+    "resetTitle": "Reset all applied policies",
+    "resetConfirmOne": "Reset the 1 applied policy? This clears its state and value. The ADMX templates stay loaded.",
+    "resetConfirmMany": "Reset {{count}} applied policies? This clears their state and values. The ADMX templates stay loaded."
+  },
+  "exportModes": {
+    "fleetdm": {
+      "label": "FleetDM compatible",
+      "description": "Raw top-level <Replace>/<Delete> commands — policy ops only, no envelope, no inline ADMX ingestion. Ingest custom ADMX through a separate FleetDM profile before applying."
+    },
+    "envelopeWithIngestion": {
+      "label": "ADMX Ingestion + Full SyncML envelope",
+      "description": "Full <SyncML> + <SyncHdr> + <SyncBody>, ADMX ingested inline, policy commands inside, closing <Final/>."
+    },
+    "bodyWithIngestion": {
+      "label": "ADMX Ingestion (SyncBody only)",
+      "description": "<SyncBody> fragment with ADMX ingestion and policy commands. No outer <SyncML>/<SyncHdr>."
+    },
+    "envelopeOnly": {
+      "label": "Full SyncML envelope (no ingestion)",
+      "description": "Full <SyncML> envelope, but skip the ADMX ingestion <Replace>. Useful when the ADMX is already uploaded on the target."
+    },
+    "bodyOnly": {
+      "label": "SyncBody only (no ingestion)",
+      "description": "Just a <SyncBody> fragment with policy commands, nothing else."
+    }
+  }
+}

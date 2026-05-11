@@ -1,3 +1,4 @@
+import { Trans, useTranslation } from "react-i18next";
 import {
   Card,
   CardContent,
@@ -33,6 +34,7 @@ interface Props {
 }
 
 export function AdmxEditor({ file, policy }: Props) {
+  const { t } = useTranslation();
   const configured = useAdmxStore((s) => s.configured);
   const setPolicyState = useAdmxStore((s) => s.setPolicyState);
   const setPolicyScope = useAdmxStore((s) => s.setPolicyScope);
@@ -73,7 +75,7 @@ export function AdmxEditor({ file, policy }: Props) {
                 apply ? "text-foreground" : "text-muted-foreground"
               )}
             >
-              Apply
+              {t("admxEditor.applyLabel")}
             </span>
             <Switch
               checked={apply}
@@ -93,24 +95,28 @@ export function AdmxEditor({ file, policy }: Props) {
 
         <div className="text-xs text-muted-foreground space-y-1 break-all">
           <div>
-            <span className="font-semibold">Registry key: </span>
+            <span className="font-semibold">{t("admxEditor.registryKey")} </span>
             <code>{policy.key}</code>
           </div>
           {policy.valueName && (
             <div>
-              <span className="font-semibold">Value name: </span>
+              <span className="font-semibold">{t("admxEditor.valueName")} </span>
               <code>{policy.valueName}</code>
             </div>
           )}
           {policy.categoryPath.length > 0 && (
             <div>
-              <span className="font-semibold">Category path: </span>
+              <span className="font-semibold">
+                {t("admxEditor.categoryPath")}{" "}
+              </span>
               <code>{policy.categoryPath.join(" → ")}</code>
             </div>
           )}
           {supportedOnText && (
             <div>
-              <span className="font-semibold">Supported on: </span>
+              <span className="font-semibold">
+                {t("admxEditor.supportedOn")}{" "}
+              </span>
               <span>{supportedOnText}</span>
             </div>
           )}
@@ -124,7 +130,9 @@ export function AdmxEditor({ file, policy }: Props) {
         >
           <div>
             <Label className="mb-2 block">
-              CSP scope{scopeFixed ? " (fixed by ADMX class)" : ""}
+              {scopeFixed
+                ? t("admxEditor.cspScopeFixed")
+                : t("admxEditor.cspScope")}
             </Label>
             <RadioGroup
               value={scope}
@@ -140,7 +148,7 @@ export function AdmxEditor({ file, policy }: Props) {
                   disabled={scopeFixed}
                 />
                 <Label htmlFor={`${policy.name}-scope-device`}>
-                  Device (HKLM)
+                  {t("admxEditor.scopeDevice")}
                 </Label>
               </div>
               <div className="flex items-center gap-2">
@@ -149,13 +157,15 @@ export function AdmxEditor({ file, policy }: Props) {
                   id={`${policy.name}-scope-user`}
                   disabled={scopeFixed}
                 />
-                <Label htmlFor={`${policy.name}-scope-user`}>User (HKCU)</Label>
+                <Label htmlFor={`${policy.name}-scope-user`}>
+                  {t("admxEditor.scopeUser")}
+                </Label>
               </div>
             </RadioGroup>
           </div>
 
           <div>
-            <Label className="mb-2 block">State</Label>
+            <Label className="mb-2 block">{t("admxEditor.state")}</Label>
             <RadioGroup
               value={apply ? state : ""}
               onValueChange={(v) =>
@@ -165,15 +175,21 @@ export function AdmxEditor({ file, policy }: Props) {
             >
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="notConfigured" id={`${policy.name}-nc`} />
-                <Label htmlFor={`${policy.name}-nc`}>Not Configured</Label>
+                <Label htmlFor={`${policy.name}-nc`}>
+                  {t("admxEditor.stateNotConfigured")}
+                </Label>
               </div>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="enabled" id={`${policy.name}-en`} />
-                <Label htmlFor={`${policy.name}-en`}>Enabled</Label>
+                <Label htmlFor={`${policy.name}-en`}>
+                  {t("admxEditor.stateEnabled")}
+                </Label>
               </div>
               <div className="flex items-center gap-2">
                 <RadioGroupItem value="disabled" id={`${policy.name}-di`} />
-                <Label htmlFor={`${policy.name}-di`}>Disabled</Label>
+                <Label htmlFor={`${policy.name}-di`}>
+                  {t("admxEditor.stateDisabled")}
+                </Label>
               </div>
             </RadioGroup>
           </div>
@@ -196,9 +212,10 @@ export function AdmxEditor({ file, policy }: Props) {
 
         {!apply && (
           <p className="text-xs text-muted-foreground border-t pt-3">
-            Apply is off — this policy is <strong>not</strong> emitted in the
-            SyncML payload. Flip the toggle, or change any setting above, to
-            include it.
+            <Trans
+              i18nKey="admxEditor.applyOff"
+              components={{ strong: <strong /> }}
+            />
           </p>
         )}
       </CardContent>

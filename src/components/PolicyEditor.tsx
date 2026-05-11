@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import {
   Card,
   CardDescription,
@@ -42,13 +43,12 @@ export function PolicyEditor() {
 }
 
 function EmptySelection() {
+  const { t } = useTranslation();
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Policy editor</CardTitle>
-        <CardDescription>
-          Select a policy from the list (ADMX or native CSP) to configure it.
-        </CardDescription>
+        <CardTitle>{t("policyEditor.emptyTitle")}</CardTitle>
+        <CardDescription>{t("policyEditor.emptyDescription")}</CardDescription>
       </CardHeader>
     </Card>
   );

@@ -102,7 +102,9 @@ export function ExportPanel() {
     const base = forceAdd ? primoCustomFileOpenUrl(undefined) : primoCustomFileOpenUrl(controleId);
     const url = `${base}?xml_file_b64=${encodeURIComponent(b64)}`;
     window.open(url, "_blank", "noopener,noreferrer");
-    resetConfigurations();
+    if(controleId) {
+      resetConfigurations();
+    }
   };
 
   const totalApplied = configuredCount + deleteCount + cspApplyCount;

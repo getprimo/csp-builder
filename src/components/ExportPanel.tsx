@@ -7,6 +7,8 @@ import {
   Check,
   RotateCcw,
   ExternalLink,
+  Pencil,
+  Plus,
 } from "lucide-react";
 import {
   Card,
@@ -26,6 +28,7 @@ import {
 } from "@/components/ui/select";
 import { useAdmxStore } from "@/store/useAdmxStore";
 import { buildSyncML, EXPORT_MODES, type ExportMode } from "@/lib/csp/syncml";
+import { cn } from "@/lib/utils";
 
 const PRIMO_CUSTOMFILE_BASE =
   "https://app.getprimo.com/mdm-controls/customfile_windows";
@@ -185,34 +188,39 @@ export function ExportPanel() {
             )}
             {copied ? t("exportPanel.copied") : t("exportPanel.copy")}
           </Button>
-          {controleId ? (
-            <>
-              <Button
-                onClick={onLoadToPrimo()}
-                disabled={files.length === 0 && cspApplyCount === 0}
+          {/* On Primo split button */}
+          <div
+            className={cn(
+              "inline-flex items-stretch h-10 border border-primo-border rounded-sm overflow-hidden text-[14px]",
+              (files.length === 0 && cspApplyCount === 0) && "opacity-50 pointer-events-none"
+            )}
+          >
+            <span className="flex h-full items-center gap-1.5 px-3 bg-brand/20 border-r border-primo-border text-primo-fg font-medium whitespace-nowrap select-none leading-none">
+              <ExternalLink className="h-3.5 w-3.5 shrink-0" />
+              On Primo
+            </span>
+            {controleId && (
+              <>
+                <button
+                  type="button"
+                  onClick={onLoadToPrimo()}
+                  className="flex h-full items-center gap-1.5 px-3 hover:bg-muted transition-colors text-primo-fg leading-none"
                 >
-                <ExternalLink className="h-4 w-4 mr-2" />{" "}
-                {t("exportPanel.loadToPrimoUpdate")}
-              </Button>
-              <Button
-                variant="outline"
-                onClick={onLoadToPrimo(true)}
-                disabled={files.length === 0 && cspApplyCount === 0}
-              >
-                <ExternalLink className="h-4 w-4 mr-2" />{" "}
-                {t("exportPanel.loadToPrimoAdd")}
-              </Button>
-            </>
-            ) : (
-              <Button
-                variant="outline"
-                onClick={onLoadToPrimo()}
-                disabled={files.length === 0 && cspApplyCount === 0}
-              >
-                <ExternalLink className="h-4 w-4 mr-2" />{" "}
-                {t("exportPanel.loadToPrimo")}
-              </Button>
-          )}
+                  <Pencil className="h-3.5 w-3.5 shrink-0" />
+                  Update
+                </button>
+                <span className="w-px bg-primo-border" />
+              </>
+            )}
+            <button
+              type="button"
+              onClick={onLoadToPrimo(controleId ? true : false)}
+              className="flex h-full items-center gap-1.5 px-3 hover:bg-muted transition-colors text-primo-fg leading-none"
+            >
+              <Plus className="h-3.5 w-3.5 shrink-0" />
+              Create new
+            </button>
+          </div>
 
           <Button
             variant="outline"

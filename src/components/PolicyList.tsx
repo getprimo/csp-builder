@@ -2,7 +2,6 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   AlertTriangle,
-  CheckCircle2,
   ChevronRight,
   Search,
 } from "lucide-react";

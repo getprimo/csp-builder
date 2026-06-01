@@ -1,10 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { PolicySources } from "@/components/PolicySources";
 import { PolicyList } from "@/components/PolicyList";
 import { PolicyEditor } from "@/components/PolicyEditor";
 import { ExportPanel } from "@/components/ExportPanel";
-import { PrimoRibbon } from "@/components/PrimoRibbon";
 import { primoUrl } from "@/lib/primo";
 import { useAdmxStore } from "@/store/useAdmxStore";
 import { parseSyncmlToState } from "@/lib/csp/parseSyncml";
@@ -176,125 +175,292 @@ function useLoadFromUrl() {
   ]);
 }
 
+function PrimoLogo({ className }: { className?: string }) {
+  return (
+    <svg
+      className={className}
+      width="98"
+      height="23"
+      viewBox="0 0 48 46"
+      fill="none"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-label="Primo"
+    >
+      <path
+        fill="#863bff"
+        d="M25.946 44.938c-.664.845-2.021.375-2.021-.698V33.937a2.26 2.26 0 0 0-2.262-2.262H10.287c-.92 0-1.456-1.04-.92-1.788l7.48-10.471c1.07-1.497 0-3.578-1.842-3.578H1.237c-.92 0-1.456-1.04-.92-1.788L10.013.474c.214-.297.556-.474.92-.474h28.894c.92 0 1.456 1.04.92 1.788l-7.48 10.471c-1.07 1.498 0 3.579 1.842 3.579h11.377c.943 0 1.473 1.088.89 1.83L25.947 44.94z"
+      />
+    </svg>
+  );
+}
+
+// Primo logo assets (node 1534:2512) — valid 7 days
+const PRIMO_MARK_ASSETS = {
+  union:  "https://www.figma.com/api/mcp/asset/6a1f2e70-3917-486c-81cf-62c6561b4a9b",
+  union1: "https://www.figma.com/api/mcp/asset/0d4c46d3-1d9c-4b66-8542-f809dfb5a95b",
+  union2: "https://www.figma.com/api/mcp/asset/1ffe450b-d668-4345-bb2a-8193fbe7b6c7",
+  union3: "https://www.figma.com/api/mcp/asset/4dcfba23-3d03-41a1-a9b1-df458bf13bdf",
+  union4: "https://www.figma.com/api/mcp/asset/eda2971f-6b66-4300-bba9-2b024d389b2c",
+  wordmark: "https://www.figma.com/api/mcp/asset/00d73f48-c1ef-413d-b7f2-38ffffdd8354",
+};
+
+function PrimoLogoFull({ height = 36 }: { height?: number }) {
+  // aspect ratio 798:182
+  const width = Math.round(height * 798 / 182);
+  return (
+    <div style={{ position: 'relative', width, height, flexShrink: 0 }}>
+      {/* Logo mark — left ~25% */}
+      <div style={{ position: 'absolute', inset: '4.12% 74.65% 0.41% 0' }}>
+        <div style={{ position: 'absolute', inset: '0 0 66.67% 66.66%' }}>
+          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union} />
+        </div>
+        <div style={{ position: 'absolute', inset: '33.33% 49.99% 33.33% 16.67%' }}>
+          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union1} />
+        </div>
+        <div style={{ position: 'absolute', inset: '0 33.32% 66.67% 33.34%' }}>
+          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union} />
+        </div>
+        <div style={{ position: 'absolute', bottom: '33.33%', left: '50%', right: '16.67%', top: '33.33%' }}>
+          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union2} />
+        </div>
+        <div style={{ position: 'absolute', inset: '66.67% 33.32% 0 33.34%' }}>
+          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union3} />
+        </div>
+        <div style={{ position: 'absolute', inset: '0 66.66% 66.67% 0' }}>
+          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union4} />
+        </div>
+      </div>
+      {/* Wordmark — right 72% */}
+      <div style={{ position: 'absolute', inset: '0 0 0 27.61%' }}>
+        <div style={{ position: 'absolute', inset: '4.53% -0.13% -0.82% 0' }}>
+          <img alt="Primo" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.wordmark} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function App() {
   useLoadFromUrl();
   const { t } = useTranslation();
 
   return (
-    <div className="min-h-screen bg-background">
-      <PrimoRibbon />
-
-      <header className="border-b">
-        <div className="container py-5">
-          <h1 className="text-2xl font-semibold tracking-tight">
-            {t("app.title")}
-          </h1>
-          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-            <Trans
-              i18nKey="app.tagline"
-              components={{
-                fleet: <strong className="text-foreground" />,
-                intune: <strong className="text-foreground" />,
-                primo: (
-                  <a
-                    href={primoUrl("header")}
-                    target="_blank"
-                    rel="noopener"
-                    className="font-medium text-foreground underline decoration-dotted underline-offset-4 hover:decoration-solid"
-                  />
-                ),
-              }}
-            />
-          </p>
-        </div>
-      </header>
-
-      <main className="container py-6 space-y-6">
-        <PolicySources />
-
-        <div className="grid grid-cols-1 lg:grid-cols-[420px_minmax(0,1fr)] gap-6 items-start">
-          <PolicyList />
-          <div className="space-y-6 min-w-0">
-            <PolicyEditor />
-            <ExportPanel />
+    <div className="min-h-screen bg-white text-primo-fg">
+      {/* Nav */}
+      <nav className="border-b border-primo-border-subtle">
+        <div className="container flex items-center justify-between h-[53px]">
+          <div className="flex items-center gap-2">
+            <img src="/favicon.svg" alt="" className="w-4 h-4" />
+            <span className="font-departure text-[18px] tracking-tight text-black">
+              CSP BUILDER
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <a
+              href={primoUrl("nav_expert")}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex h-7 items-center rounded-sm bg-brand px-3 text-xs font-medium text-primo-fg hover:bg-brand/90 transition-colors"
+            >
+              Talk to an expert
+            </a>
+            <a
+              href={primoUrl("nav_try")}
+              target="_blank"
+              rel="noopener"
+              className="inline-flex h-7 items-center rounded-sm border border-primo-border-subtle px-3 text-xs font-medium text-primo-fg hover:bg-muted transition-colors"
+            >
+              Try Primo
+            </a>
           </div>
         </div>
+      </nav>
 
-        <section className="rounded-lg border bg-muted/30 p-5">
-          <h2 className="text-base font-semibold">{t("promo.heading")}</h2>
-          <p className="mt-1.5 text-sm text-muted-foreground">
-            <Trans i18nKey="promo.body" components={{ em: <em /> }} />
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <a
-              href={primoUrl("cta_primary")}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex h-9 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
-            >
-              {t("promo.ctaPrimary")}
-            </a>
-            <a
-              href={primoUrl("cta_mdm", "/product-page/mdm")}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent"
-            >
-              {t("promo.ctaMdm")}
-            </a>
-            <a
-              href={primoUrl("cta_demo", "/request-a-demo")}
-              target="_blank"
-              rel="noopener"
-              className="inline-flex h-9 items-center rounded-md border bg-background px-4 text-sm font-medium transition-colors hover:bg-accent"
-            >
-              {t("promo.ctaDemo")}
-            </a>
+      {/* Sub-nav tags */}
+      <div className="border-primo-border">
+        <div className="container flex items-center justify-center h-[54px]">
+          <div className="font-mono text-[12px] tracking-tight text-black flex items-center gap-3">
+            <span>FREE</span>
+            <span className="text-[10px] text-primo-muted">/</span>
+            <span>RUNS IN BROWSER</span>
+            <span className="text-[10px] text-primo-muted">/</span>
+            <span>OPEN SOURCE</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Hero */}
+      <section className="bg-white text-center">
+        {/* Container aligné sur les sections du dessous */}
+        <div className="container mx-auto">
+          {/* Wrapper sans padding — référence commune pour img et contenu */}
+          <div className="relative">
+          {/* Grille PNG — en flux pour driver la hauteur du container */}
+          <img
+            src="/hero-grid.png"
+            alt=""
+            aria-hidden
+            className="block w-full pointer-events-none select-none"
+          />
+          {/* Contenu positionné exactement dans le trou de la grille
+              PNG: 1271×641px, PAD=10px, CELL=90px
+              Trou cols 2-11, rows 1-5 → px: left=190, top=100, w=900, h=450
+              En % de l'image : left=14.95%, top=15.60%, w=70.81%, h=70.20% */}
+          <div
+            className="absolute z-10 flex flex-col items-center justify-center text-center"
+            style={{
+              left:   '14.95%',
+              top:    '15.60%',
+              width:  '70.81%',
+              height: '70.20%',
+            }}
+          >
+            {/* imgFrame2136137828 — rectangle bleu-cyan clair */}
+            <img
+              src="https://www.figma.com/api/mcp/asset/6e6a1774-a9e5-4c6e-836d-75e2e5bdc09c"
+              alt=""
+              aria-hidden
+              className="absolute inset-0 w-full h-full pointer-events-none select-none"
+              style={{ objectFit: 'fill' }}
+            />
+            {/* Texte centré dans le trou */}
+            <div className="relative z-10 flex flex-col items-center px-8" style={{ maxWidth: 656 }}>
+              <h1 className="text-[48px] leading-[1.4] font-semibold tracking-tight text-black">
+                Deploy Windows
+                <br />
+                policies in minutes
+              </h1>
+              <p className="mt-4 text-[16px] leading-[1.5] text-primo-muted">
+                {t("app.tagline_short", {
+                  defaultValue:
+                    "Free generator that converts Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads. Works with Fleet, Intune, and any MDM that speaks OMA-DM.",
+                })}
+              </p>
+              <div className="mt-6 flex items-center justify-center gap-3 text-[24px] font-semibold text-primo-fg">
+                <span>By</span>
+                <a href={primoUrl("hero_logo")} target="_blank" rel="noopener">
+                  <PrimoLogoFull height={22} />
+                </a>
+              </div>
+            </div>
+          </div>
+          </div>{/* close relative wrapper */}
+        </div>
+      </section>
+
+      {/* Main sections */}
+      <main className="container py-10 space-y-12">
+
+        {/* 1. Sources */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-[32px] font-semibold tracking-tight text-crow">
+              <span className="mr-3 text-primo-muted font-mono text-[20px]">1.</span>
+              Sources
+            </h2>
+            <p className="text-[16px] text-primo-muted">
+              {t("sources.description", { defaultValue: "Define what your catalog of policies should look like" })}
+            </p>
+          </div>
+          <PolicySources />
+        </section>
+
+        {/* 2. Setup */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-[32px] font-semibold tracking-tight text-crow">
+              <span className="mr-3 text-primo-muted font-mono text-[20px]">2.</span>
+              Setup
+            </h2>
+            <p className="text-[16px] text-primo-muted">
+              {t("setup.description", { defaultValue: "Define what your catalog of policies should look like" })}
+            </p>
+          </div>
+          <div className="grid grid-cols-1 lg:grid-cols-[420px_minmax(0,1fr)] gap-0 items-stretch border border-primo-border">
+            <PolicyList />
+            <div className="min-w-0 border-l border-primo-border">
+              <PolicyEditor />
+            </div>
+          </div>
+        </section>
+
+        {/* 3. Export */}
+        <section>
+          <div className="mb-6">
+            <h2 className="text-[32px] font-semibold tracking-tight text-crow">
+              <span className="mr-3 text-primo-muted font-mono text-[20px]">3.</span>
+              Export
+            </h2>
+          </div>
+          <ExportPanel />
+        </section>
+
+        {/* CTA */}
+        <section className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between py-12 border-t border-primo-border">
+          <div>
+            <h2 className="text-[50px] leading-[1.4] font-semibold tracking-tight text-crow w-[540px] max-w-full">
+              Shipping policies
+              <br />
+              at scale?
+            </h2>
+          </div>
+          <div className="max-w-[480px]">
+            <p className="text-[20px] leading-[1.6] text-crow">
+              This builder handles the payload. Primo handles the rest: enrollment, ADMX and native CSP policies, and macOS, Windows, Linux, and iOS in one console, all tied to your HRIS.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-6">
+              <a
+                href={primoUrl("cta_primary")}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex h-10 items-center rounded-sm bg-brand px-5 text-[15px] font-medium text-primo-fg hover:bg-brand/90 transition-colors"
+              >
+                Talk to an expert
+              </a>
+              <a
+                href={primoUrl("cta_try")}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex h-10 items-center rounded-sm border border-primo-border-subtle px-5 text-[15px] font-medium text-primo-fg hover:bg-muted transition-colors"
+              >
+                Try Primo
+              </a>
+            </div>
           </div>
         </section>
       </main>
 
-      <footer className="border-t">
-        <div className="container flex flex-col gap-2 py-4 text-xs text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <div>{t("footer.stack")}</div>
-          <div>
-            {t("footer.byPrimo")}{" "}
-            <a
-              href={primoUrl("footer")}
-              target="_blank"
-              rel="noopener"
-              className="font-medium text-foreground underline decoration-dotted underline-offset-4 hover:decoration-solid"
-            >
-              {t("footer.primo")}
-            </a>
-            {" · "}
-            <a
-              href={primoUrl("footer_mdm", "/product-page/mdm")}
-              target="_blank"
-              rel="noopener"
-              className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
-            >
-              {t("footer.mdm")}
-            </a>
-            {" · "}
-            <a
-              href={primoUrl("footer_pricing", "/pricing")}
-              target="_blank"
-              rel="noopener"
-              className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
-            >
-              {t("footer.pricing")}
-            </a>
-            {" · "}
-            <a
-              href={primoUrl("footer_demo", "/request-a-demo")}
-              target="_blank"
-              rel="noopener"
-              className="underline decoration-dotted underline-offset-4 hover:decoration-solid"
-            >
-              {t("footer.demo")}
-            </a>
+      {/* Footer */}
+      <footer className="bg-primo-dark">
+        <div className="container py-20 flex flex-col items-center gap-7">
+          <div className="flex flex-col items-center gap-6 max-w-sm text-center">
+            <div className="flex items-center gap-4">
+              <img src="/favicon.svg" alt="" className="w-8 h-8" />
+              <span className="font-departure text-[36px] tracking-tight text-white">
+                CSP BUILDER
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="text-[14px] text-[#a6b0b5] uppercase tracking-wide">
+                Built with care by
+              </span>
+              <a
+                href={primoUrl("footer")}
+                target="_blank"
+                rel="noopener"
+                className="inline-flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity"
+              >
+                <PrimoLogo className="h-4 w-auto brightness-0 invert" />
+                <span className="text-[14px] text-white font-medium">Primo</span>
+              </a>
+            </div>
+            <p className="text-[12px] leading-[1.6] text-[#fffbf4]">
+              We believe that strong foundations create strong companies. That's why we're building the all-in-one IT platform for companies on their growth from 2 to 2000 employees.
+            </p>
           </div>
+          <p className="text-[12px] text-[#a6b0b5]">
+            ©2026 Primo. All Rights reserved.
+          </p>
         </div>
       </footer>
     </div>

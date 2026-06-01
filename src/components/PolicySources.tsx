@@ -1,15 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { Trans, useTranslation } from "react-i18next";
-import {
-  UploadCloud,
-  Shield,
-  Trash2,
-  FileCode,
-  ChevronRight,
-} from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { useTranslation } from "react-i18next";
+import { Trash2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { parseAdmx } from "@/lib/admx/parser";
 import { useAdmxStore } from "@/store/useAdmxStore";
@@ -60,12 +52,7 @@ export function PolicySources() {
 
   const [pending, setPending] = useState<Record<string, PendingPair>>({});
   const [error, setError] = useState<string | undefined>();
-  const [customOpen, setCustomOpen] = useState(false);
 
-  // Re-hydrate persisted sample IDs into `files`. Depends on
-  // enabledSampleIds so the effect re-runs once zustand/persist has
-  // rehydrated the store (which happens asynchronously after the first
-  // mount). Each run is idempotent thanks to the `loaded` lookup.
   useEffect(() => {
     const loaded = new Set(files.map((f) => f.id));
     for (const id of enabledSampleIds) {
@@ -166,177 +153,137 @@ export function PolicySources() {
   });
 
   const customFiles = files.filter((f) => f.id.startsWith("custom::"));
-  const checkedCount =
-    enabledSampleIds.length + (cspCatalogEnabled ? 1 : 0);
+
+  // All items in order: Native CSP first, then ADMX samples, then custom uploaded, then upload cell
+  const sampleItems = SAMPLES.map((s) => ({
+    type: "sample" as const,
+    sample: s,
+    checked: enabledSampleIds.includes(s.id),
+  }));
 
   return (
-    <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="flex items-center justify-between gap-2">
-          <span>{t("policySources.title")}</span>
-          <Badge variant="outline" className="text-[11px]">
-            {t("policySources.checked", { count: checkedCount })}
-          </Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-3">
-        {/* Native CSP catalog */}
-        <label className="flex items-start gap-3 rounded-md border p-3 hover:bg-accent/40 cursor-pointer">
+    <div>
+      {/* 3-column grid with shared borders */}
+      <div className="grid grid-cols-3 border-t border-l border-primo-border">
+
+        {/* Native CSP — always first */}
+        <label
+          className={cn(
+            "flex gap-3 items-start p-4 border-b border-r border-primo-border cursor-pointer",
+            "hover:bg-gray-50 transition-colors"
+          )}
+        >
           <input
             type="checkbox"
-            className="mt-1"
+            className="checkbox-square mt-0.5"
             checked={cspCatalogEnabled}
             onChange={(e) => setCspCatalogEnabled(e.target.checked)}
           />
           <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <Shield className="h-4 w-4 text-blue-600" />
-              <span className="font-medium">
-                {t("policySources.nativeCsp.name")}
-              </span>
-              <Badge variant="secondary" className="text-[10px]">
-                {t("policySources.nativeCsp.stats")}
-              </Badge>
+            <div className="text-[14px] font-medium text-primo-fg leading-[1.4]">
+              {t("policySources.nativeCsp.name")}
             </div>
-            <div className="mt-0.5 text-xs text-muted-foreground">
+            <div className="mt-1 text-[14px] text-primo-muted leading-[1.4]">
               {t("policySources.nativeCsp.description")}
             </div>
           </div>
         </label>
 
-        {/* Bundled ADMX samples */}
-        <div>
-          <div className="mb-1">
-            <span className="text-xs font-medium text-muted-foreground">
-              {t("policySources.bundledTemplates")}
-            </span>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
-            {SAMPLES.map((s) => {
-              const checked = enabledSampleIds.includes(s.id);
-              return (
-                <label
-                  key={s.id}
-                  className={cn(
-                    "flex items-start gap-2 rounded-md border p-2 text-sm hover:bg-accent/40 cursor-pointer transition-colors",
-                    checked && "border-primary bg-accent/20"
-                  )}
-                >
-                  <input
-                    type="checkbox"
-                    className="mt-0.5"
-                    checked={checked}
-                    onChange={(e) => toggleSample(s, e.target.checked)}
-                  />
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium truncate">{s.name}</span>
-                    </div>
-                    <div className="text-[11px] text-muted-foreground truncate">
-                      {s.vendor} · {formatSize(sampleSize(s))}
-                    </div>
-                  </div>
-                </label>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* Custom upload (collapsible) */}
-        <div>
-          <button
-            type="button"
-            onClick={() => setCustomOpen((v) => !v)}
-            className="flex items-center gap-2 w-full rounded-md border bg-muted/30 px-3 py-2 text-sm hover:bg-muted/60 transition-colors"
-          >
-            <ChevronRight
-              className={cn(
-                "h-4 w-4 transition-transform",
-                customOpen && "rotate-90"
-              )}
-            />
-            <UploadCloud className="h-4 w-4 text-muted-foreground" />
-            <span className="font-medium">{t("policySources.uploadCustom")}</span>
-            {customFiles.length > 0 && (
-              <Badge variant="secondary" className="ml-auto text-[10px]">
-                {t("policySources.uploadedCount", {
-                  count: customFiles.length,
-                })}
-              </Badge>
+        {/* ADMX samples */}
+        {sampleItems.map(({ sample: s, checked }) => (
+          <label
+            key={s.id}
+            className={cn(
+              "flex gap-3 items-start p-4 border-b border-r border-primo-border cursor-pointer",
+              "hover:bg-gray-50 transition-colors"
             )}
-          </button>
-
-          {customOpen && (
-            <div className="mt-2 space-y-2">
-              <div
-                {...getRootProps()}
-                className={cn(
-                  "border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors",
-                  isDragActive ? "border-primary bg-accent" : "border-border"
-                )}
-              >
-                <input {...getInputProps()} />
-                <UploadCloud className="mx-auto h-8 w-8 text-muted-foreground" />
-                <p className="mt-2 text-sm font-medium">
-                  <Trans
-                    i18nKey="policySources.dropZone.instruction"
-                    components={{ admx: <code />, adml: <code /> }}
-                  />
-                </p>
-                <p className="text-xs text-muted-foreground mt-1">
-                  {t("policySources.dropZone.or")}
-                </p>
+          >
+            <input
+              type="checkbox"
+              className="checkbox-square mt-0.5"
+              checked={checked}
+              onChange={(e) => toggleSample(s, e.target.checked)}
+            />
+            <div className="min-w-0 flex-1">
+              <div className="text-[14px] font-medium text-primo-fg leading-[1.4]">
+                {s.name}
               </div>
-
-              {Object.keys(pending).length > 0 && (
-                <p className="text-xs text-muted-foreground">
-                  {t("policySources.waitingFor", {
-                    names: Object.keys(pending).join(", "),
-                  })}
-                </p>
-              )}
-
-              {customFiles.length > 0 && (
-                <div className="space-y-1">
-                  {customFiles.map((f) => (
-                    <div
-                      key={f.id}
-                      className="flex items-center justify-between rounded-md border p-2 text-sm"
-                    >
-                      <div className="flex items-start gap-2 min-w-0">
-                        <FileCode className="h-4 w-4 mt-0.5 text-muted-foreground shrink-0" />
-                        <div className="min-w-0">
-                          <div className="font-medium truncate">
-                            {f.appName}
-                          </div>
-                          <div className="text-[11px] text-muted-foreground truncate">
-                            {f.admxFileName}
-                            {f.admlFileName ? ` + ${f.admlFileName}` : ""}{" "}
-                            ·{" "}
-                            {t("policySources.policiesCount", {
-                              count: f.policies.length,
-                            })}
-                          </div>
-                        </div>
-                      </div>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={() => removeFile(f.id)}
-                        aria-label={t("policySources.remove")}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-              )}
+              <div className="mt-1 text-[14px] text-primo-muted leading-[1.4]">
+                {s.vendor} · {formatSize(sampleSize(s))}
+              </div>
             </div>
-          )}
-        </div>
+          </label>
+        ))}
 
-        {error && <p className="text-sm text-destructive">{error}</p>}
-      </CardContent>
-    </Card>
+        {/* Custom uploaded files */}
+        {customFiles.map((f) => (
+          <div
+            key={f.id}
+            className="flex gap-3 items-start p-4 border-b border-r border-primo-border"
+          >
+            <input
+              type="checkbox"
+              className="checkbox-square mt-0.5"
+              checked
+              readOnly
+            />
+            <div className="min-w-0 flex-1">
+              <div className="text-[14px] font-medium text-primo-fg leading-[1.4] truncate">
+                {f.appName}
+              </div>
+              <div className="mt-1 text-[14px] text-primo-muted leading-[1.4] truncate">
+                {f.admxFileName}
+                {f.admlFileName ? ` + ${f.admlFileName}` : ""} ·{" "}
+                {t("policySources.policiesCount", {
+                  count: f.policies.length,
+                })}
+              </div>
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              className="shrink-0 -mt-1 -mr-2 h-7 w-7 text-primo-muted hover:text-primo-fg"
+              onClick={() => removeFile(f.id)}
+              aria-label={t("policySources.remove")}
+            >
+              <Trash2 className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        ))}
+
+        {/* Upload cell — last */}
+        <div
+          {...getRootProps()}
+          className={cn(
+            "flex gap-3 items-start p-4 border-b border-r border-primo-border border-dashed cursor-pointer",
+            "bg-[#fdfcfc] hover:bg-gray-50 transition-colors",
+            isDragActive && "bg-blue-50 border-blue-400"
+          )}
+        >
+          <input {...getInputProps()} />
+          <Plus className="h-3 w-3 mt-1 shrink-0 text-primo-muted" />
+          <div className="min-w-0 flex-1">
+            <div className="text-[14px] font-medium text-primo-fg leading-[1.4]">
+              {t("policySources.uploadCustom")}
+            </div>
+            <div className="mt-1 text-[14px] text-primo-muted leading-[1.4]">
+              Pairs are matched by filename.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {Object.keys(pending).length > 0 && (
+        <p className="mt-2 text-xs text-primo-muted">
+          {t("policySources.waitingFor", {
+            names: Object.keys(pending).join(", "),
+          })}
+        </p>
+      )}
+
+      {error && (
+        <p className="mt-2 text-sm text-red-600">{error}</p>
+      )}
+    </div>
   );
 }

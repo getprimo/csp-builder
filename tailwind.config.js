@@ -9,7 +9,18 @@ export default {
       screens: { "2xl": "1400px" },
     },
     extend: {
+      fontFamily: {
+        mono: ['"IBM Plex Mono"', 'ui-monospace', 'monospace'],
+        departure: ['"Departure Mono"', 'monospace'],
+      },
       colors: {
+        brand: '#68e4ff',
+        crow: '#1e0918',
+        'primo-dark': '#1a1a1d',
+        'primo-border': '#efe8e8',
+        'primo-border-subtle': '#f3e7d7',
+        'primo-muted': '#7c868b',
+        'primo-fg': '#192024',
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

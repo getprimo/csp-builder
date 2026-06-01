@@ -4,15 +4,14 @@ import {
   AlertTriangle,
   CheckCircle2,
   ChevronRight,
-  FileCode,
-  Folder,
-  FolderOpen,
   Search,
-  Shield,
 } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
+// Figma design icons (valid 7 days from asset fetch)
+const ICON_GROUP = "https://www.figma.com/api/mcp/asset/5021eebe-b3dd-4c15-8ff9-9ff548abcd9c";
+const ICON_FOLDER = "https://www.figma.com/api/mcp/asset/ba057cbd-ffdf-4882-b96a-fd2e40f6c576";
+const ICON_APPLIED = "https://www.figma.com/api/mcp/asset/cfba1eb5-1764-41ff-a441-35174a7dd1cb";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { checkCompatibility } from "@/lib/admx/compatibility";
 import type { AdmxFile, PolicyDefinition } from "@/lib/admx/types";
 import {
@@ -290,60 +289,54 @@ export function PolicyList() {
   if (files.length === 0 && cspGroups.length === 0) return null;
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center justify-between gap-2 flex-wrap">
-          <span>{t("policyList.title")}</span>
-          <div className="flex gap-2 flex-wrap">
-            {totalApplied > 0 && (
-              <Badge variant="success">
-                {t("policyList.applied", { count: totalApplied })}
-              </Badge>
-            )}
-            <Badge variant="outline">
-              {t("policyList.stats", {
-                admx: admxTotals.compat,
-                csp: cspTotal,
-              })}
-            </Badge>
-            {admxTotals.excluded > 0 && (
-              <Badge variant="destructive">
-                {t("policyList.excluded", { count: admxTotals.excluded })}
-              </Badge>
-            )}
-          </div>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="relative mb-2">
-          <Search className="absolute left-2 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder={t("policyList.searchPlaceholder")}
-            className="pl-8"
-          />
+    <div>
+      {/* Header */}
+      <div className="flex items-center justify-between gap-2 p-4 border-b border-primo-border">
+        <span className="text-[16px] font-medium text-primo-fg">{t("policyList.title")}</span>
+        <div className="flex items-center gap-3">
+          {totalApplied > 0 && (
+            <span className="font-mono text-[12px] text-green-600">↑ {t("policyList.applied", { count: totalApplied })}</span>
+          )}
+          <span className="font-mono text-[12px] text-primo-muted">
+            {t("policyList.stats", { admx: admxTotals.compat, csp: cspTotal })}
+          </span>
         </div>
-        <div className="flex flex-wrap gap-4 mb-2 text-sm text-muted-foreground">
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={onlyApplied}
-              onChange={(e) => setOnlyApplied(e.target.checked)}
-            />
-            {t("policyList.onlyApplied", { count: totalApplied })}
-          </label>
-          <label className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              checked={showIncompatible}
-              onChange={(e) => setShowIncompatible(e.target.checked)}
-            />
-            {t("policyList.showIncompatible")}
-          </label>
-        </div>
+      </div>
 
-        <div className="max-h-[540px] overflow-y-auto rounded-md border">
+      {/* Search */}
+      <div className="relative border-b border-primo-border">
+        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primo-muted" />
+        <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder={t("policyList.searchPlaceholder")}
+          className="w-full h-9 pl-9 pr-3 text-[14px] bg-white text-primo-fg placeholder:text-primo-muted focus:outline-none"
+        />
+      </div>
+
+      {/* Filters */}
+      <div className="flex items-center justify-between px-4 py-3 border-b border-primo-border text-[14px] text-primo-fg">
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="checkbox-square"
+            checked={onlyApplied}
+            onChange={(e) => setOnlyApplied(e.target.checked)}
+          />
+          {t("policyList.onlyApplied", { count: totalApplied })}
+        </label>
+        <label className="flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            className="checkbox-square"
+            checked={showIncompatible}
+            onChange={(e) => setShowIncompatible(e.target.checked)}
+          />
+          {t("policyList.showIncompatible")}
+        </label>
+      </div>
+
+      <div className="max-h-[620px] overflow-y-auto">
           {filteredGroups.map((g) => {
             const isOpen = effectiveExpanded.has(g.id);
             const visibleCount = countLeaves(g.filteredRoot);
@@ -381,11 +374,11 @@ export function PolicyList() {
                       isOpen && "rotate-90"
                     )}
                   />
-                  {g.kind === "admx" ? (
-                    <FileCode className="h-4 w-4 shrink-0 text-muted-foreground" />
-                  ) : (
-                    <Shield className="h-4 w-4 shrink-0 text-blue-600" />
-                  )}
+                  <img
+                    src={ICON_GROUP}
+                    alt=""
+                    className="h-4 w-4 shrink-0"
+                  />
                   <span className="font-medium truncate flex-1">
                     {g.title}
                   </span>
@@ -419,13 +412,12 @@ export function PolicyList() {
             );
           })}
           {q && filteredGroups.length === 0 && (
-            <div className="p-4 text-sm text-muted-foreground">
+            <div className="p-4 text-[14px] text-primo-muted">
               {t("policyList.noMatches")}
             </div>
           )}
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
 
@@ -490,11 +482,7 @@ function TreeRenderer({
                   isOpen && "rotate-90"
                 )}
               />
-              {isOpen ? (
-                <FolderOpen className="h-3.5 w-3.5 shrink-0 text-amber-600" />
-              ) : (
-                <Folder className="h-3.5 w-3.5 shrink-0 text-amber-600" />
-              )}
+              <img src={ICON_FOLDER} alt="" className="h-3.5 w-3.5 shrink-0" />
               <span className="truncate flex-1">{child.name}</span>
               <Badge variant="outline" className="text-[10px]">
                 {count}
@@ -587,7 +575,7 @@ function AdmxRow({
     >
       <div className="flex items-start gap-2">
         {entry.ingestable ? (
-          <CheckCircle2 className="h-4 w-4 mt-0.5 text-emerald-600 shrink-0" />
+          <img src={ICON_APPLIED} alt="" className="h-4 w-4 mt-0.5 shrink-0" />
         ) : (
           <AlertTriangle className="h-4 w-4 mt-0.5 text-amber-600 shrink-0" />
         )}
@@ -648,7 +636,7 @@ function CspRow({
       style={{ paddingLeft: `${12 + depth * 14}px` }}
     >
       <div className="flex items-start gap-2">
-        <CheckCircle2 className="h-4 w-4 mt-0.5 text-blue-600 shrink-0" />
+        <img src={ICON_APPLIED} alt="" className="h-4 w-4 mt-0.5 shrink-0" />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium truncate">

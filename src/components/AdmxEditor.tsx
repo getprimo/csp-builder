@@ -1,12 +1,5 @@
 import { Trans, useTranslation } from "react-i18next";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui/radio-group";
@@ -54,41 +47,32 @@ export function AdmxEditor({ file, policy }: Props) {
     : undefined;
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <CardTitle className="truncate">
-              {policy.displayName || policy.name}
-            </CardTitle>
-            <CardDescription>
-              <span className="font-mono text-xs">{policy.name}</span> · class{" "}
-              <Badge variant="outline" className="align-middle">
-                {policy.class}
-              </Badge>
-            </CardDescription>
+    <div className="flex flex-col">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 p-4 border-b border-primo-border">
+        <div className="min-w-0">
+          <div className="text-[16px] font-medium text-primo-fg truncate">
+            {policy.displayName || policy.name}
           </div>
-          <label className="flex items-center gap-2 select-none cursor-pointer">
-            <span
-              className={cn(
-                "text-sm font-medium",
-                apply ? "text-foreground" : "text-muted-foreground"
-              )}
-            >
-              {t("admxEditor.applyLabel")}
-            </span>
-            <Switch
-              checked={apply}
-              onCheckedChange={(v) =>
-                setApply(file.id, policy.name, v, policy.class)
-              }
-            />
-          </label>
+          <div className="font-mono text-[12px] text-primo-muted mt-0.5 truncate">
+            {policy.name}
+            {" · "}
+            <Badge variant="outline" className="align-middle text-[10px]">
+              {policy.class}
+            </Badge>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-5">
+        <Switch
+          checked={apply}
+          onCheckedChange={(v) =>
+            setApply(file.id, policy.name, v, policy.class)
+          }
+        />
+      </div>
+
+      <div className="p-4 space-y-5">
         {policy.explainText && (
-          <div className="text-sm text-muted-foreground whitespace-pre-line break-words rounded-md bg-muted/50 p-3">
+          <div className="text-[16px] text-primo-muted whitespace-pre-line break-words bg-[#fdfcfc] p-4 rounded-sm">
             {policy.explainText}
           </div>
         )}
@@ -218,7 +202,7 @@ export function AdmxEditor({ file, policy }: Props) {
             />
           </p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }

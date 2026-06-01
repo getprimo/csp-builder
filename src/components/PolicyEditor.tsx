@@ -1,10 +1,4 @@
 import { useTranslation } from "react-i18next";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { useAdmxStore, policyKey } from "@/store/useAdmxStore";
 import type { AdmxFile, PolicyDefinition } from "@/lib/admx/types";
 import { AdmxEditor } from "@/components/AdmxEditor";
@@ -45,12 +39,10 @@ export function PolicyEditor() {
 function EmptySelection() {
   const { t } = useTranslation();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>{t("policyEditor.emptyTitle")}</CardTitle>
-        <CardDescription>{t("policyEditor.emptyDescription")}</CardDescription>
-      </CardHeader>
-    </Card>
+    <div className="h-full min-h-[200px] flex flex-col gap-1 items-start justify-start p-4 bg-[#fdfcfc]">
+      <span className="text-[16px] font-medium text-primo-fg">{t("policyEditor.emptyTitle")}</span>
+      <span className="text-[16px] text-primo-muted">{t("policyEditor.emptyDescription")}</span>
+    </div>
   );
 }
 

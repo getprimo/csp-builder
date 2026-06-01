@@ -1,12 +1,5 @@
 import { Trans, useTranslation } from "react-i18next";
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   RadioGroup,
   RadioGroupItem,
 } from "@/components/ui/radio-group";
@@ -73,51 +66,34 @@ export function CspEditor({ setting }: Props) {
   };
 
   return (
-    <Card>
-      <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="min-w-0">
-            <CardTitle className="truncate">{setting.name}</CardTitle>
-            <CardDescription className="break-all">
-              <span className="font-mono text-xs">
-                {setting.family === "standalone" ? "" : "Policy/"}
-                {setting.path.join("/")}
-              </span>{" "}
-              · family{" "}
-              <Badge variant="outline" className="align-middle">
-                {setting.family === "standalone"
-                  ? t("cspEditor.familyStandalone")
-                  : t("cspEditor.familyPolicyCsp")}
-              </Badge>{" "}
-              · scope{" "}
-              <Badge variant="outline" className="align-middle">
-                {setting.scope}
-              </Badge>{" "}
-              · format{" "}
-              <Badge variant="outline" className="align-middle">
-                {setting.format}
-              </Badge>
-            </CardDescription>
+    <div className="flex flex-col">
+      {/* Header */}
+      <div className="flex items-start justify-between gap-4 p-4 border-b border-primo-border">
+        <div className="min-w-0">
+          <div className="text-[16px] font-medium text-primo-fg truncate">{setting.name}</div>
+          <div className="font-mono text-[12px] text-primo-muted mt-0.5 break-all">
+            {setting.family === "standalone" ? "" : "Policy/"}
+            {setting.path.join("/")}
           </div>
-          <label className="flex items-center gap-2 select-none cursor-pointer">
-            <span
-              className={cn(
-                "text-sm font-medium",
-                apply ? "text-foreground" : "text-muted-foreground"
-              )}
-            >
-              {t("cspEditor.applyLabel")}
-            </span>
-            <Switch
-              checked={apply}
-              onCheckedChange={(v) => setCspApply(setting.id, v)}
-            />
-          </label>
+          <div className="flex flex-wrap gap-1 mt-1">
+            <Badge variant="outline" className="text-[10px]">
+              {setting.family === "standalone"
+                ? t("cspEditor.familyStandalone")
+                : t("cspEditor.familyPolicyCsp")}
+            </Badge>
+            <Badge variant="outline" className="text-[10px]">{setting.scope}</Badge>
+            <Badge variant="outline" className="text-[10px]">{setting.format}</Badge>
+          </div>
         </div>
-      </CardHeader>
-      <CardContent className="space-y-5">
+        <Switch
+          checked={apply}
+          onCheckedChange={(v) => setCspApply(setting.id, v)}
+        />
+      </div>
+
+      <div className="p-4 space-y-5">
         {setting.description && (
-          <div className="text-sm text-muted-foreground whitespace-pre-line break-words rounded-md bg-muted/50 p-3">
+          <div className="text-[16px] text-primo-muted whitespace-pre-line break-words bg-[#fdfcfc] p-4 rounded-sm">
             {setting.description}
           </div>
         )}
@@ -358,8 +334,8 @@ export function CspEditor({ setting }: Props) {
             />
           </p>
         )}
-      </CardContent>
-    </Card>
+      </div>
+    </div>
   );
 }
 

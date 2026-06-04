@@ -75,15 +75,6 @@ export function CspEditor({ setting }: Props) {
             {setting.family === "standalone" ? "" : "Policy/"}
             {setting.path.join("/")}
           </div>
-          <div className="flex flex-wrap gap-1 mt-1">
-            <Badge variant="outline" className="text-[10px]">
-              {setting.family === "standalone"
-                ? t("cspEditor.familyStandalone")
-                : t("cspEditor.familyPolicyCsp")}
-            </Badge>
-            <Badge variant="outline" className="text-[10px]">{setting.scope}</Badge>
-            <Badge variant="outline" className="text-[10px]">{setting.format}</Badge>
-          </div>
         </div>
         <Switch
           checked={apply}
@@ -161,7 +152,7 @@ export function CspEditor({ setting }: Props) {
           )}
         </div>
 
-        <div className={cn("space-y-5 transition-opacity", !apply && "opacity-60")}>
+        <div className={cn("space-y-5 transition-opacity", !apply && "opacity-40")}>
           {instanceSlots(setting).length > 0 && (
             <div className="space-y-2 rounded-md border border-blue-200 bg-blue-50 p-3 text-sm text-blue-900">
               <div className="font-semibold">

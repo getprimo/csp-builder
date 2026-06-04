@@ -54,7 +54,7 @@
     "excluded": "{{count}} excluded",
     "searchPlaceholder": "Search by name, category or description…",
     "onlyApplied": "Only applied ({{count}})",
-    "showIncompatible": "Show incompatible ADMX",
+    "showIncompatible": "Incompatible ADMX",
     "noMatches": "No policy matches the search.",
     "applyBadge": "Apply"
   },

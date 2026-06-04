@@ -73,14 +73,11 @@
   input[type="checkbox"].checkbox-square:checked::after {
     content: "";
     position: absolute;
-    left: 4px;
-    top: 1px;
-    width: 5px;
-    height: 9px;
-    border: 2px solid white;
-    border-top: none;
-    border-left: none;
-    transform: rotate(45deg);
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.66699 12H5.33366V10.6667H6.66699V12ZM5.33366 10.6667H4.00033V9.33333H5.33366V10.6667ZM8.00033 9.33333V10.6667H6.66699V9.33333H8.00033ZM4.00033 9.33333H2.66699V8H4.00033V9.33333ZM9.33366 9.33333H8.00033V8H9.33366V9.33333ZM10.667 8H9.33366V6.66667H10.667V8ZM12.0003 6.66667H10.667V5.33333H12.0003V6.66667ZM13.3337 5.33333H12.0003V4H13.3337V5.33333Z' fill='white'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 16px 16px;
   }
 
   body {

@@ -247,20 +247,20 @@ function App() {
   return (
     <div className="min-h-screen bg-white text-primo-fg">
       {/* Nav */}
-      <nav className="border-b border-primo-border-subtle">
+      <nav className="border-b border-primo-border">
         <div className="container flex items-center justify-between h-[53px]">
-          <div className="flex items-center gap-2">
-            <img src="/favicon.svg" alt="" className="w-4 h-4" />
-            <span className="font-departure text-[18px] tracking-tight text-black">
-              CSP BUILDER
-            </span>
+          <div className="flex items-center">
+            <svg width="150" height="23" viewBox="0 0 150 23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CSP Builder">
+              <path d="M8.66634 11.5002H9.99967V12.8335H11.333V14.1668H8.66634V18.1668H1.33301V15.5002H2.66634V16.8335H7.33301V14.1668H4.66634V12.8335H5.99967V11.5002H7.33301V10.1668H8.66634V11.5002ZM11.9997 6.16683H10.6663V8.8335H13.333V7.50016H14.6663V18.1668H9.99967V16.8335H13.333V10.1668H9.33301V6.16683H2.66634V8.8335H1.33301V4.8335H11.9997V6.16683ZM2.66634 14.1668H1.33301V12.8335H2.66634V14.1668ZM2.66634 11.5002H1.33301V10.1668H2.66634V11.5002ZM13.333 7.50016H11.9997V6.16683H13.333V7.50016Z" fill="black"/>
+              <path d="M25.6364 6.54545H27.2727V16.3636H25.6364V6.54545ZM27.2727 16.3636H32.1818V18H27.2727V16.3636ZM32.1818 14.7273H33.8182V16.3636H32.1818V14.7273ZM27.2727 4.90909H32.1818V6.54545H27.2727V4.90909ZM32.1818 6.54545H33.8182V8.18182H32.1818V6.54545ZM37.0253 6.54545H38.6617V9.81818H37.0253V6.54545ZM38.6617 9.81818H43.5708V11.4545H38.6617V9.81818ZM43.5708 16.3636V18H38.6617V16.3636H43.5708ZM38.6617 16.3636H37.0253V14.7273H38.6617V16.3636ZM43.5708 11.4545H45.2071V16.3636H43.5708V11.4545ZM38.6617 4.90909H43.5708V6.54545H38.6617V4.90909ZM43.5708 6.54545H45.2071V8.18182H43.5708V6.54545ZM48.4142 4.90909H54.9597V6.54545H50.0506V11.4545H54.9597V13.0909H50.0506V18H48.4142V4.90909ZM54.9597 6.54545H56.5961V11.4545H54.9597V6.54545ZM71.1921 4.90909H77.7376V6.54545H72.8285V9.81818H77.7376V11.4545H72.8285V16.3636H77.7376V18H71.1921V4.90909ZM77.7376 11.4545H79.3739V16.3636H77.7376V11.4545ZM77.7376 6.54545H79.3739V9.81818H77.7376V6.54545ZM82.5811 4.90909H84.2174V16.3636H82.5811V4.90909ZM84.2174 16.3636H89.1265V18H84.2174V16.3636ZM89.1265 4.90909H90.7629V16.3636H89.1265V4.90909ZM97.2427 16.3636V6.54545H93.97V4.90909H102.152V6.54545H98.8791V16.3636H102.152V18H93.97V16.3636H97.2427ZM105.359 4.90909H106.995V16.3636H113.541V18H105.359V4.90909ZM116.748 4.90909H123.293V6.54545H118.384V16.3636H123.293V18H116.748V4.90909ZM123.293 6.54545H124.93V16.3636H123.293V6.54545ZM128.137 4.90909H136.319V6.54545H129.773V9.81818H134.682V11.4545H129.773V16.3636H136.319V18H128.137V4.90909ZM139.526 4.90909H146.071V6.54545H141.162V11.4545H146.071V14.7273H144.435V13.0909H141.162V18H139.526V4.90909ZM146.071 6.54545H147.708V11.4545H146.071V6.54545ZM146.071 14.7273H147.708V18H146.071V14.7273Z" fill="black"/>
+            </svg>
           </div>
           <div className="flex items-center gap-2">
             <a
               href={primoUrl("nav_expert")}
               target="_blank"
               rel="noopener"
-              className="inline-flex h-7 items-center rounded-sm bg-brand px-3 text-xs font-medium text-primo-fg hover:bg-brand/90 transition-colors"
+              className="inline-flex h-7 items-center rounded-none bg-brand px-3 text-xs font-medium text-primo-fg hover:bg-brand/90 transition-colors"
             >
               Talk to an expert
             </a>
@@ -268,7 +268,7 @@ function App() {
               href={primoUrl("nav_try")}
               target="_blank"
               rel="noopener"
-              className="inline-flex h-7 items-center rounded-sm border border-primo-border-subtle px-3 text-xs font-medium text-primo-fg hover:bg-muted transition-colors"
+              className="inline-flex h-7 items-center rounded-none border border-primo-border-subtle px-3 text-xs font-medium text-primo-fg hover:bg-muted transition-colors"
             >
               Try Primo
             </a>
@@ -277,13 +277,13 @@ function App() {
       </nav>
 
       {/* Sub-nav tags */}
-      <div className="border-primo-border">
-        <div className="container flex items-center justify-center h-[54px]">
-          <div className="font-mono text-[12px] tracking-tight text-black flex items-center gap-3">
+      <div>
+        <div className="container flex items-center justify-center h-9">
+          <div className="font-mono text-[11px] tracking-[0.08em] text-primo-muted flex items-center gap-3">
             <span>FREE</span>
-            <span className="text-[10px] text-primo-muted">/</span>
+            <span>/</span>
             <span>RUNS IN BROWSER</span>
-            <span className="text-[10px] text-primo-muted">/</span>
+            <span>/</span>
             <span>OPEN SOURCE</span>
           </div>
         </div>
@@ -354,10 +354,10 @@ function App() {
         {/* 1. Sources */}
         <section>
           <div className="mb-6">
-            <h2 className="text-[32px] font-semibold tracking-tight text-crow">
-              <span className="mr-3 text-primo-muted font-mono text-[20px]">1.</span>
-              Sources
-            </h2>
+            <div className="flex items-baseline gap-3 mb-1">
+              <span className="font-departure text-[32px] leading-none text-crow">1.</span>
+              <h2 className="text-[32px] font-semibold tracking-tight text-crow">Sources</h2>
+            </div>
             <p className="text-[16px] text-primo-muted">
               {t("sources.description", { defaultValue: "Define what your catalog of policies should look like" })}
             </p>
@@ -368,10 +368,10 @@ function App() {
         {/* 2. Setup */}
         <section>
           <div className="mb-6">
-            <h2 className="text-[32px] font-semibold tracking-tight text-crow">
-              <span className="mr-3 text-primo-muted font-mono text-[20px]">2.</span>
-              Setup
-            </h2>
+            <div className="flex items-baseline gap-3 mb-1">
+              <span className="font-departure text-[32px] leading-none text-crow">2.</span>
+              <h2 className="text-[32px] font-semibold tracking-tight text-crow">Setup</h2>
+            </div>
             <p className="text-[16px] text-primo-muted">
               {t("setup.description", { defaultValue: "Define what your catalog of policies should look like" })}
             </p>
@@ -387,16 +387,16 @@ function App() {
         {/* 3. Export */}
         <section>
           <div className="mb-6">
-            <h2 className="text-[32px] font-semibold tracking-tight text-crow">
-              <span className="mr-3 text-primo-muted font-mono text-[20px]">3.</span>
-              Export
-            </h2>
+            <div className="flex items-baseline gap-3 mb-1">
+              <span className="font-departure text-[32px] leading-none text-crow">3.</span>
+              <h2 className="text-[32px] font-semibold tracking-tight text-crow">Export</h2>
+            </div>
           </div>
           <ExportPanel />
         </section>
 
         {/* CTA */}
-        <section className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between py-12 border-t border-primo-border">
+        <section className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between py-12 border-t-2 border-primo-border">
           <div>
             <h2 className="text-[50px] leading-[1.4] font-semibold tracking-tight text-crow w-[540px] max-w-full">
               Shipping policies
@@ -413,7 +413,7 @@ function App() {
                 href={primoUrl("cta_primary")}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex h-10 items-center rounded-sm bg-brand px-5 text-[15px] font-medium text-primo-fg hover:bg-brand/90 transition-colors"
+                className="inline-flex h-10 items-center rounded-none bg-brand px-5 text-[15px] font-medium text-primo-fg hover:bg-brand/90 transition-colors"
               >
                 Talk to an expert
               </a>
@@ -421,7 +421,7 @@ function App() {
                 href={primoUrl("cta_try")}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex h-10 items-center rounded-sm border border-primo-border-subtle px-5 text-[15px] font-medium text-primo-fg hover:bg-muted transition-colors"
+                className="inline-flex h-10 items-center rounded-none border border-primo-border-subtle px-5 text-[15px] font-medium text-primo-fg hover:bg-muted transition-colors"
               >
                 Try Primo
               </a>
@@ -433,14 +433,16 @@ function App() {
       {/* Footer */}
       <footer className="bg-primo-dark">
         <div className="container py-20 flex flex-col items-center gap-7">
+          {/* Content centré */}
           <div className="flex flex-col items-center gap-6 max-w-sm text-center">
+            {/* Logo CSP Builder */}
             <div className="flex items-center gap-4">
               <img src="/favicon.svg" alt="" className="w-8 h-8" />
-              <span className="font-departure text-[36px] tracking-tight text-white">
-                CSP BUILDER
-              </span>
+              <span className="font-departure text-[36px] tracking-tight text-white">CSP BUILDER</span>
             </div>
-            <div className="flex items-center gap-2">
+
+            {/* Built with care by — items-baseline */}
+            <div className="flex items-baseline gap-2">
               <span className="text-[14px] text-[#a6b0b5] uppercase tracking-wide">
                 Built with care by
               </span>
@@ -448,16 +450,32 @@ function App() {
                 href={primoUrl("footer")}
                 target="_blank"
                 rel="noopener"
-                className="inline-flex items-center gap-1 opacity-70 hover:opacity-100 transition-opacity"
+                className="hover:opacity-80 transition-opacity"
               >
-                <PrimoLogo className="h-4 w-auto brightness-0 invert" />
-                <span className="text-[14px] text-white font-medium">Primo</span>
+                <svg width="97" height="22" viewBox="0 0 97 23" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Primo">
+                  <path fillRule="evenodd" clipRule="evenodd" d="M16.2959 0.905273H24.4437L24.3582 0.954643L24.4449 0.905373L20.371 7.90659L20.371 3.23968L16.2959 0.905273Z" fill="#FAFAFA"/>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M4.07422 7.90625H12.222L12.1365 7.95561L12.2232 7.90635L8.14931 14.9076L8.14936 10.2407L4.07422 7.90625Z" fill="#FAFAFA"/>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M8.14941 0.905273H16.2972L16.2117 0.954643L16.2984 0.905373L12.2245 7.90659L12.2246 3.23968L8.14941 0.905273Z" fill="#FAFAFA"/>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M12.2227 7.90625H20.3704L20.3703 7.90635L16.2964 14.9076L16.2964 10.2399L12.2227 7.90625Z" fill="#FAFAFA"/>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M8.14941 14.9082H16.2972L16.2118 14.9575L16.2984 14.9083L12.2245 21.9095L12.2246 17.2426L8.14941 14.9082Z" fill="#FAFAFA"/>
+                  <path fillRule="evenodd" clipRule="evenodd" d="M0 0.905273H8.14777L8.06222 0.954677L8.14898 0.905373L4.07509 7.90659L4.07514 3.23968L0 0.905273Z" fill="#FAFAFA"/>
+                  <path d="M26.6182 22.0002V0.996094H33.3662C34.7397 0.996094 35.9639 1.29534 37.0388 1.89384C38.1137 2.49233 38.9398 3.3003 39.5171 4.31774C40.1143 5.31523 40.4129 6.44239 40.4129 7.69923C40.4129 8.93612 40.1143 10.0633 39.5171 11.0807C38.9398 12.0982 38.1137 12.9061 37.0388 13.5046C35.9639 14.0832 34.7397 14.3724 33.3662 14.3724H30.4699V22.0002H26.6182ZM33.0378 10.6319C33.6748 10.6319 34.2321 10.5022 34.7099 10.2428C35.2075 9.98349 35.5957 9.62439 35.8743 9.16555C36.153 8.7067 36.2924 8.20795 36.2924 7.66931C36.2924 7.13066 36.153 6.63192 35.8743 6.17307C35.5957 5.71423 35.2075 5.35513 34.7099 5.09578C34.2321 4.83643 33.6748 4.70676 33.0378 4.70676H30.4699V10.6319H33.0378Z" fill="#FAFAFA"/>
+                  <path d="M42.1624 22.0002V8.05377H51.4484V11.4652H45.7753V22.0002H42.1624Z" fill="#FAFAFA"/>
+                  <path d="M53.9778 22.0002V18.4077V11.4652V8.05377H57.7102V18.4077V22.0002H53.9778Z" fill="#FAFAFA"/>
+                  <path d="M60.3692 22.0002V8.05377H74.2236C75.3184 8.05377 76.3137 8.31311 77.2094 8.83181C78.1052 9.33055 78.8019 10.0188 79.2995 10.8966C79.8171 11.7744 80.0759 12.742 80.0759 13.7993V22.0002H76.4331V13.8592C76.4331 13.1609 76.2141 12.5923 75.7762 12.1535C75.3383 11.6946 74.771 11.4652 74.0743 11.4652H72.014V22.0002H68.4011V11.4652H63.982V22.0002H60.3692Z" fill="#FAFAFA"/>
+                  <path d="M89.1659 22.1813C87.8522 22.1813 86.6379 21.8621 85.5232 21.2237C84.4085 20.5853 83.5227 19.7175 82.8658 18.6202C82.2288 17.523 81.9103 16.316 81.9103 14.9993C81.9103 13.6827 82.2288 12.4757 82.8658 11.3785C83.5227 10.2812 84.4085 9.4134 85.5232 8.775C86.6379 8.13661 87.8522 7.81741 89.1659 7.81741H89.2257C90.5593 7.81741 91.7835 8.13661 92.8983 8.775C94.013 9.4134 94.8888 10.2812 95.5258 11.3785C96.1827 12.4757 96.5112 13.6827 96.5112 14.9993C96.5112 16.316 96.1827 17.523 95.5258 18.6202C94.8888 19.7175 94.013 20.5853 92.8983 21.2237C91.7835 21.8621 90.5593 22.1813 89.2257 22.1813H89.1659ZM89.2257 18.5604C89.8626 18.5604 90.4499 18.4008 90.9873 18.0816C91.5447 17.7424 91.9727 17.3035 92.2712 16.7649C92.5897 16.2063 92.749 15.6178 92.749 14.9993C92.749 14.3609 92.5897 13.7724 92.2712 13.2338C91.9727 12.6752 91.5447 12.2363 90.9873 11.9171C90.4499 11.5979 89.8626 11.4383 89.2257 11.4383H89.1659C88.529 11.4383 87.9417 11.5979 87.4043 11.9171C86.8668 12.2363 86.4389 12.6752 86.1204 13.2338C85.8218 13.7724 85.6725 14.3609 85.6725 14.9993C85.6725 15.6377 85.8218 16.2362 86.1204 16.7948C86.4389 17.3335 86.8668 17.7624 87.4043 18.0816C87.9417 18.4008 88.529 18.5604 89.1659 18.5604H89.2257Z" fill="#FAFAFA"/>
+                  <path d="M53.9819 5.42495C54.4995 5.94365 55.1165 6.203 55.8332 6.203C56.5498 6.203 57.1569 5.94365 57.6545 5.42495C58.1721 4.90626 58.4309 4.29779 58.4309 3.59955C58.4309 2.88135 58.1721 2.27288 57.6545 1.77414C57.1569 1.25544 56.5498 0.996094 55.8332 0.996094C55.1165 0.996094 54.4995 1.25544 53.9819 1.77414C53.4843 2.27288 53.2354 2.88135 53.2354 3.59955C53.2354 4.29779 53.4843 4.90626 53.9819 5.42495Z" fill="#FAFAFA"/>
+                </svg>
               </a>
             </div>
+
+            {/* Tagline */}
             <p className="text-[12px] leading-[1.6] text-[#fffbf4]">
               We believe that strong foundations create strong companies. That's why we're building the all-in-one IT platform for companies on their growth from 2 to 2000 employees.
             </p>
           </div>
+
+          {/* Copyright */}
           <p className="text-[12px] text-[#a6b0b5]">
             ©2026 Primo. All Rights reserved.
           </p>

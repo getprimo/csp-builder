@@ -2,14 +2,35 @@ import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   AlertTriangle,
-  ChevronRight,
   Search,
 } from "lucide-react";
 
-// Figma design icons (valid 7 days from asset fetch)
-const ICON_GROUP = "https://www.figma.com/api/mcp/asset/5021eebe-b3dd-4c15-8ff9-9ff548abcd9c";
-const ICON_FOLDER = "https://www.figma.com/api/mcp/asset/ba057cbd-ffdf-4882-b96a-fd2e40f6c576";
-const ICON_APPLIED = "https://www.figma.com/api/mcp/asset/cfba1eb5-1764-41ff-a441-35174a7dd1cb";
+function IconFile({ className }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M11.9997 2.66683H10.6663V5.3335H13.333V4.00016H14.6663V14.6668H1.33301V1.3335H11.9997V2.66683ZM2.66634 13.3335H13.333V6.66683H9.33301V2.66683H2.66634V13.3335ZM6.66634 12.0002H5.33301V10.6668H6.66634V12.0002ZM9.33301 12.0002H7.99967V10.6668H9.33301V12.0002ZM5.33301 10.6668H3.99967V9.3335H5.33301V10.6668ZM10.6663 10.6668H9.33301V9.3335H10.6663V10.6668ZM6.66634 9.3335H5.33301V8.00016H6.66634V9.3335ZM9.33301 9.3335H7.99967V8.00016H9.33301V9.3335ZM13.333 4.00016H11.9997V2.66683H13.333V4.00016Z" fill="currentColor"/>
+    </svg>
+  );
+}
+
+function IconFolder({ className }: { className?: string }) {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" className={className}>
+      <path d="M2.66634 3.99984V11.9998H13.333V5.33317H6.66634V3.99984H2.66634ZM14.6663 3.99984V13.3332H1.33301V2.6665H7.99967V3.99984H14.6663Z" fill="#F9C84A"/>
+    </svg>
+  );
+}
+
+function IconChevron({ open, className }: { open: boolean; className?: string }) {
+  return (
+    <svg
+      width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+      className={cn("h-6 w-6 shrink-0 transition-transform text-primo-muted", open && "rotate-180", className)}
+    >
+      <path d="M17 9V11H15V13H13V15H11V13H9V11H7V9H17Z" fill="currentColor"/>
+    </svg>
+  );
+}
 import { Badge } from "@/components/ui/badge";
 import { checkCompatibility } from "@/lib/admx/compatibility";
 import type { AdmxFile, PolicyDefinition } from "@/lib/admx/types";
@@ -289,32 +310,39 @@ export function PolicyList() {
 
   return (
     <div>
-      {/* Header */}
-      <div className="flex items-center justify-between gap-2 p-4 border-b border-primo-border">
-        <span className="text-[16px] font-medium text-primo-fg">{t("policyList.title")}</span>
-        <div className="flex items-center gap-3">
-          {totalApplied > 0 && (
-            <span className="font-mono text-[12px] text-green-600">↑ {t("policyList.applied", { count: totalApplied })}</span>
-          )}
+      {/* Header bloc — titre + divider + search + checkboxes */}
+      <div className="flex flex-col gap-4 px-4 pt-3 pb-4 border-b border-primo-border">
+        {/* Title row */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="text-[16px] font-medium text-primo-fg">{t("policyList.title")}</span>
+            {totalApplied > 0 && (
+              <span className="font-mono text-[12px] text-teal-600">
+                ✓ {totalApplied} applied
+              </span>
+            )}
+          </div>
           <span className="font-mono text-[12px] text-primo-muted">
             {t("policyList.stats", { admx: admxTotals.compat, csp: cspTotal })}
           </span>
         </div>
-      </div>
 
-      {/* Search */}
-      <div className="relative border-b border-primo-border">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primo-muted" />
-        <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder={t("policyList.searchPlaceholder")}
-          className="w-full h-9 pl-9 pr-3 text-[14px] bg-white text-primo-fg placeholder:text-primo-muted focus:outline-none"
-        />
-      </div>
+        {/* Divider */}
+        <div className="-mx-4 border-t border-primo-border" />
 
-      {/* Filters */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-primo-border text-[14px] text-primo-fg">
+        {/* Search */}
+        <div className="relative border border-primo-border">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-primo-muted" />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder={t("policyList.searchPlaceholder")}
+            className="w-full h-9 pl-9 pr-3 text-[13px] bg-white text-primo-fg placeholder:text-primo-muted focus:outline-none"
+          />
+        </div>
+
+        {/* Filters */}
+        <div className="flex items-center justify-between text-[14px] text-primo-fg">
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -333,7 +361,8 @@ export function PolicyList() {
           />
           {t("policyList.showIncompatible")}
         </label>
-      </div>
+        </div>
+      </div>{/* end header bloc */}
 
       <div className="max-h-[620px] overflow-y-auto">
           {filteredGroups.map((g) => {
@@ -367,28 +396,19 @@ export function PolicyList() {
                   onClick={() => toggleNode(g.id)}
                   className="sticky top-0 z-20 w-full flex items-center gap-2 px-3 py-2 text-left bg-card hover:bg-muted transition-colors border-b"
                 >
-                  <ChevronRight
-                    className={cn(
-                      "h-4 w-4 shrink-0 transition-transform",
-                      isOpen && "rotate-90"
-                    )}
-                  />
-                  <img
-                    src={ICON_GROUP}
-                    alt=""
-                    className="h-4 w-4 shrink-0"
-                  />
+                  <IconFile className="shrink-0 text-primo-fg" />
                   <span className="font-medium truncate flex-1">
                     {g.title}
                   </span>
-                  <Badge variant="outline" className="text-[11px]">
+                  <span className="font-mono text-[11px] text-primo-muted shrink-0">
                     {countLabel}
-                  </Badge>
+                  </span>
                   {appliedInGroup > 0 && (
                     <Badge variant="success" className="text-[11px]">
                       {t("policyList.applied", { count: appliedInGroup })}
                     </Badge>
                   )}
+                  <IconChevron open={isOpen} />
                 </button>
 
                 {isOpen && (
@@ -475,17 +495,12 @@ function TreeRenderer({
               className="w-full flex items-center gap-2 py-1.5 pr-3 text-left text-sm hover:bg-muted/60 transition-colors"
               style={{ paddingLeft: `${12 + depth * 14}px` }}
             >
-              <ChevronRight
-                className={cn(
-                  "h-3.5 w-3.5 shrink-0 transition-transform text-muted-foreground",
-                  isOpen && "rotate-90"
-                )}
-              />
-              <img src={ICON_FOLDER} alt="" className="h-3.5 w-3.5 shrink-0" />
+              <IconFolder className="shrink-0" />
               <span className="truncate flex-1">{child.name}</span>
-              <Badge variant="outline" className="text-[10px]">
+              <span className="font-mono text-[10px] text-primo-muted shrink-0">
                 {count}
-              </Badge>
+              </span>
+              <IconChevron open={isOpen} className="h-3.5 w-3.5" />
             </button>
             {isOpen && (
               <TreeRenderer
@@ -574,7 +589,7 @@ function AdmxRow({
     >
       <div className="flex items-start gap-2">
         {entry.ingestable ? (
-          <img src={ICON_APPLIED} alt="" className="h-4 w-4 mt-0.5 shrink-0" />
+          <IconFile className="mt-0.5 shrink-0 text-primo-muted" />
         ) : (
           <AlertTriangle className="h-4 w-4 mt-0.5 text-amber-600 shrink-0" />
         )}
@@ -635,7 +650,7 @@ function CspRow({
       style={{ paddingLeft: `${12 + depth * 14}px` }}
     >
       <div className="flex items-start gap-2">
-        <img src={ICON_APPLIED} alt="" className="h-4 w-4 mt-0.5 shrink-0" />
+        <IconFile className="mt-0.5 shrink-0 text-primo-muted" />
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium truncate">

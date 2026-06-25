@@ -175,49 +175,15 @@ function useLoadFromUrl() {
   ]);
 }
 
-// Primo logo assets (node 1534:2512) — valid 7 days
-const PRIMO_MARK_ASSETS = {
-  union:  "https://www.figma.com/api/mcp/asset/6a1f2e70-3917-486c-81cf-62c6561b4a9b",
-  union1: "https://www.figma.com/api/mcp/asset/0d4c46d3-1d9c-4b66-8542-f809dfb5a95b",
-  union2: "https://www.figma.com/api/mcp/asset/1ffe450b-d668-4345-bb2a-8193fbe7b6c7",
-  union3: "https://www.figma.com/api/mcp/asset/4dcfba23-3d03-41a1-a9b1-df458bf13bdf",
-  union4: "https://www.figma.com/api/mcp/asset/eda2971f-6b66-4300-bba9-2b024d389b2c",
-  wordmark: "https://www.figma.com/api/mcp/asset/00d73f48-c1ef-413d-b7f2-38ffffdd8354",
-};
-
 function PrimoLogoFull({ height = 36 }: { height?: number }) {
   // aspect ratio 798:182
   const width = Math.round(height * 798 / 182);
   return (
-    <div style={{ position: 'relative', width, height, flexShrink: 0 }}>
-      {/* Logo mark — left ~25% */}
-      <div style={{ position: 'absolute', inset: '4.12% 74.65% 0.41% 0' }}>
-        <div style={{ position: 'absolute', inset: '0 0 66.67% 66.66%' }}>
-          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union} />
-        </div>
-        <div style={{ position: 'absolute', inset: '33.33% 49.99% 33.33% 16.67%' }}>
-          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union1} />
-        </div>
-        <div style={{ position: 'absolute', inset: '0 33.32% 66.67% 33.34%' }}>
-          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union} />
-        </div>
-        <div style={{ position: 'absolute', bottom: '33.33%', left: '50%', right: '16.67%', top: '33.33%' }}>
-          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union2} />
-        </div>
-        <div style={{ position: 'absolute', inset: '66.67% 33.32% 0 33.34%' }}>
-          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union3} />
-        </div>
-        <div style={{ position: 'absolute', inset: '0 66.66% 66.67% 0' }}>
-          <img alt="" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.union4} />
-        </div>
-      </div>
-      {/* Wordmark — right 72% */}
-      <div style={{ position: 'absolute', inset: '0 0 0 27.61%' }}>
-        <div style={{ position: 'absolute', inset: '4.53% -0.13% -0.82% 0' }}>
-          <img alt="Primo" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }} src={PRIMO_MARK_ASSETS.wordmark} />
-        </div>
-      </div>
-    </div>
+    <img
+      src="/assets/primo-logo.svg"
+      alt="Primo"
+      style={{ width, height, flexShrink: 0 }}
+    />
   );
 }
 
@@ -296,9 +262,8 @@ function App() {
               height: '70.20%',
             }}
           >
-            {/* imgFrame2136137828 — rectangle bleu-cyan clair */}
             <img
-              src="https://www.figma.com/api/mcp/asset/6e6a1774-a9e5-4c6e-836d-75e2e5bdc09c"
+              src="/assets/hero-frame.svg"
               alt=""
               aria-hidden
               className="absolute inset-0 w-full h-full pointer-events-none select-none"

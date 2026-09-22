@@ -2,7 +2,7 @@
 
 # CSP Builder
 
-**Free online generator to convert Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for FleetDM, Intune, and any MDM.**
+**Free online generator to convert Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for Fleet, Intune, and any MDM.**
 
 [![Live site](https://img.shields.io/badge/Try%20it%20live-csp--builder.getprimo.com-111?style=for-the-badge&logo=windowsterminal&logoColor=white)](https://csp-builder.getprimo.com?utm_source=github&utm_medium=readme&utm_campaign=csp_builder&utm_content=hero_badge)
 [![Built by Primo](https://img.shields.io/badge/Built%20by-Primo-8B5CF6?style=for-the-badge)](https://www.getprimo.com?utm_source=github&utm_medium=readme&utm_campaign=csp_builder&utm_content=hero_badge)
@@ -25,7 +25,7 @@ A **100% client-side** web app that turns Windows policy definitions into the OM
 1. **ADMX-backed CSP** — drop your own ADMX/ADML templates (or pick from 10 pre-loaded: Chrome, Edge, Firefox, Office, OneDrive, Adobe…). The app parses them, filters CSP-ingestable policies (with a reason for each rejection), and emits `<Replace>` / `<Delete>` commands under `./Device/Vendor/MSFT/Policy/Config/{Area}~Policy~{Cat}/{Policy}`.
 2. **Native Policy CSP** — browse the full Microsoft Policy CSP catalog (**3,000+ settings**, 260+ areas) bundled from the official DDFv2 Feb 2026 release. Each setting is editable with a format-aware input and emits a proper `<Replace>` with the right `<Format>` tag (bool / int / chr / xml / b64).
 
-Shared features: unified searchable list, per-policy **Apply** toggle, Device/User scope for `Both`-class policies, **5 export modes** (FleetDM default + 4 SyncML-envelope variants), live XML preview, copy/download.
+Shared features: unified searchable list, per-policy **Apply** toggle, Device/User scope for `Both`-class policies, **5 export modes** (Fleet default + 4 SyncML-envelope variants), live XML preview, copy/download.
 
 ---
 
@@ -35,7 +35,7 @@ Going from on-prem **GPO** → **MDM-based policy delivery** means hand-writing 
 
 This tool does it for you in a browser tab — free, private, offline-capable.
 
-**Keywords** (for the SEO crawlers and anyone searching here): _ADMX to SyncML, FleetDM ADMX, FleetDM CSP, Intune ADMX ingestion, Windows Policy CSP, Group Policy to MDM, OMA-DM, GPO converter, SyncML generator, Policy Configuration Service Provider._
+**Keywords** (for the SEO crawlers and anyone searching here): _ADMX to SyncML, Fleet ADMX, Fleet CSP, Intune ADMX ingestion, Windows Policy CSP, Group Policy to MDM, OMA-DM, GPO converter, SyncML generator, Policy Configuration Service Provider._
 
 ---
 
@@ -211,7 +211,7 @@ Every policy (ADMX and native CSP) has an **Apply** switch, off by default.
 
 | Preset                                    | Outer wrapper                        | Ingestion | Use case |
 |-------------------------------------------|--------------------------------------|:---------:|----------|
-| **FleetDM compatible** *(default)*        | none (bare top-level tags)           |    ✗      | FleetDM Windows MDM custom profile — ingest ADMX in a **separate** FleetDM profile |
+| **Fleet compatible** *(default)*          | none (bare top-level tags)           |    ✗      | Fleet Windows MDM custom profile — ingest ADMX in a **separate** Fleet profile |
 | ADMX Ingestion + Full SyncML envelope     | `<SyncML>` + `<SyncHdr>` + `<SyncBody>` | ✓      | Classic DM session payload |
 | ADMX Ingestion (SyncBody only)            | `<SyncBody>` + `<Final/>`            |    ✓      | When the caller injects its own `<SyncHdr>` |
 | Full SyncML envelope (no ingestion)       | `<SyncML>` + `<SyncHdr>` + `<SyncBody>` | ✗      | Target already has the ADMX registered |

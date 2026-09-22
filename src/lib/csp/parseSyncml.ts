@@ -51,7 +51,7 @@ interface RawCommand {
 function extractCommands(xml: string): RawCommand[] {
   // Strip any XML declaration and wrap in a synthetic root so the parser
   // accepts both full SyncML documents (single root) and fragment modes like
-  // FleetDM's raw multi-root <Replace>/<Delete> output.
+  // Fleet's raw multi-root <Replace>/<Delete> output.
   const stripped = xml.replace(/^\s*<\?xml[^?]*\?>\s*/, "").trim();
   if (!stripped) return [];
   const wrapped = `<__cspb_root>${stripped}</__cspb_root>`;

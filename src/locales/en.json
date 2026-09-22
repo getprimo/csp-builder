@@ -1,9 +1,9 @@
 {
   "app": {
     "title": "CSP Builder",
-    "tagline": "Free online generator to turn Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for <fleet>FleetDM</fleet>, <intune>Intune</intune>, and any MDM that speaks OMA-DM. Built by <primo>Primo</primo> — the IT platform for modern teams (device management, onboarding, SaaS, procurement).",
+    "tagline": "Free online generator to turn Windows ADMX/ADML templates and the Microsoft Policy CSP catalog into ready-to-ship SyncML payloads for <fleet>Fleet</fleet>, <intune>Intune</intune>, and any MDM that speaks OMA-DM. Built by <primo>Primo</primo> — the IT platform for modern teams (device management, onboarding, SaaS, procurement).",
     "primoLink": "Primo",
-    "fleetdm": "FleetDM",
+    "fleet": "Fleet",
     "intune": "Intune"
   },
   "primoRibbon": {
@@ -153,9 +153,9 @@
     "resetConfirmMany": "Reset {{count}} applied policies? This clears their state and values. The ADMX templates stay loaded."
   },
   "exportModes": {
-    "fleetdm": {
-      "label": "FleetDM compatible",
-      "description": "Raw top-level <Replace>/<Delete> commands — policy ops only, no envelope, no inline ADMX ingestion. Ingest custom ADMX through a separate FleetDM profile before applying."
+    "fleet": {
+      "label": "Fleet compatible",
+      "description": "Raw top-level <Replace>/<Delete> commands — policy ops only, no envelope, no inline ADMX ingestion. Ingest custom ADMX through a separate Fleet profile before applying."
     },
     "envelopeWithIngestion": {
       "label": "ADMX Ingestion + Full SyncML envelope",

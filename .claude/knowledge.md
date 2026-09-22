@@ -18,7 +18,7 @@ build SyncML payloads for Windows CSP policy delivery. Two tracks:
 
 Both tracks share: unified searchable list, per-policy **Apply** toggle
 (off by default, auto-on on any edit), scope radio for Both-class settings,
-five export modes (FleetDM default, plus four SyncBody/SyncML envelope
+five export modes (Fleet default, plus four SyncBody/SyncML envelope
 variants).
 
 ## Path
@@ -90,8 +90,8 @@ npm run lint               # ESLint, must pass clean
 
 ## Export modes (dropdown in ExportPanel)
 
-1. **FleetDM compatible** *(default)* — bare top-level `<Replace>`/`<Delete>`,
-   no envelope, **no inline ADMX ingestion** (FleetDM expects ingestion in a
+1. **Fleet compatible** *(default)* — bare top-level `<Replace>`/`<Delete>`,
+   no envelope, **no inline ADMX ingestion** (Fleet expects ingestion in a
    separate profile — confirmed via their docs).
 2. **ADMX Ingestion + Full SyncML envelope** — `<SyncML>`/`<SyncHdr>`/
    `<SyncBody>` + ingestion CDATA + Config commands + `<Final/>`.

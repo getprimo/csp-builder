@@ -32,7 +32,7 @@ function primoCustomFileOpenUrl(controleId: string | undefined): string {
 }
 
 const MODE_I18N_KEY: Record<ExportMode, string> = {
-  fleetdm: "exportModes.fleetdm",
+  fleet: "exportModes.fleet",
   "envelope-with-ingestion": "exportModes.envelopeWithIngestion",
   "body-with-ingestion": "exportModes.bodyWithIngestion",
   "envelope-only": "exportModes.envelopeOnly",
@@ -46,7 +46,7 @@ export function ExportPanel() {
   const configuredCsp = useAdmxStore((s) => s.configuredCsp);
   const controleId = useAdmxStore((s) => s.controleId);
   const resetConfigurations = useAdmxStore((s) => s.resetConfigurations);
-  const [mode, setMode] = useState<ExportMode>("fleetdm");
+  const [mode, setMode] = useState<ExportMode>("fleet");
   const [copied, setCopied] = useState(false);
 
   const xml = useMemo(
@@ -71,7 +71,7 @@ export function ExportPanel() {
     const a = document.createElement("a");
     a.href = url;
     a.download =
-      mode === "fleetdm" ? "policies.fleetdm.xml" : "policies.syncml.xml";
+      mode === "fleet" ? "policies.fleet.xml" : "policies.syncml.xml";
     a.click();
     URL.revokeObjectURL(url);
   };

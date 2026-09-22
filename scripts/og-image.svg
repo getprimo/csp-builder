@@ -44,7 +44,7 @@
 
   <!-- subtitle -->
   <text x="72" y="390" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif" font-size="28" font-weight="400" fill="#ffffff" fill-opacity="0.78">
-    Windows CSP · ADMX ingestion · FleetDM &amp; Intune
+    Windows CSP · ADMX ingestion · Fleet &amp; Intune
   </text>
 
   <!-- feature chips -->

@@ -15,7 +15,7 @@ import {
 import { buildPolicyPayload, xmlEscape } from "./encoder";
 
 export type ExportMode =
-  | "fleetdm"
+  | "fleet"
   | "envelope-with-ingestion"
   | "envelope-only"
   | "body-with-ingestion"
@@ -29,10 +29,10 @@ export interface ExportModeInfo {
 
 export const EXPORT_MODES: ExportModeInfo[] = [
   {
-    id: "fleetdm",
-    label: "FleetDM compatible",
+    id: "fleet",
+    label: "Fleet compatible",
     description:
-      "Raw top-level <Replace>/<Delete> commands — policy ops only, no envelope, no inline ADMX ingestion. Ingest custom ADMX through a separate FleetDM profile before applying.",
+      "Raw top-level <Replace>/<Delete> commands — policy ops only, no envelope, no inline ADMX ingestion. Ingest custom ADMX through a separate Fleet profile before applying.",
   },
   {
     id: "envelope-with-ingestion",
@@ -150,11 +150,11 @@ export function buildSyncML(
   configuredCsp: Record<string, ConfiguredCsp> = {},
   opts: SyncMLOptions = {}
 ): string {
-  const mode: ExportMode = opts.mode ?? "fleetdm";
+  const mode: ExportMode = opts.mode ?? "fleet";
   const includeIngestion =
     mode === "envelope-with-ingestion" || mode === "body-with-ingestion";
   const wrapMode: "full" | "body" | "raw" =
-    mode === "fleetdm"
+    mode === "fleet"
       ? "raw"
       : mode === "envelope-with-ingestion" || mode === "envelope-only"
         ? "full"
@@ -268,7 +268,7 @@ export function buildSyncML(
   }
 
   if (wrapMode === "raw") {
-    // FleetDM: top-level commands with no SyncBody/SyncML/Final wrappers.
+    // Fleet: top-level commands with no SyncBody/SyncML/Final wrappers.
     // Emit the inner commands with leading indentation stripped so they sit
     // flush at the start of each line.
     return parts.map((p) => p.replace(/^ {2}/gm, "")).join("\n") + "\n";

@@ -70,6 +70,8 @@ export type CspAllowed =
   | { kind: "admx-backed" }
   | { kind: "other"; raw?: string };
 
+export type CspAccessVerb = "Add" | "Copy" | "Delete" | "Exec" | "Get" | "Replace";
+
 export interface CspApplicability {
   osBuild?: string;
   cspVersion?: string;
@@ -109,6 +111,12 @@ export interface CspSetting {
   defaultValue?: string;
   allowed?: CspAllowed;
   applicability?: CspApplicability;
+  /**
+   * The OMA-DM operations the node accepts, as the DDF declares them. A node
+   * that accepts `Exec` only is a command (e.g. `Defender/Scan`), not a
+   * setting. Absent when the DDF declares no AccessType.
+   */
+  accessType?: CspAccessVerb[];
   deprecated?: boolean;
   osBuildDeprecated?: string;
   /**

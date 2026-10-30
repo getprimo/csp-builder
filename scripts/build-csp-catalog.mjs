@@ -171,6 +171,21 @@ function isWritableLeaf(props) {
   return "Add" in at || "Replace" in at || "Exec" in at;
 }
 
+const ACCESS_VERBS = ["Add", "Copy", "Delete", "Exec", "Get", "Replace"];
+
+/**
+ * The OMA-DM operations the node accepts, in the DDF's own order. Emitted so a
+ * consumer can tell a setting (Add/Replace) from a command (Exec only, e.g.
+ * `Defender/Scan`), which the writable filter above keeps on purpose.
+ * Undefined when the DDF declares no AccessType.
+ */
+function accessTypeOf(props) {
+  const at = props?.AccessType;
+  if (!at || typeof at !== "object") return undefined;
+  const verbs = ACCESS_VERBS.filter((v) => v in at);
+  return verbs.length > 0 ? verbs : undefined;
+}
+
 function walk(node, uriParts, areaChain, emit) {
   if (!node) return;
   const nodeName = textOf(node.NodeName) ?? "";
@@ -201,6 +216,7 @@ function walk(node, uriParts, areaChain, emit) {
     defaultValue: textOf(props.DefaultValue),
     allowed: parseAllowedValues(props.AllowedValues),
     applicability: looseBuild(props.Applicability),
+    accessType: accessTypeOf(props),
     deprecated: props.Deprecated !== undefined,
     osBuildDeprecated:
       props.Deprecated?.["@_OsBuildDeprecated"] ?? undefined,
@@ -541,6 +557,14 @@ function main() {
           existing.scope = "Both";
           if (!existing.description && leaf.description)
             existing.description = leaf.description;
+          // The Device and User leaves of one policy normally declare the same
+          // operations; keep the union when they differ.
+          if (leaf.accessType) {
+            const merged = ACCESS_VERBS.filter(
+              (v) => existing.accessType?.includes(v) || leaf.accessType.includes(v)
+            );
+            existing.accessType = merged;
+          }
           byId.set(bareId, existing);
         } else {
           byId.set(bareId, {
@@ -555,6 +579,7 @@ function main() {
             defaultValue: leaf.defaultValue,
             allowed: leaf.allowed,
             applicability: leaf.applicability,
+            accessType: leaf.accessType,
             deprecated: leaf.deprecated || undefined,
             osBuildDeprecated: leaf.osBuildDeprecated,
           });

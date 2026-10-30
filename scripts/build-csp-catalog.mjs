@@ -160,6 +160,8 @@ function looseBuild(applicability) {
   return out;
 }
 
+let leavesWithoutAccessType = 0;
+
 /**
  * A leaf is writable if its AccessType declares any of Add/Replace/Exec.
  * Get-only leaves (status readbacks) cannot be pushed via MDM and are skipped
@@ -167,8 +169,23 @@ function looseBuild(applicability) {
  */
 function isWritableLeaf(props) {
   const at = props?.AccessType;
-  if (!at || typeof at !== "object") return true; // default to writable if unspecified
+  if (!at || typeof at !== "object") {
+    leavesWithoutAccessType++;
+    return false; // no AccessType, no way to know what a device accepts: skipped, and counted
+  }
   return "Add" in at || "Replace" in at || "Exec" in at;
+}
+
+const ACCESS_VERBS = ["Add", "Copy", "Delete", "Exec", "Get", "Replace"];
+
+/**
+ * The OMA-DM operations the node accepts, in the DDF's own order. Emitted so a
+ * consumer can tell a setting (Add/Replace) from a command (Exec only, e.g.
+ * `Defender/Scan`), which the writable filter above keeps on purpose. Always
+ * set on an emitted leaf: a leaf without AccessType never passes the filter.
+ */
+function accessTypeOf(props) {
+  return ACCESS_VERBS.filter((v) => v in props.AccessType);
 }
 
 function walk(node, uriParts, areaChain, emit) {
@@ -201,6 +218,7 @@ function walk(node, uriParts, areaChain, emit) {
     defaultValue: textOf(props.DefaultValue),
     allowed: parseAllowedValues(props.AllowedValues),
     applicability: looseBuild(props.Applicability),
+    accessType: accessTypeOf(props),
     deprecated: props.Deprecated !== undefined,
     osBuildDeprecated:
       props.Deprecated?.["@_OsBuildDeprecated"] ?? undefined,
@@ -541,6 +559,11 @@ function main() {
           existing.scope = "Both";
           if (!existing.description && leaf.description)
             existing.description = leaf.description;
+          // The Device and User leaves of one policy normally declare the same
+          // operations; keep the union when they differ.
+          existing.accessType = ACCESS_VERBS.filter(
+            (v) => existing.accessType.includes(v) || leaf.accessType.includes(v)
+          );
           byId.set(bareId, existing);
         } else {
           byId.set(bareId, {
@@ -555,6 +578,7 @@ function main() {
             defaultValue: leaf.defaultValue,
             allowed: leaf.allowed,
             applicability: leaf.applicability,
+            accessType: leaf.accessType,
             deprecated: leaf.deprecated || undefined,
             osBuildDeprecated: leaf.osBuildDeprecated,
           });
@@ -595,6 +619,31 @@ function main() {
     return a.name.localeCompare(b.name);
   });
 
+  // Every emitted node declares its AccessType, and a node a device can be written to (Add/Replace) or told to
+  // act (Exec) is the only kind the catalog holds: a regression here would hand consumers a setting they can
+  // neither set nor read as a command.
+  const writeVerbs = new Set(["Add", "Replace", "Exec"]);
+  const withoutAccessType = settings.filter((s) => !s.accessType?.length);
+  const withoutWriteVerb = settings.filter(
+    (s) => s.accessType?.length && !s.accessType.some((v) => writeVerbs.has(v))
+  );
+  const commands = settings.filter(
+    (s) =>
+      s.accessType?.includes("Exec") &&
+      !s.accessType.includes("Add") &&
+      !s.accessType.includes("Replace")
+  );
+  if (withoutAccessType.length || withoutWriteVerb.length) {
+    console.error(
+      `AccessType invariant broken: ${withoutAccessType.length} setting(s) without accessType, ` +
+        `${withoutWriteVerb.length} without Add, Replace or Exec.`
+    );
+    for (const s of [...withoutAccessType, ...withoutWriteVerb].slice(0, 20)) {
+      console.error(`  ${s.id}`);
+    }
+    process.exit(1);
+  }
+
   const catalog = {
     generatedAt: new Date().toISOString(),
     source: "Microsoft DDFv2 Feb 2026 (Windows 11 26H2) + PolicyDefinitions (sysvol-centralstore)",
@@ -611,6 +660,10 @@ function main() {
   console.log(`Top-level nodes scanned: ${totalTopNodes}, Policy-rooted: ${policyTopNodes}.`);
   const areas = new Set(settings.map((s) => s.area));
   console.log(`Areas: ${areas.size}`);
+  console.log(`Leaves skipped for lack of an AccessType: ${leavesWithoutAccessType}.`);
+  console.log(
+    `AccessType on every setting; commands (Exec without Add/Replace): ${commands.length}.`
+  );
 }
 
 main();

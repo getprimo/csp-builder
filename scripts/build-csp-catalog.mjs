@@ -620,6 +620,31 @@ function main() {
     return a.name.localeCompare(b.name);
   });
 
+  // Every emitted node declares its AccessType, and a node a device can be written to (Add/Replace) or told to
+  // act (Exec) is the only kind the catalog holds: a regression here would hand consumers a setting they can
+  // neither set nor read as a command.
+  const writeVerbs = new Set(["Add", "Replace", "Exec"]);
+  const withoutAccessType = settings.filter((s) => !s.accessType?.length);
+  const withoutWriteVerb = settings.filter(
+    (s) => s.accessType?.length && !s.accessType.some((v) => writeVerbs.has(v))
+  );
+  const commands = settings.filter(
+    (s) =>
+      s.accessType?.includes("Exec") &&
+      !s.accessType.includes("Add") &&
+      !s.accessType.includes("Replace")
+  );
+  if (withoutAccessType.length || withoutWriteVerb.length) {
+    console.error(
+      `AccessType invariant broken: ${withoutAccessType.length} setting(s) without accessType, ` +
+        `${withoutWriteVerb.length} without Add, Replace or Exec.`
+    );
+    for (const s of [...withoutAccessType, ...withoutWriteVerb].slice(0, 20)) {
+      console.error(`  ${s.id}`);
+    }
+    process.exit(1);
+  }
+
   const catalog = {
     generatedAt: new Date().toISOString(),
     source: "Microsoft DDFv2 Feb 2026 (Windows 11 26H2) + PolicyDefinitions (sysvol-centralstore)",
@@ -636,6 +661,9 @@ function main() {
   console.log(`Top-level nodes scanned: ${totalTopNodes}, Policy-rooted: ${policyTopNodes}.`);
   const areas = new Set(settings.map((s) => s.area));
   console.log(`Areas: ${areas.size}`);
+  console.log(
+    `AccessType on every setting; commands (Exec without Add/Replace): ${commands.length}.`
+  );
 }
 
 main();

@@ -160,6 +160,8 @@ function looseBuild(applicability) {
   return out;
 }
 
+let leavesWithoutAccessType = 0;
+
 /**
  * A leaf is writable if its AccessType declares any of Add/Replace/Exec.
  * Get-only leaves (status readbacks) cannot be pushed via MDM and are skipped
@@ -167,7 +169,10 @@ function looseBuild(applicability) {
  */
 function isWritableLeaf(props) {
   const at = props?.AccessType;
-  if (!at || typeof at !== "object") return true; // default to writable if unspecified
+  if (!at || typeof at !== "object") {
+    leavesWithoutAccessType++;
+    return false; // no AccessType, no way to know what a device accepts: skipped, and counted
+  }
   return "Add" in at || "Replace" in at || "Exec" in at;
 }
 
@@ -176,14 +181,11 @@ const ACCESS_VERBS = ["Add", "Copy", "Delete", "Exec", "Get", "Replace"];
 /**
  * The OMA-DM operations the node accepts, in the DDF's own order. Emitted so a
  * consumer can tell a setting (Add/Replace) from a command (Exec only, e.g.
- * `Defender/Scan`), which the writable filter above keeps on purpose.
- * Undefined when the DDF declares no AccessType.
+ * `Defender/Scan`), which the writable filter above keeps on purpose. Always
+ * set on an emitted leaf: a leaf without AccessType never passes the filter.
  */
 function accessTypeOf(props) {
-  const at = props?.AccessType;
-  if (!at || typeof at !== "object") return undefined;
-  const verbs = ACCESS_VERBS.filter((v) => v in at);
-  return verbs.length > 0 ? verbs : undefined;
+  return ACCESS_VERBS.filter((v) => v in props.AccessType);
 }
 
 function walk(node, uriParts, areaChain, emit) {
@@ -559,12 +561,9 @@ function main() {
             existing.description = leaf.description;
           // The Device and User leaves of one policy normally declare the same
           // operations; keep the union when they differ.
-          if (leaf.accessType) {
-            const merged = ACCESS_VERBS.filter(
-              (v) => existing.accessType?.includes(v) || leaf.accessType.includes(v)
-            );
-            existing.accessType = merged;
-          }
+          existing.accessType = ACCESS_VERBS.filter(
+            (v) => existing.accessType.includes(v) || leaf.accessType.includes(v)
+          );
           byId.set(bareId, existing);
         } else {
           byId.set(bareId, {
@@ -661,6 +660,7 @@ function main() {
   console.log(`Top-level nodes scanned: ${totalTopNodes}, Policy-rooted: ${policyTopNodes}.`);
   const areas = new Set(settings.map((s) => s.area));
   console.log(`Areas: ${areas.size}`);
+  console.log(`Leaves skipped for lack of an AccessType: ${leavesWithoutAccessType}.`);
   console.log(
     `AccessType on every setting; commands (Exec without Add/Replace): ${commands.length}.`
   );

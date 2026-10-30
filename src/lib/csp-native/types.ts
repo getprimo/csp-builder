@@ -112,11 +112,12 @@ export interface CspSetting {
   allowed?: CspAllowed;
   applicability?: CspApplicability;
   /**
-   * The OMA-DM operations the node accepts, as the DDF declares them. A node
-   * that accepts `Exec` only is a command (e.g. `Defender/Scan`), not a
-   * setting. Absent when the DDF declares no AccessType.
+   * The OMA-DM operations the node accepts, as the DDF declares them, never
+   * empty: a leaf the DDF gives no AccessType is not in the catalog. A node
+   * that accepts `Exec` and neither `Add` nor `Replace` is a command (e.g.
+   * `Defender/Scan`), not a setting.
    */
-  accessType?: CspAccessVerb[];
+  accessType: CspAccessVerb[];
   deprecated?: boolean;
   osBuildDeprecated?: string;
   /**

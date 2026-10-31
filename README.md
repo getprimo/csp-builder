@@ -89,24 +89,26 @@ npm run build:og-image   # rsvg-convert scripts/og-image.svg → public/og-image
 ### Regenerate the CSP catalog
 
 ```bash
-npm run fetch:admx-pack    # one-off: mirror the Windows PolicyDefinitions folder
+npm run fetch:ddf          # replace scripts/csp-ddf/*.zip when Microsoft published a new DDF
+npm run fetch:admx-pack    # Microsoft's ADMX pack (pinned in scripts/sources.mjs), needs msitools
 npm run build:csp-catalog  # parse DDF + ADMX, write src/lib/csp-native/catalog.json
 ```
 
 The catalog is committed (~4.3 MB), so CI/end users never need to run this.
-Maintainers only run it after:
-- refreshing `scripts/csp-ddf/DDFv2Feb2026.zip` (the Microsoft DDF), or
-- refreshing the Windows ADMX mirror (for element schemas on ADMX-backed CSPs).
+The **Refresh CSP catalog** workflow runs the three steps every Monday and
+opens a pull request when Microsoft published a new DDF zip (about three a
+year); a run without a new DDF opens nothing. Dispatch it with
+`force_rebuild` after bumping the ADMX pack, or to prove a change to the build.
 
-`fetch:admx-pack` pulls from the community mirror
-[jozefizso/sysvol-centralstore](https://github.com/jozefizso/sysvol-centralstore)
-into `scripts/admx-windows/` (gitignored).
-
-**Prefer the official Microsoft pack** for the freshest policies: download
-[Administrative Templates (.admx) for Windows 11 25H2](https://www.microsoft.com/en-us/download/details.aspx?id=108394)
-(or the newer equivalent), and copy its `PolicyDefinitions/*.admx` +
-`PolicyDefinitions/en-US/*.adml` into `scripts/admx-windows/` (replacing the
-community mirror output). Then run `npm run build:csp-catalog`.
+Both sources are Microsoft's, listed in `scripts/sources.mjs`:
+- the DDF zip, the first "DDF v2" link on
+  [the DDF page](https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf),
+  detected and replaced by `fetch:ddf`;
+- the [Administrative Templates (.admx) pack](https://www.microsoft.com/en-us/download/details.aspx?id=108542),
+  **pinned** by URL: a new pack changes element schemas, so a human bumps it
+  and reviews the rebuild. `fetch:admx-pack` extracts the MSI with
+  `msiextract` (`apt-get install msitools`, `brew install msitools`) into
+  `scripts/admx-windows/` (gitignored).
 
 About 1,480 ADMX-backed CSPs get their element schema attached this way; the
 rest fall back to a textarea editor with inline help.
@@ -152,8 +154,8 @@ The other samples (edge, office/word/outlook, acrobat-dc, reader-dc, onedrive) s
 
 ## Native Policy CSP catalog
 
-- **Source:** [DDFv2 Feb 2026](https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf) — Microsoft's official zip of 313 XML definition files, plus a mirror of the Windows PolicyDefinitions folder ([jozefizso/sysvol-centralstore](https://github.com/jozefizso/sysvol-centralstore)) for the ADMX element schemas.
-- **Build step:** `npm run build:csp-catalog` reads the DDF zip + ADMX mirror, walks every area under `./Device/Vendor/MSFT/Policy/Config` and `./User/…`, merges same-path entries into a single `scope: "Both"` record, matches each ADMX-backed CSP to its source ADMX policy to attach element definitions (types, labels, enum items, ranges), and writes `src/lib/csp-native/catalog.json` (~4.3 MB, committed so the regular build doesn't re-parse either source).
+- **Source:** [DDFv2 Feb 2026](https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf) — Microsoft's official zip of 313 XML definition files, plus Microsoft's [Administrative Templates (.admx) pack](https://www.microsoft.com/en-us/download/details.aspx?id=108542) for the ADMX element schemas (both in `scripts/sources.mjs`).
+- **Build step:** `npm run build:csp-catalog` reads the DDF zip + ADMX pack, walks every area under `./Device/Vendor/MSFT/Policy/Config` and `./User/…`, merges same-path entries into a single `scope: "Both"` record, matches each ADMX-backed CSP to its source ADMX policy to attach element definitions (types, labels, enum items, ranges), and writes `src/lib/csp-native/catalog.json` (~4.3 MB, committed so the regular build doesn't re-parse either source).
 - **ADMX-backed settings:** ~1,480 out of ~2,080 ADMX-backed CSPs get a structured editor (enum dropdowns, text inputs, bool switches, number fields). The rest fall back to a textarea where you write the `<enabled/><data…/>` payload by hand (with a help panel showing the expected structure).
 - **Standalone CSPs:** beyond the ~3,100 Policy CSPs (`./{Device,User}/Vendor/MSFT/Policy/Config/…`), the catalog also ships ~800 **standalone CSPs** rooted at `./{Device,User}/Vendor/MSFT/<Area>/…` — Personalization, BitLocker, Defender, Firewall, VPNv2, DMClient, EnterpriseModernAppManagement, Email, ActiveSync, LAPS, WindowsLicensing, etc. The editor marks them with a `standalone` family badge; the SyncML export uses the correct URI (no `Policy/Config` prefix). Read-only status leaves (e.g. `DesktopImageStatus`) and action-only nodes (`Enroll`, `Unenroll`, `Install`) are filtered out since MDM cannot push them.
 - **Coverage:** ~3,000 settings across 260+ areas — AboveLock, Authentication, BitLocker, Browser, DeviceLock, Experience, Privacy, Update, WindowsDefenderSecurityCenter, …

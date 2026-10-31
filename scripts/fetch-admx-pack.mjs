@@ -1,82 +1,83 @@
 #!/usr/bin/env node
 /**
- * Fetch the Windows PolicyDefinitions mirror used to enrich the CSP catalog
- * with ADMX element schemas.
+ * Fetch the Windows PolicyDefinitions used to enrich the CSP catalog with
+ * ADMX element schemas: Microsoft's official Administrative Templates pack,
+ * pinned in scripts/sources.mjs (ADMX_PACK).
  *
- * Source: https://github.com/jozefizso/sysvol-centralstore (community mirror
- * of the Windows ADMX PolicyDefinitions folder + en-US resources).
- *
- * Downloads the repo tarball, extracts just the ADMX + en-US ADML files into
- * scripts/admx-windows/, and cleans up. Run once after cloning, or whenever
- * you want to refresh the catalog:
+ * Downloads the MSI, extracts it with `msiextract` (msitools: `apt-get install
+ * msitools` on a runner, `brew install msitools` on a Mac), and copies the
+ * ADMX + en-US ADML files into scripts/admx-windows/ (gitignored).
  *
  *   npm run fetch:admx-pack
  *   npm run build:csp-catalog
  *
- * The resulting catalog.json is committed, so this script is only needed by
- * maintainers regenerating the schema (never by CI or end users).
+ * The resulting catalog.json is committed, so this script runs only when the
+ * catalog is rebuilt — by the weekly workflow on a new DDF, or by hand.
  */
-import { execSync } from "node:child_process";
-import { existsSync, mkdirSync, rmSync, readdirSync, copyFileSync } from "node:fs";
+import { execFileSync } from "node:child_process";
+import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { ADMX_PACK } from "./sources.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
-const ROOT = join(__dirname, "..");
-const OUT_DIR = join(ROOT, "scripts", "admx-windows");
+const OUT_DIR = join(__dirname, "admx-windows");
 const EN_US_OUT = join(OUT_DIR, "en-US");
-const TMP_TAR = "/tmp/sysvol-centralstore.tar.gz";
-const TMP_EXTRACT = "/tmp/sysvol-centralstore-extract";
-const TARBALL_URL =
-  "https://github.com/jozefizso/sysvol-centralstore/archive/refs/heads/master.tar.gz";
 
-function sh(cmd) {
-  execSync(cmd, { stdio: "inherit" });
+/** The first `PolicyDefinitions` directory under `dir`, wherever the MSI's own layout puts it. */
+function findPolicyDefinitions(dir) {
+  for (const entry of readdirSync(dir, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const path = join(dir, entry.name);
+    if (entry.name.toLowerCase() === "policydefinitions") return path;
+    const found = findPolicyDefinitions(path);
+    if (found) return found;
+  }
+  return undefined;
 }
 
-function main() {
-  console.log(`Downloading ${TARBALL_URL} ...`);
-  sh(`curl -sL -o ${TMP_TAR} ${TARBALL_URL}`);
-
-  console.log(`Extracting ...`);
-  rmSync(TMP_EXTRACT, { recursive: true, force: true });
-  mkdirSync(TMP_EXTRACT, { recursive: true });
-  sh(`tar -xzf ${TMP_TAR} -C ${TMP_EXTRACT}`);
-
-  const extractedDir = readdirSync(TMP_EXTRACT).find((d) =>
-    d.startsWith("sysvol-centralstore-")
-  );
-  if (!extractedDir) throw new Error("Tarball layout unexpected — no sysvol-centralstore-* dir");
-  const policyDefs = join(TMP_EXTRACT, extractedDir, "PolicyDefinitions");
-  if (!existsSync(policyDefs)) throw new Error(`No PolicyDefinitions in ${policyDefs}`);
-
-  rmSync(OUT_DIR, { recursive: true, force: true });
-  mkdirSync(OUT_DIR, { recursive: true });
-  mkdirSync(EN_US_OUT, { recursive: true });
-
-  let admxCount = 0;
-  let admlCount = 0;
-  for (const f of readdirSync(policyDefs)) {
-    if (f.toLowerCase().endsWith(".admx")) {
-      copyFileSync(join(policyDefs, f), join(OUT_DIR, f));
-      admxCount++;
-    }
+function copyAll(from, to, extension) {
+  mkdirSync(to, { recursive: true });
+  let count = 0;
+  for (const f of readdirSync(from)) {
+    if (!f.toLowerCase().endsWith(extension)) continue;
+    copyFileSync(join(from, f), join(to, f));
+    count++;
   }
-  const enDir = join(policyDefs, "en-us");
-  if (existsSync(enDir)) {
-    for (const f of readdirSync(enDir)) {
-      if (f.toLowerCase().endsWith(".adml")) {
-        copyFileSync(join(enDir, f), join(EN_US_OUT, f));
-        admlCount++;
-      }
-    }
-  }
-
-  rmSync(TMP_TAR, { force: true });
-  rmSync(TMP_EXTRACT, { recursive: true, force: true });
-
-  console.log(`Done: ${admxCount} ADMX + ${admlCount} en-US ADML → ${OUT_DIR}`);
-  console.log(`Next: npm run build:csp-catalog`);
+  return count;
 }
 
-main();
+async function main() {
+  const tmp = mkdtempSync(join(tmpdir(), "admx-pack-"));
+  try {
+    console.log(`Downloading ${ADMX_PACK.name} ...`);
+    const response = await fetch(ADMX_PACK.url);
+    if (!response.ok) throw new Error(`${ADMX_PACK.url}: HTTP ${response.status}`);
+    const msi = join(tmp, "pack.msi");
+    writeFileSync(msi, Buffer.from(await response.arrayBuffer()));
+
+    console.log("Extracting with msiextract ...");
+    const extracted = join(tmp, "extracted");
+    mkdirSync(extracted);
+    execFileSync("msiextract", ["-C", extracted, msi], { stdio: ["ignore", "ignore", "inherit"] });
+
+    const policyDefs = findPolicyDefinitions(extracted);
+    if (!policyDefs) throw new Error("No PolicyDefinitions directory in the MSI");
+    const enUs = readdirSync(policyDefs).find((d) => d.toLowerCase() === "en-us");
+    if (!enUs) throw new Error(`No en-US directory in ${policyDefs}`);
+
+    rmSync(OUT_DIR, { recursive: true, force: true });
+    const admxCount = copyAll(policyDefs, OUT_DIR, ".admx");
+    const admlCount = copyAll(join(policyDefs, enUs), EN_US_OUT, ".adml");
+    if (admxCount === 0 || admlCount === 0) throw new Error(`Empty pack: ${admxCount} ADMX, ${admlCount} ADML`);
+
+    console.log(`Done: ${admxCount} ADMX + ${admlCount} en-US ADML → ${OUT_DIR}`);
+    console.log("Next: npm run build:csp-catalog");
+  } finally {
+    rmSync(tmp, { recursive: true, force: true });
+  }
+}
+
+if (!existsSync(join(__dirname, "..", "package.json"))) throw new Error("Run from the csp-builder checkout");
+await main();

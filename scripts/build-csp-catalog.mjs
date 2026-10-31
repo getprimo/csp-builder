@@ -3,8 +3,8 @@
  * Parse Microsoft's Policy CSP DDF zip into a compact JSON catalog.
  *
  * Input:
- *   - scripts/csp-ddf/DDFv2Feb2026.zip       (committed DDF source)
- *   - scripts/admx-windows/*.admx            (Windows PolicyDefinitions mirror)
+ *   - scripts/csp-ddf/*.zip                  (the one committed DDF zip, kept current by fetch-ddf.mjs)
+ *   - scripts/admx-windows/*.admx            (Microsoft's ADMX pack, fetched by fetch-admx-pack.mjs)
  *   - scripts/admx-windows/en-US/*.adml      (English labels)
  *
  * Output: src/lib/csp-native/catalog.json
@@ -25,10 +25,13 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { XMLParser } from "fast-xml-parser";
 import AdmZip from "adm-zip";
+import { committedDdfZip } from "./fetch-ddf.mjs";
+import { ADMX_PACK } from "./sources.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = join(__dirname, "..");
-const ZIP = join(ROOT, "scripts", "csp-ddf", "DDFv2Feb2026.zip");
+const ZIP_NAME = committedDdfZip();
+const ZIP = join(ROOT, "scripts", "csp-ddf", ZIP_NAME);
 const ADMX_DIR = join(ROOT, "scripts", "admx-windows");
 const ADML_DIR = join(ADMX_DIR, "en-US");
 const OUT = join(ROOT, "src", "lib", "csp-native", "catalog.json");
@@ -646,7 +649,7 @@ function main() {
 
   const catalog = {
     generatedAt: new Date().toISOString(),
-    source: "Microsoft DDFv2 Feb 2026 (Windows 11 26H2) + PolicyDefinitions (sysvol-centralstore)",
+    source: `Microsoft ${ZIP_NAME.replace(/\.zip$/, "")} + ${ADMX_PACK.name}`,
     settingCount: settings.length,
     settings,
   };

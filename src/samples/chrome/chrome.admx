@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <policyDefinitions revision="1.0" schemaVersion="1.0">
-  <!--chrome version: 147.0.7727.138-->
+  <!--chrome version: 156.0.8078.80-->
   <policyNamespaces>
     <target namespace="Google.Policies.Chrome" prefix="chrome"/>
     <using namespace="Google.Policies" prefix="Google"/>
@@ -95,13 +95,13 @@
     <category displayName="$(string.Printing_group)" name="Printing_recommended">
       <parentCategory ref="googlechrome_recommended"/>
     </category>
-    <category displayName="$(string.PrivacySandbox_group)" name="PrivacySandbox">
-      <parentCategory ref="googlechrome"/>
-    </category>
     <category displayName="$(string.ProtectedContent_group)" name="ProtectedContent">
       <parentCategory ref="googlechrome"/>
     </category>
     <category displayName="$(string.Proxy_group)" name="Proxy">
+      <parentCategory ref="googlechrome"/>
+    </category>
+    <category displayName="$(string.Relaunch_group)" name="Relaunch">
       <parentCategory ref="googlechrome"/>
     </category>
     <category displayName="$(string.RemoteAccess_group)" name="RemoteAccess">
@@ -279,6 +279,20 @@
         <list id="AutoSelectCertificateForUrlsDesc" key="Software\Policies\Google\Chrome\AutoSelectCertificateForUrls" valuePrefix=""/>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.AutomaticDownloadsAllowedForUrls)" explainText="$(string.AutomaticDownloadsAllowedForUrls_Explain)" key="Software\Policies\Google\Chrome" name="AutomaticDownloadsAllowedForUrls" presentation="$(presentation.AutomaticDownloadsAllowedForUrls)">
+      <parentCategory ref="ContentSettings"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <list id="AutomaticDownloadsAllowedForUrlsDesc" key="Software\Policies\Google\Chrome\AutomaticDownloadsAllowedForUrls" valuePrefix=""/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.AutomaticDownloadsBlockedForUrls)" explainText="$(string.AutomaticDownloadsBlockedForUrls_Explain)" key="Software\Policies\Google\Chrome" name="AutomaticDownloadsBlockedForUrls" presentation="$(presentation.AutomaticDownloadsBlockedForUrls)">
+      <parentCategory ref="ContentSettings"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <list id="AutomaticDownloadsBlockedForUrlsDesc" key="Software\Policies\Google\Chrome\AutomaticDownloadsBlockedForUrls" valuePrefix=""/>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.AutomaticFullscreenAllowedForUrls)" explainText="$(string.AutomaticFullscreenAllowedForUrls_Explain)" key="Software\Policies\Google\Chrome" name="AutomaticFullscreenAllowedForUrls" presentation="$(presentation.AutomaticFullscreenAllowedForUrls)">
       <parentCategory ref="ContentSettings"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -337,6 +351,29 @@
       <disabledValue>
         <decimal value="0"/>
       </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.DefaultAutomaticDownloadsSetting)" explainText="$(string.DefaultAutomaticDownloadsSetting_Explain)" key="Software\Policies\Google\Chrome" name="DefaultAutomaticDownloadsSetting" presentation="$(presentation.DefaultAutomaticDownloadsSetting)">
+      <parentCategory ref="ContentSettings"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="DefaultAutomaticDownloadsSetting" valueName="DefaultAutomaticDownloadsSetting">
+          <item displayName="$(string.DefaultAutomaticDownloadsSetting_AllowAutomaticDownloads)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+          <item displayName="$(string.DefaultAutomaticDownloadsSetting_BlockAutomaticDownloads)">
+            <value>
+              <decimal value="2"/>
+            </value>
+          </item>
+          <item displayName="$(string.DefaultAutomaticDownloadsSetting_AskAutomaticDownloads)">
+            <value>
+              <decimal value="3"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
     </policy>
     <policy class="Both" displayName="$(string.DefaultClipboardSetting)" explainText="$(string.DefaultClipboardSetting_Explain)" key="Software\Policies\Google\Chrome" name="DefaultClipboardSetting" presentation="$(presentation.DefaultClipboardSetting)">
       <parentCategory ref="ContentSettings"/>
@@ -625,6 +662,11 @@
               <decimal value="2"/>
             </value>
           </item>
+          <item displayName="$(string.DefaultSensorsSetting_AskSensors)">
+            <value>
+              <decimal value="3"/>
+            </value>
+          </item>
         </enum>
       </elements>
     </policy>
@@ -902,6 +944,16 @@
       <elements>
         <list id="PreciseGeolocationAllowedForUrlsDesc" key="Software\Policies\Google\Chrome\PreciseGeolocationAllowedForUrls" valuePrefix=""/>
       </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.RestrictYouTubeCookiesDeletion)" explainText="$(string.RestrictYouTubeCookiesDeletion_Explain)" key="Software\Policies\Google\Chrome" name="RestrictYouTubeCookiesDeletion" presentation="$(presentation.RestrictYouTubeCookiesDeletion)" valueName="RestrictYouTubeCookiesDeletion">
+      <parentCategory ref="ContentSettings"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.SensorsAllowedForUrls)" explainText="$(string.SensorsAllowedForUrls_Explain)" key="Software\Policies\Google\Chrome" name="SensorsAllowedForUrls" presentation="$(presentation.SensorsAllowedForUrls)">
       <parentCategory ref="ContentSettings"/>
@@ -1282,7 +1334,7 @@
         <list id="WindowPlacementBlockedForUrlsDesc" key="Software\Policies\Google\Chrome\WindowPlacementBlockedForUrls" valuePrefix=""/>
       </elements>
     </policy>
-    <policy class="Both" displayName="$(string.FirstPartySetsEnabled)" explainText="$(string.FirstPartySetsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="FirstPartySetsEnabled" presentation="$(presentation.FirstPartySetsEnabled)" valueName="FirstPartySetsEnabled">
+    <policy class="Both" displayName="$(string.AutoFillEnabled)" explainText="$(string.AutoFillEnabled_Explain)" key="Software\Policies\Google\Chrome" name="AutoFillEnabled" presentation="$(presentation.AutoFillEnabled)" valueName="AutoFillEnabled">
       <parentCategory ref="DeprecatedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -1292,14 +1344,17 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.FirstPartySetsOverrides)" explainText="$(string.FirstPartySetsOverrides_Explain)" key="Software\Policies\Google\Chrome" name="FirstPartySetsOverrides" presentation="$(presentation.FirstPartySetsOverrides)">
+    <policy class="Both" displayName="$(string.AutofillAddressEnabled)" explainText="$(string.AutofillAddressEnabled_Explain)" key="Software\Policies\Google\Chrome" name="AutofillAddressEnabled" presentation="$(presentation.AutofillAddressEnabled)" valueName="AutofillAddressEnabled">
       <parentCategory ref="DeprecatedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <text id="FirstPartySetsOverrides" maxLength="1000000" valueName="FirstPartySetsOverrides"/>
-      </elements>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.AutoFillEnabled)" explainText="$(string.AutoFillEnabled_Explain)" key="Software\Policies\Google\Chrome" name="AutoFillEnabled" presentation="$(presentation.AutoFillEnabled)" valueName="AutoFillEnabled">
+    <policy class="Both" displayName="$(string.AutofillCreditCardEnabled)" explainText="$(string.AutofillCreditCardEnabled_Explain)" key="Software\Policies\Google\Chrome" name="AutofillCreditCardEnabled" presentation="$(presentation.AutofillCreditCardEnabled)" valueName="AutofillCreditCardEnabled">
       <parentCategory ref="DeprecatedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -1457,7 +1512,34 @@
         </enum>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.PdfViewerOutOfProcessIframeEnabled)" explainText="$(string.PdfViewerOutOfProcessIframeEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PdfViewerOutOfProcessIframeEnabled" presentation="$(presentation.PdfViewerOutOfProcessIframeEnabled)" valueName="PdfViewerOutOfProcessIframeEnabled">
+      <parentCategory ref="DeprecatedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy class="Both" displayName="$(string.PromotionalTabsEnabled)" explainText="$(string.PromotionalTabsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PromotionalTabsEnabled" presentation="$(presentation.PromotionalTabsEnabled)" valueName="PromotionalTabsEnabled">
+      <parentCategory ref="DeprecatedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.RoamingProfileLocation)" explainText="$(string.RoamingProfileLocation_Explain)" key="Software\Policies\Google\Chrome" name="RoamingProfileLocation" presentation="$(presentation.RoamingProfileLocation)">
+      <parentCategory ref="DeprecatedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <text id="RoamingProfileLocation" maxLength="1000000" valueName="RoamingProfileLocation"/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.RoamingProfileSupportEnabled)" explainText="$(string.RoamingProfileSupportEnabled_Explain)" key="Software\Policies\Google\Chrome" name="RoamingProfileSupportEnabled" presentation="$(presentation.RoamingProfileSupportEnabled)" valueName="RoamingProfileSupportEnabled">
       <parentCategory ref="DeprecatedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -1495,6 +1577,16 @@
       </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.PrivacySandboxAdTopicsEnabled)" explainText="$(string.PrivacySandboxAdTopicsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PrivacySandboxAdTopicsEnabled" presentation="$(presentation.PrivacySandboxAdTopicsEnabled)" valueName="PrivacySandboxAdTopicsEnabled">
+      <parentCategory ref="DeprecatedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.PrivacySandboxPromptEnabled)" explainText="$(string.PrivacySandboxPromptEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PrivacySandboxPromptEnabled" presentation="$(presentation.PrivacySandboxPromptEnabled)" valueName="PrivacySandboxPromptEnabled">
       <parentCategory ref="DeprecatedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -1596,23 +1688,6 @@
         </enum>
       </elements>
     </policy>
-    <policy class="Both" displayName="$(string.RelatedWebsiteSetsEnabled)" explainText="$(string.RelatedWebsiteSetsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="RelatedWebsiteSetsEnabled" presentation="$(presentation.RelatedWebsiteSetsEnabled)" valueName="RelatedWebsiteSetsEnabled">
-      <parentCategory ref="DeprecatedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
-    <policy class="Both" displayName="$(string.RelatedWebsiteSetsOverrides)" explainText="$(string.RelatedWebsiteSetsOverrides_Explain)" key="Software\Policies\Google\Chrome" name="RelatedWebsiteSetsOverrides" presentation="$(presentation.RelatedWebsiteSetsOverrides)">
-      <parentCategory ref="DeprecatedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <text id="RelatedWebsiteSetsOverrides" maxLength="1000000" valueName="RelatedWebsiteSetsOverrides"/>
-      </elements>
-    </policy>
     <policy class="Both" displayName="$(string.RemoteAccessHostClientDomain)" explainText="$(string.RemoteAccessHostClientDomain_Explain)" key="Software\Policies\Google\Chrome" name="RemoteAccessHostClientDomain" presentation="$(presentation.RemoteAccessHostClientDomain)">
       <parentCategory ref="DeprecatedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -1638,6 +1713,26 @@
       </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.AutoFillEnabled)" explainText="$(string.AutoFillEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="AutoFillEnabled_recommended" presentation="$(presentation.AutoFillEnabled)" valueName="AutoFillEnabled">
+      <parentCategory ref="DeprecatedPolicies_recommended"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.AutofillAddressEnabled)" explainText="$(string.AutofillAddressEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="AutofillAddressEnabled_recommended" presentation="$(presentation.AutofillAddressEnabled)" valueName="AutofillAddressEnabled">
+      <parentCategory ref="DeprecatedPolicies_recommended"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.AutofillCreditCardEnabled)" explainText="$(string.AutofillCreditCardEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="AutofillCreditCardEnabled_recommended" presentation="$(presentation.AutofillCreditCardEnabled)" valueName="AutofillCreditCardEnabled">
       <parentCategory ref="DeprecatedPolicies_recommended"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -1734,6 +1829,16 @@
         <list id="ExtensionInstallTypeBlocklistDesc" key="Software\Policies\Google\Chrome\ExtensionInstallTypeBlocklist" valuePrefix=""/>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.ExtensionReviewPromptsEnabled)" explainText="$(string.ExtensionReviewPromptsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="ExtensionReviewPromptsEnabled" presentation="$(presentation.ExtensionReviewPromptsEnabled)" valueName="ExtensionReviewPromptsEnabled">
+      <parentCategory ref="Extensions"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy class="Both" displayName="$(string.ExtensionSettings)" explainText="$(string.ExtensionSettings_Explain)" key="Software\Policies\Google\Chrome" name="ExtensionSettings" presentation="$(presentation.ExtensionSettings)">
       <parentCategory ref="Extensions"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -1777,6 +1882,29 @@
         </enum>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.AutofillGenAiSettings)" explainText="$(string.AutofillGenAiSettings_Explain)" key="Software\Policies\Google\Chrome" name="AutofillGenAiSettings" presentation="$(presentation.AutofillGenAiSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="AutofillGenAiSettings" valueName="AutofillGenAiSettings">
+          <item displayName="$(string.AutofillGenAiSettings_Allowed)">
+            <value>
+              <decimal value="0"/>
+            </value>
+          </item>
+          <item displayName="$(string.AutofillGenAiSettings_AllowedWithoutLogging)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+          <item displayName="$(string.AutofillGenAiSettings_Disabled)">
+            <value>
+              <decimal value="2"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.AutofillPredictionSettings)" explainText="$(string.AutofillPredictionSettings_Explain)" key="Software\Policies\Google\Chrome" name="AutofillPredictionSettings" presentation="$(presentation.AutofillPredictionSettings)">
       <parentCategory ref="GenerativeAI"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -1798,6 +1926,13 @@
             </value>
           </item>
         </enum>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.ChromeSuggestionsSettings)" explainText="$(string.ChromeSuggestionsSettings_Explain)" key="Software\Policies\Google\Chrome" name="ChromeSuggestionsSettings" presentation="$(presentation.ChromeSuggestionsSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <decimal id="ChromeSuggestionsSettings" maxValue="2000000000" minValue="0" valueName="ChromeSuggestionsSettings"/>
       </elements>
     </policy>
     <policy class="Both" displayName="$(string.CreateThemesSettings)" explainText="$(string.CreateThemesSettings_Explain)" key="Software\Policies\Google\Chrome" name="CreateThemesSettings" presentation="$(presentation.CreateThemesSettings)">
@@ -1896,6 +2031,24 @@
         </enum>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.GeminiSparkSettings)" explainText="$(string.GeminiSparkSettings_Explain)" key="Software\Policies\Google\Chrome" name="GeminiSparkSettings" presentation="$(presentation.GeminiSparkSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="GeminiSparkSettings" valueName="GeminiSparkSettings">
+          <item displayName="$(string.GeminiSparkSettings_Enabled)">
+            <value>
+              <decimal value="0"/>
+            </value>
+          </item>
+          <item displayName="$(string.GeminiSparkSettings_Disabled)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.GenAILocalFoundationalModelSettings)" explainText="$(string.GenAILocalFoundationalModelSettings_Explain)" key="Software\Policies\Google\Chrome" name="GenAILocalFoundationalModelSettings" presentation="$(presentation.GenAILocalFoundationalModelSettings)">
       <parentCategory ref="GenerativeAI"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -1978,6 +2131,24 @@
         </enum>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.SmartTabSharingSettings)" explainText="$(string.SmartTabSharingSettings_Explain)" key="Software\Policies\Google\Chrome" name="SmartTabSharingSettings" presentation="$(presentation.SmartTabSharingSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="SmartTabSharingSettings" valueName="SmartTabSharingSettings">
+          <item displayName="$(string.SmartTabSharingSettings_Allowed)">
+            <value>
+              <decimal value="0"/>
+            </value>
+          </item>
+          <item displayName="$(string.SmartTabSharingSettings_Disabled)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.TabCompareSettings)" explainText="$(string.TabCompareSettings_Explain)" key="Software\Policies\Google\Chrome" name="TabCompareSettings" presentation="$(presentation.TabCompareSettings)">
       <parentCategory ref="GenerativeAI"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -1994,6 +2165,70 @@
             </value>
           </item>
           <item displayName="$(string.TabCompareSettings_Disabled)">
+            <value>
+              <decimal value="2"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.ThirdPartyAiChatSettings)" explainText="$(string.ThirdPartyAiChatSettings_Explain)" key="Software\Policies\Google\Chrome" name="ThirdPartyAiChatSettings" presentation="$(presentation.ThirdPartyAiChatSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="ThirdPartyAiChatSettings" valueName="ThirdPartyAiChatSettings">
+          <item displayName="$(string.ThirdPartyAiChatSettings_Allowed)">
+            <value>
+              <decimal value="0"/>
+            </value>
+          </item>
+          <item displayName="$(string.ThirdPartyAiChatSettings_Disabled)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.TryOnYouSettings)" explainText="$(string.TryOnYouSettings_Explain)" key="Software\Policies\Google\Chrome" name="TryOnYouSettings" presentation="$(presentation.TryOnYouSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="TryOnYouSettings" valueName="TryOnYouSettings">
+          <item displayName="$(string.TryOnYouSettings_Allowed)">
+            <value>
+              <decimal value="0"/>
+            </value>
+          </item>
+          <item displayName="$(string.TryOnYouSettings_AllowedWithoutDataCollection)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+          <item displayName="$(string.TryOnYouSettings_Disabled)">
+            <value>
+              <decimal value="2"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.VoiceTypingSettings)" explainText="$(string.VoiceTypingSettings_Explain)" key="Software\Policies\Google\Chrome" name="VoiceTypingSettings" presentation="$(presentation.VoiceTypingSettings)">
+      <parentCategory ref="GenerativeAI"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="VoiceTypingSettings" valueName="VoiceTypingSettings">
+          <item displayName="$(string.VoiceTypingSettings_Allowed)">
+            <value>
+              <decimal value="0"/>
+            </value>
+          </item>
+          <item displayName="$(string.VoiceTypingSettings_AllowedWithoutLogging)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+          <item displayName="$(string.VoiceTypingSettings_Disabled)">
             <value>
               <decimal value="2"/>
             </value>
@@ -2436,6 +2671,16 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy class="Both" displayName="$(string.AllowSocketPoolSizeRandomizationForProxies)" explainText="$(string.AllowSocketPoolSizeRandomizationForProxies_Explain)" key="Software\Policies\Google\Chrome" name="AllowSocketPoolSizeRandomizationForProxies" presentation="$(presentation.AllowSocketPoolSizeRandomizationForProxies)" valueName="AllowSocketPoolSizeRandomizationForProxies">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy class="Both" displayName="$(string.AllowWebAuthnWithBrokenTlsCerts)" explainText="$(string.AllowWebAuthnWithBrokenTlsCerts_Explain)" key="Software\Policies\Google\Chrome" name="AllowWebAuthnWithBrokenTlsCerts" presentation="$(presentation.AllowWebAuthnWithBrokenTlsCerts)" valueName="AllowWebAuthnWithBrokenTlsCerts">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -2576,25 +2821,12 @@
         <list id="AutoOpenFileTypesDesc" key="Software\Policies\Google\Chrome\AutoOpenFileTypes" valuePrefix=""/>
       </elements>
     </policy>
-    <policy class="Both" displayName="$(string.AutofillAddressEnabled)" explainText="$(string.AutofillAddressEnabled_Explain)" key="Software\Policies\Google\Chrome" name="AutofillAddressEnabled" presentation="$(presentation.AutofillAddressEnabled)" valueName="AutofillAddressEnabled">
+    <policy class="Both" displayName="$(string.AutofillSettings)" explainText="$(string.AutofillSettings_Explain)" key="Software\Policies\Google\Chrome" name="AutofillSettings" presentation="$(presentation.AutofillSettings)">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
-    <policy class="Both" displayName="$(string.AutofillCreditCardEnabled)" explainText="$(string.AutofillCreditCardEnabled_Explain)" key="Software\Policies\Google\Chrome" name="AutofillCreditCardEnabled" presentation="$(presentation.AutofillCreditCardEnabled)" valueName="AutofillCreditCardEnabled">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
+      <elements>
+        <text id="AutofillSettings" maxLength="1000000" valueName="AutofillSettings"/>
+      </elements>
     </policy>
     <policy class="Both" displayName="$(string.AutoplayAllowed)" explainText="$(string.AutoplayAllowed_Explain)" key="Software\Policies\Google\Chrome" name="AutoplayAllowed" presentation="$(presentation.AutoplayAllowed)" valueName="AutoplayAllowed">
       <parentCategory ref="googlechrome"/>
@@ -2613,7 +2845,27 @@
         <list id="AutoplayAllowlistDesc" key="Software\Policies\Google\Chrome\AutoplayAllowlist" valuePrefix=""/>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.BackForwardCacheForWebSocketsAllowed)" explainText="$(string.BackForwardCacheForWebSocketsAllowed_Explain)" key="Software\Policies\Google\Chrome" name="BackForwardCacheForWebSocketsAllowed" presentation="$(presentation.BackForwardCacheForWebSocketsAllowed)" valueName="BackForwardCacheForWebSocketsAllowed">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy class="Both" displayName="$(string.BackgroundModeEnabled)" explainText="$(string.BackgroundModeEnabled_Explain)" key="Software\Policies\Google\Chrome" name="BackgroundModeEnabled" presentation="$(presentation.BackgroundModeEnabled)" valueName="BackgroundModeEnabled">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.BackgroundTabFreezingEnabled)" explainText="$(string.BackgroundTabFreezingEnabled_Explain)" key="Software\Policies\Google\Chrome" name="BackgroundTabFreezingEnabled" presentation="$(presentation.BackgroundTabFreezingEnabled)" valueName="BackgroundTabFreezingEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -2857,16 +3109,6 @@
         <list id="ClearBrowsingDataOnExitListDesc" key="Software\Policies\Google\Chrome\ClearBrowsingDataOnExitList" valuePrefix=""/>
       </elements>
     </policy>
-    <policy class="Both" displayName="$(string.ClickToCallEnabled)" explainText="$(string.ClickToCallEnabled_Explain)" key="Software\Policies\Google\Chrome" name="ClickToCallEnabled" presentation="$(presentation.ClickToCallEnabled)" valueName="ClickToCallEnabled">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
     <policy class="Both" displayName="$(string.CloudManagementEnrollmentMandatory)" explainText="$(string.CloudManagementEnrollmentMandatory_Explain)" key="Software\Policies\Google\Chrome" name="CloudManagementEnrollmentMandatory" presentation="$(presentation.CloudManagementEnrollmentMandatory)" valueName="CloudManagementEnrollmentMandatory">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -2934,7 +3176,24 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy class="Both" displayName="$(string.CpuPerformanceTierOverride)" explainText="$(string.CpuPerformanceTierOverride_Explain)" key="Software\Policies\Google\Chrome" name="CpuPerformanceTierOverride" presentation="$(presentation.CpuPerformanceTierOverride)">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <decimal id="CpuPerformanceTierOverride" maxValue="4" minValue="0" valueName="CpuPerformanceTierOverride"/>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.DNSInterceptionChecksEnabled)" explainText="$(string.DNSInterceptionChecksEnabled_Explain)" key="Software\Policies\Google\Chrome" name="DNSInterceptionChecksEnabled" presentation="$(presentation.DNSInterceptionChecksEnabled)" valueName="DNSInterceptionChecksEnabled">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.DataUrlInWebWorkerOpaqueOriginEnabled)" explainText="$(string.DataUrlInWebWorkerOpaqueOriginEnabled_Explain)" key="Software\Policies\Google\Chrome" name="DataUrlInWebWorkerOpaqueOriginEnabled" presentation="$(presentation.DataUrlInWebWorkerOpaqueOriginEnabled)" valueName="DataUrlInWebWorkerOpaqueOriginEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -3354,6 +3613,13 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy class="Both" displayName="$(string.ForceForegroundPriorityForUrls)" explainText="$(string.ForceForegroundPriorityForUrls_Explain)" key="Software\Policies\Google\Chrome" name="ForceForegroundPriorityForUrls" presentation="$(presentation.ForceForegroundPriorityForUrls)">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <list id="ForceForegroundPriorityForUrlsDesc" key="Software\Policies\Google\Chrome\ForceForegroundPriorityForUrls" valuePrefix=""/>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.ForceGoogleSafeSearch)" explainText="$(string.ForceGoogleSafeSearch_Explain)" key="Software\Policies\Google\Chrome" name="ForceGoogleSafeSearch" presentation="$(presentation.ForceGoogleSafeSearch)" valueName="ForceGoogleSafeSearch">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -3711,7 +3977,14 @@
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <elements>
-        <decimal id="MaxConnectionsPerProxy" maxValue="2000000000" minValue="0" valueName="MaxConnectionsPerProxy"/>
+        <decimal id="MaxConnectionsPerProxy" maxValue="256" minValue="6" valueName="MaxConnectionsPerProxy"/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.MaxConnectionsPerProxyForWebSocket)" explainText="$(string.MaxConnectionsPerProxyForWebSocket_Explain)" key="Software\Policies\Google\Chrome" name="MaxConnectionsPerProxyForWebSocket" presentation="$(presentation.MaxConnectionsPerProxyForWebSocket)">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <decimal id="MaxConnectionsPerProxyForWebSocket" maxValue="256" minValue="6" valueName="MaxConnectionsPerProxyForWebSocket"/>
       </elements>
     </policy>
     <policy class="Both" displayName="$(string.MaxInvalidationFetchDelay)" explainText="$(string.MaxInvalidationFetchDelay_Explain)" key="Software\Policies\Google\Chrome" name="MaxInvalidationFetchDelay" presentation="$(presentation.MaxInvalidationFetchDelay)">
@@ -3795,16 +4068,6 @@
       </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.NTPFooterManagementNoticeEnabled)" explainText="$(string.NTPFooterManagementNoticeEnabled_Explain)" key="Software\Policies\Google\Chrome" name="NTPFooterManagementNoticeEnabled" presentation="$(presentation.NTPFooterManagementNoticeEnabled)" valueName="NTPFooterManagementNoticeEnabled">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
-    <policy class="Both" displayName="$(string.NTPMiddleSlotAnnouncementVisible)" explainText="$(string.NTPMiddleSlotAnnouncementVisible_Explain)" key="Software\Policies\Google\Chrome" name="NTPMiddleSlotAnnouncementVisible" presentation="$(presentation.NTPMiddleSlotAnnouncementVisible)" valueName="NTPMiddleSlotAnnouncementVisible">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -3931,16 +4194,6 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.PdfViewerOutOfProcessIframeEnabled)" explainText="$(string.PdfViewerOutOfProcessIframeEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PdfViewerOutOfProcessIframeEnabled" presentation="$(presentation.PdfViewerOutOfProcessIframeEnabled)" valueName="PdfViewerOutOfProcessIframeEnabled">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
     <policy class="Both" displayName="$(string.PolicyAtomicGroupsEnabled)" explainText="$(string.PolicyAtomicGroupsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PolicyAtomicGroupsEnabled" presentation="$(presentation.PolicyAtomicGroupsEnabled)" valueName="PolicyAtomicGroupsEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -3973,6 +4226,16 @@
       </elements>
     </policy>
     <policy class="Both" displayName="$(string.PrefetchWithServiceWorkerEnabled)" explainText="$(string.PrefetchWithServiceWorkerEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PrefetchWithServiceWorkerEnabled" presentation="$(presentation.PrefetchWithServiceWorkerEnabled)" valueName="PrefetchWithServiceWorkerEnabled">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.ProcessIsolationEnabled)" explainText="$(string.ProcessIsolationEnabled_Explain)" key="Software\Policies\Google\Chrome" name="ProcessIsolationEnabled" presentation="$(presentation.ProcessIsolationEnabled)" valueName="ProcessIsolationEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -4090,45 +4353,6 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.RelaunchFastIfOutdated)" explainText="$(string.RelaunchFastIfOutdated_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchFastIfOutdated" presentation="$(presentation.RelaunchFastIfOutdated)">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <decimal id="RelaunchFastIfOutdated" maxValue="2000000000" minValue="7" valueName="RelaunchFastIfOutdated"/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RelaunchNotification)" explainText="$(string.RelaunchNotification_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchNotification" presentation="$(presentation.RelaunchNotification)">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <enum id="RelaunchNotification" valueName="RelaunchNotification">
-          <item displayName="$(string.RelaunchNotification_Recommended)">
-            <value>
-              <decimal value="1"/>
-            </value>
-          </item>
-          <item displayName="$(string.RelaunchNotification_Required)">
-            <value>
-              <decimal value="2"/>
-            </value>
-          </item>
-        </enum>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RelaunchNotificationPeriod)" explainText="$(string.RelaunchNotificationPeriod_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchNotificationPeriod" presentation="$(presentation.RelaunchNotificationPeriod)">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <decimal id="RelaunchNotificationPeriod" maxValue="2000000000" minValue="3600000" valueName="RelaunchNotificationPeriod"/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RelaunchWindow)" explainText="$(string.RelaunchWindow_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchWindow" presentation="$(presentation.RelaunchWindow)">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <text id="RelaunchWindow" maxLength="1000000" valueName="RelaunchWindow"/>
-      </elements>
-    </policy>
     <policy class="Both" displayName="$(string.RemoteDebuggingAllowed)" explainText="$(string.RemoteDebuggingAllowed_Explain)" key="Software\Policies\Google\Chrome" name="RemoteDebuggingAllowed" presentation="$(presentation.RemoteDebuggingAllowed)" valueName="RemoteDebuggingAllowed">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -4150,6 +4374,16 @@
       </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.RequireOnlineRevocationChecksForLocalAnchors)" explainText="$(string.RequireOnlineRevocationChecksForLocalAnchors_Explain)" key="Software\Policies\Google\Chrome" name="RequireOnlineRevocationChecksForLocalAnchors" presentation="$(presentation.RequireOnlineRevocationChecksForLocalAnchors)" valueName="RequireOnlineRevocationChecksForLocalAnchors">
+      <parentCategory ref="googlechrome"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.RestrictBackgroundFetchFromServiceWorkerEnabled)" explainText="$(string.RestrictBackgroundFetchFromServiceWorkerEnabled_Explain)" key="Software\Policies\Google\Chrome" name="RestrictBackgroundFetchFromServiceWorkerEnabled" presentation="$(presentation.RestrictBackgroundFetchFromServiceWorkerEnabled)" valueName="RestrictBackgroundFetchFromServiceWorkerEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -4182,23 +4416,6 @@
       <elements>
         <text id="RestrictSigninToPattern" maxLength="1000000" valueName="RestrictSigninToPattern"/>
       </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RoamingProfileLocation)" explainText="$(string.RoamingProfileLocation_Explain)" key="Software\Policies\Google\Chrome" name="RoamingProfileLocation" presentation="$(presentation.RoamingProfileLocation)">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <text id="RoamingProfileLocation" maxLength="1000000" valueName="RoamingProfileLocation"/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RoamingProfileSupportEnabled)" explainText="$(string.RoamingProfileSupportEnabled_Explain)" key="Software\Policies\Google\Chrome" name="RoamingProfileSupportEnabled" presentation="$(presentation.RoamingProfileSupportEnabled)" valueName="RoamingProfileSupportEnabled">
-      <parentCategory ref="googlechrome"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.SSLErrorOverrideAllowed)" explainText="$(string.SSLErrorOverrideAllowed_Explain)" key="Software\Policies\Google\Chrome" name="SSLErrorOverrideAllowed" presentation="$(presentation.SSLErrorOverrideAllowed)" valueName="SSLErrorOverrideAllowed">
       <parentCategory ref="googlechrome"/>
@@ -4329,7 +4546,7 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.SharedClipboardEnabled)" explainText="$(string.SharedClipboardEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SharedClipboardEnabled" presentation="$(presentation.SharedClipboardEnabled)" valueName="SharedClipboardEnabled">
+    <policy class="Both" displayName="$(string.SharedWorkerBlobURLFixEnabled)" explainText="$(string.SharedWorkerBlobURLFixEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SharedWorkerBlobURLFixEnabled" presentation="$(presentation.SharedWorkerBlobURLFixEnabled)" valueName="SharedWorkerBlobURLFixEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -4339,7 +4556,7 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.SharedWorkerBlobURLFixEnabled)" explainText="$(string.SharedWorkerBlobURLFixEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SharedWorkerBlobURLFixEnabled" presentation="$(presentation.SharedWorkerBlobURLFixEnabled)" valueName="SharedWorkerBlobURLFixEnabled">
+    <policy class="Both" displayName="$(string.SharedWorkerExtendedLifetimeEnabled)" explainText="$(string.SharedWorkerExtendedLifetimeEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SharedWorkerExtendedLifetimeEnabled" presentation="$(presentation.SharedWorkerExtendedLifetimeEnabled)" valueName="SharedWorkerExtendedLifetimeEnabled">
       <parentCategory ref="googlechrome"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -4778,26 +4995,6 @@
         <text id="ApplicationLocaleValue" maxLength="1000000" valueName="ApplicationLocaleValue"/>
       </elements>
     </policy>
-    <policy class="Both" displayName="$(string.AutofillAddressEnabled)" explainText="$(string.AutofillAddressEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="AutofillAddressEnabled_recommended" presentation="$(presentation.AutofillAddressEnabled)" valueName="AutofillAddressEnabled">
-      <parentCategory ref="googlechrome_recommended"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
-    <policy class="Both" displayName="$(string.AutofillCreditCardEnabled)" explainText="$(string.AutofillCreditCardEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="AutofillCreditCardEnabled_recommended" presentation="$(presentation.AutofillCreditCardEnabled)" valueName="AutofillCreditCardEnabled">
-      <parentCategory ref="googlechrome_recommended"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
     <policy class="Both" displayName="$(string.BackgroundModeEnabled)" explainText="$(string.BackgroundModeEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="BackgroundModeEnabled_recommended" presentation="$(presentation.BackgroundModeEnabled)" valueName="BackgroundModeEnabled">
       <parentCategory ref="googlechrome_recommended"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -5153,6 +5350,13 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy class="Both" displayName="$(string.HttpHeaderInjection)" explainText="$(string.HttpHeaderInjection_Explain)" key="Software\Policies\Google\Chrome" name="HttpHeaderInjection" presentation="$(presentation.HttpHeaderInjection)">
+      <parentCategory ref="Network"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <text id="HttpHeaderInjection" maxLength="1000000" valueName="HttpHeaderInjection"/>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.IPv6ReachabilityOverrideEnabled)" explainText="$(string.IPv6ReachabilityOverrideEnabled_Explain)" key="Software\Policies\Google\Chrome" name="IPv6ReachabilityOverrideEnabled" presentation="$(presentation.IPv6ReachabilityOverrideEnabled)" valueName="IPv6ReachabilityOverrideEnabled">
       <parentCategory ref="Network"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -5468,16 +5672,6 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.PrivacySandboxPromptEnabled)" explainText="$(string.PrivacySandboxPromptEnabled_Explain)" key="Software\Policies\Google\Chrome" name="PrivacySandboxPromptEnabled" presentation="$(presentation.PrivacySandboxPromptEnabled)" valueName="PrivacySandboxPromptEnabled">
-      <parentCategory ref="PrivacySandbox"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
     <policy class="Both" displayName="$(string.ProtectedContentIdentifiersAllowed)" explainText="$(string.ProtectedContentIdentifiersAllowed_Explain)" key="Software\Policies\Google\Chrome" name="ProtectedContentIdentifiersAllowed" presentation="$(presentation.ProtectedContentIdentifiersAllowed)" valueName="ProtectedContentIdentifiersAllowed">
       <parentCategory ref="ProtectedContent"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -5493,6 +5687,45 @@
       <supportedOn ref="SUPPORTED_WIN7"/>
       <elements>
         <decimal id="EnableProxyOverrideRulesForAllUsers" maxValue="2000000000" minValue="0" valueName="EnableProxyOverrideRulesForAllUsers"/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.RelaunchFastIfOutdated)" explainText="$(string.RelaunchFastIfOutdated_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchFastIfOutdated" presentation="$(presentation.RelaunchFastIfOutdated)">
+      <parentCategory ref="Relaunch"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <decimal id="RelaunchFastIfOutdated" maxValue="2000000000" minValue="7" valueName="RelaunchFastIfOutdated"/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.RelaunchNotification)" explainText="$(string.RelaunchNotification_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchNotification" presentation="$(presentation.RelaunchNotification)">
+      <parentCategory ref="Relaunch"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <enum id="RelaunchNotification" valueName="RelaunchNotification">
+          <item displayName="$(string.RelaunchNotification_Recommended)">
+            <value>
+              <decimal value="1"/>
+            </value>
+          </item>
+          <item displayName="$(string.RelaunchNotification_Required)">
+            <value>
+              <decimal value="2"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.RelaunchNotificationPeriod)" explainText="$(string.RelaunchNotificationPeriod_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchNotificationPeriod" presentation="$(presentation.RelaunchNotificationPeriod)">
+      <parentCategory ref="Relaunch"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <decimal id="RelaunchNotificationPeriod" maxValue="2000000000" minValue="3600000" valueName="RelaunchNotificationPeriod"/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.RelaunchWindow)" explainText="$(string.RelaunchWindow_Explain)" key="Software\Policies\Google\Chrome" name="RelaunchWindow" presentation="$(presentation.RelaunchWindow)">
+      <parentCategory ref="Relaunch"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <text id="RelaunchWindow" maxLength="1000000" valueName="RelaunchWindow"/>
       </elements>
     </policy>
     <policy class="Both" displayName="$(string.RemoteAccessHostAllowClientPairing)" explainText="$(string.RemoteAccessHostAllowClientPairing_Explain)" key="Software\Policies\Google\Chrome" name="RemoteAccessHostAllowClientPairing" presentation="$(presentation.RemoteAccessHostAllowClientPairing)" valueName="RemoteAccessHostAllowClientPairing">
@@ -5631,62 +5864,6 @@
       </elements>
     </policy>
     <policy class="Both" displayName="$(string.UiAutomationProviderEnabled)" explainText="$(string.UiAutomationProviderEnabled_Explain)" key="Software\Policies\Google\Chrome" name="UiAutomationProviderEnabled" presentation="$(presentation.UiAutomationProviderEnabled)" valueName="UiAutomationProviderEnabled">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
-    <policy class="Both" displayName="$(string.ChromeFrameContentTypes)" explainText="$(string.ChromeFrameContentTypes_Explain)" key="Software\Policies\Google\Chrome" name="ChromeFrameContentTypes" presentation="$(presentation.ChromeFrameContentTypes)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <list id="ChromeFrameContentTypesDesc" key="Software\Policies\Google\Chrome\ChromeFrameContentTypes" valuePrefix=""/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.AdditionalLaunchParameters)" explainText="$(string.AdditionalLaunchParameters_Explain)" key="Software\Policies\Google\Chrome" name="AdditionalLaunchParameters" presentation="$(presentation.AdditionalLaunchParameters)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <text id="AdditionalLaunchParameters" maxLength="1000000" valueName="AdditionalLaunchParameters"/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.ChromeFrameRendererSettings)" explainText="$(string.ChromeFrameRendererSettings_Explain)" key="Software\Policies\Google\Chrome" name="ChromeFrameRendererSettings" presentation="$(presentation.ChromeFrameRendererSettings)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <enum id="ChromeFrameRendererSettings" valueName="ChromeFrameRendererSettings">
-          <item displayName="$(string.ChromeFrameRendererSettings_RenderInHost)">
-            <value>
-              <decimal value="0"/>
-            </value>
-          </item>
-          <item displayName="$(string.ChromeFrameRendererSettings_RenderInChromeFrame)">
-            <value>
-              <decimal value="1"/>
-            </value>
-          </item>
-        </enum>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RenderInChromeFrameList)" explainText="$(string.RenderInChromeFrameList_Explain)" key="Software\Policies\Google\Chrome" name="RenderInChromeFrameList" presentation="$(presentation.RenderInChromeFrameList)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <list id="RenderInChromeFrameListDesc" key="Software\Policies\Google\Chrome\RenderInChromeFrameList" valuePrefix=""/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.RenderInHostList)" explainText="$(string.RenderInHostList_Explain)" key="Software\Policies\Google\Chrome" name="RenderInHostList" presentation="$(presentation.RenderInHostList)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <list id="RenderInHostListDesc" key="Software\Policies\Google\Chrome\RenderInHostList" valuePrefix=""/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.SkipMetadataCheck)" explainText="$(string.SkipMetadataCheck_Explain)" key="Software\Policies\Google\Chrome" name="SkipMetadataCheck" presentation="$(presentation.SkipMetadataCheck)" valueName="SkipMetadataCheck">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -5943,6 +6120,23 @@
         </enum>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.FirstPartySetsEnabled)" explainText="$(string.FirstPartySetsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="FirstPartySetsEnabled" presentation="$(presentation.FirstPartySetsEnabled)" valueName="FirstPartySetsEnabled">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.FirstPartySetsOverrides)" explainText="$(string.FirstPartySetsOverrides_Explain)" key="Software\Policies\Google\Chrome" name="FirstPartySetsOverrides" presentation="$(presentation.FirstPartySetsOverrides)">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <text id="FirstPartySetsOverrides" maxLength="1000000" valueName="FirstPartySetsOverrides"/>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.TabOrganizerSettings)" explainText="$(string.TabOrganizerSettings_Explain)" key="Software\Policies\Google\Chrome" name="TabOrganizerSettings" presentation="$(presentation.TabOrganizerSettings)">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -6155,6 +6349,16 @@
       </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.ClearSiteDataOnExit)" explainText="$(string.ClearSiteDataOnExit_Explain)" key="Software\Policies\Google\Chrome" name="ClearSiteDataOnExit" presentation="$(presentation.ClearSiteDataOnExit)" valueName="ClearSiteDataOnExit">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.ClickToCallEnabled)" explainText="$(string.ClickToCallEnabled_Explain)" key="Software\Policies\Google\Chrome" name="ClickToCallEnabled" presentation="$(presentation.ClickToCallEnabled)" valueName="ClickToCallEnabled">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -6440,13 +6644,6 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.GCFUserDataDir)" explainText="$(string.GCFUserDataDir_Explain)" key="Software\Policies\Google\Chrome" name="GCFUserDataDir" presentation="$(presentation.GCFUserDataDir)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <text id="GCFUserDataDir" maxLength="1000000" valueName="GCFUserDataDir"/>
-      </elements>
-    </policy>
     <policy class="Both" displayName="$(string.HideWebStorePromo)" explainText="$(string.HideWebStorePromo_Explain)" key="Software\Policies\Google\Chrome" name="HideWebStorePromo" presentation="$(presentation.HideWebStorePromo)" valueName="HideWebStorePromo">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -6542,6 +6739,16 @@
       </elements>
     </policy>
     <policy class="Both" displayName="$(string.MutationEventsEnabled)" explainText="$(string.MutationEventsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="MutationEventsEnabled" presentation="$(presentation.MutationEventsEnabled)" valueName="MutationEventsEnabled">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.NTPMiddleSlotAnnouncementVisible)" explainText="$(string.NTPMiddleSlotAnnouncementVisible_Explain)" key="Software\Policies\Google\Chrome" name="NTPMiddleSlotAnnouncementVisible" presentation="$(presentation.NTPMiddleSlotAnnouncementVisible)" valueName="NTPMiddleSlotAnnouncementVisible">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -6834,14 +7041,7 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.SpellcheckLanguageBlacklist)" explainText="$(string.SpellcheckLanguageBlacklist_Explain)" key="Software\Policies\Google\Chrome" name="SpellcheckLanguageBlacklist" presentation="$(presentation.SpellcheckLanguageBlacklist)">
-      <parentCategory ref="RemovedPolicies"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <elements>
-        <list id="SpellcheckLanguageBlacklistDesc" key="Software\Policies\Google\Chrome\SpellcheckLanguageBlacklist" valuePrefix=""/>
-      </elements>
-    </policy>
-    <policy class="Both" displayName="$(string.StricterMixedContentTreatmentEnabled)" explainText="$(string.StricterMixedContentTreatmentEnabled_Explain)" key="Software\Policies\Google\Chrome" name="StricterMixedContentTreatmentEnabled" presentation="$(presentation.StricterMixedContentTreatmentEnabled)" valueName="StricterMixedContentTreatmentEnabled">
+    <policy class="Both" displayName="$(string.SharedClipboardEnabled)" explainText="$(string.SharedClipboardEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SharedClipboardEnabled" presentation="$(presentation.SharedClipboardEnabled)" valueName="SharedClipboardEnabled">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -6851,7 +7051,14 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.SuppressChromeFrameTurndownPrompt)" explainText="$(string.SuppressChromeFrameTurndownPrompt_Explain)" key="Software\Policies\Google\Chrome" name="SuppressChromeFrameTurndownPrompt" presentation="$(presentation.SuppressChromeFrameTurndownPrompt)" valueName="SuppressChromeFrameTurndownPrompt">
+    <policy class="Both" displayName="$(string.SpellcheckLanguageBlacklist)" explainText="$(string.SpellcheckLanguageBlacklist_Explain)" key="Software\Policies\Google\Chrome" name="SpellcheckLanguageBlacklist" presentation="$(presentation.SpellcheckLanguageBlacklist)">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <list id="SpellcheckLanguageBlacklistDesc" key="Software\Policies\Google\Chrome\SpellcheckLanguageBlacklist" valuePrefix=""/>
+      </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.StricterMixedContentTreatmentEnabled)" explainText="$(string.StricterMixedContentTreatmentEnabled_Explain)" key="Software\Policies\Google\Chrome" name="StricterMixedContentTreatmentEnabled" presentation="$(presentation.StricterMixedContentTreatmentEnabled)" valueName="StricterMixedContentTreatmentEnabled">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
       <enabledValue>
@@ -7233,6 +7440,23 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy class="Both" displayName="$(string.RelatedWebsiteSetsEnabled)" explainText="$(string.RelatedWebsiteSetsEnabled_Explain)" key="Software\Policies\Google\Chrome" name="RelatedWebsiteSetsEnabled" presentation="$(presentation.RelatedWebsiteSetsEnabled)" valueName="RelatedWebsiteSetsEnabled">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy class="Both" displayName="$(string.RelatedWebsiteSetsOverrides)" explainText="$(string.RelatedWebsiteSetsOverrides_Explain)" key="Software\Policies\Google\Chrome" name="RelatedWebsiteSetsOverrides" presentation="$(presentation.RelatedWebsiteSetsOverrides)">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <elements>
+        <text id="RelatedWebsiteSetsOverrides" maxLength="1000000" valueName="RelatedWebsiteSetsOverrides"/>
+      </elements>
+    </policy>
     <policy class="Both" displayName="$(string.RemoteAccessClientFirewallTraversal)" explainText="$(string.RemoteAccessClientFirewallTraversal_Explain)" key="Software\Policies\Google\Chrome" name="RemoteAccessClientFirewallTraversal" presentation="$(presentation.RemoteAccessClientFirewallTraversal)" valueName="RemoteAccessClientFirewallTraversal">
       <parentCategory ref="RemovedPolicies"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -7266,6 +7490,16 @@
       <elements>
         <text id="RemoteAccessHostTalkGadgetPrefix" maxLength="1000000" valueName="RemoteAccessHostTalkGadgetPrefix"/>
       </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.SafeBrowsingExtendedReportingEnabled)" explainText="$(string.SafeBrowsingExtendedReportingEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SafeBrowsingExtendedReportingEnabled" presentation="$(presentation.SafeBrowsingExtendedReportingEnabled)" valueName="SafeBrowsingExtendedReportingEnabled">
+      <parentCategory ref="RemovedPolicies"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.DefaultSearchProviderIconURL)" explainText="$(string.DefaultSearchProviderIconURL_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="DefaultSearchProviderIconURL_recommended" presentation="$(presentation.DefaultSearchProviderIconURL)">
       <parentCategory ref="RemovedPolicies_recommended"/>
@@ -7389,16 +7623,6 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy class="Both" displayName="$(string.SafeBrowsingExtendedReportingEnabled)" explainText="$(string.SafeBrowsingExtendedReportingEnabled_Explain)" key="Software\Policies\Google\Chrome" name="SafeBrowsingExtendedReportingEnabled" presentation="$(presentation.SafeBrowsingExtendedReportingEnabled)" valueName="SafeBrowsingExtendedReportingEnabled">
-      <parentCategory ref="SafeBrowsing"/>
-      <supportedOn ref="SUPPORTED_WIN7"/>
-      <enabledValue>
-        <decimal value="1"/>
-      </enabledValue>
-      <disabledValue>
-        <decimal value="0"/>
-      </disabledValue>
-    </policy>
     <policy class="Both" displayName="$(string.SafeBrowsingProtectionLevel)" explainText="$(string.SafeBrowsingProtectionLevel_Explain)" key="Software\Policies\Google\Chrome" name="SafeBrowsingProtectionLevel" presentation="$(presentation.SafeBrowsingProtectionLevel)">
       <parentCategory ref="SafeBrowsing"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -7499,6 +7723,16 @@
         <text id="HomepageLocation" maxLength="1000000" valueName="HomepageLocation"/>
       </elements>
     </policy>
+    <policy class="Both" displayName="$(string.LaunchOnStartupEnabled)" explainText="$(string.LaunchOnStartupEnabled_Explain)" key="Software\Policies\Google\Chrome" name="LaunchOnStartupEnabled" presentation="$(presentation.LaunchOnStartupEnabled)" valueName="LaunchOnStartupEnabled">
+      <parentCategory ref="Startup"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy class="Both" displayName="$(string.NewTabPageLocation)" explainText="$(string.NewTabPageLocation_Explain)" key="Software\Policies\Google\Chrome" name="NewTabPageLocation" presentation="$(presentation.NewTabPageLocation)">
       <parentCategory ref="Startup"/>
       <supportedOn ref="SUPPORTED_WIN7"/>
@@ -7567,6 +7801,16 @@
       <elements>
         <text id="HomepageLocation" maxLength="1000000" valueName="HomepageLocation"/>
       </elements>
+    </policy>
+    <policy class="Both" displayName="$(string.LaunchOnStartupEnabled)" explainText="$(string.LaunchOnStartupEnabled_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="LaunchOnStartupEnabled_recommended" presentation="$(presentation.LaunchOnStartupEnabled)" valueName="LaunchOnStartupEnabled">
+      <parentCategory ref="Startup_recommended"/>
+      <supportedOn ref="SUPPORTED_WIN7"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
     </policy>
     <policy class="Both" displayName="$(string.RestoreOnStartup)" explainText="$(string.RestoreOnStartup_Explain)" key="Software\Policies\Google\Chrome\Recommended" name="RestoreOnStartup_recommended" presentation="$(presentation.RestoreOnStartup)">
       <parentCategory ref="Startup_recommended"/>

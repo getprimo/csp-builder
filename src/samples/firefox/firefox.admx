@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<policyDefinitions revision="7.10" schemaVersion="1.0">
+<policyDefinitions xmlns="http://schemas.microsoft.com/GroupPolicy/2006/07/PolicyDefinitions" revision="8.4" schemaVersion="1.0">
   <policyNamespaces>
     <target prefix="firefox" namespace="Mozilla.Policies.Firefox"/>
     <using prefix="Mozilla" namespace="Mozilla.Policies"/>
   </policyNamespaces>
-  <resources minRequiredRevision="7.10"/>
+  <resources minRequiredRevision="8.4"/>
   <supportedOn>
     <definitions>
       <definition name="UNSUPPORTED" displayName="$(string.UNSUPPORTED)"/>
@@ -88,6 +88,14 @@
       <definition name="SUPPORTED_FF148_ONLY" displayName="$(string.SUPPORTED_FF148_ONLY)"/>
       <definition name="SUPPORTED_FF14902_ONLY" displayName="$(string.SUPPORTED_FF14902_ONLY)"/>
       <definition name="SUPPORTED_FF150_ONLY" displayName="$(string.SUPPORTED_FF150_ONLY)"/>
+      <definition name="SUPPORTED_FF151_ONLY" displayName="$(string.SUPPORTED_FF151_ONLY)"/>
+      <definition name="SUPPORTED_FF152_ONLY" displayName="$(string.SUPPORTED_FF152_ONLY)"/>
+      <definition name="SUPPORTED_FF153_ONLY" displayName="$(string.SUPPORTED_FF153_ONLY)"/>
+      <definition name="SUPPORTED_FF154_ONLY" displayName="$(string.SUPPORTED_FF154_ONLY)"/>
+      <definition name="SUPPORTED_FF154" displayName="$(string.SUPPORTED_FF154)"/>
+      <definition name="SUPPORTED_FF155_ONLY" displayName="$(string.SUPPORTED_FF155_ONLY)"/>
+      <definition name="SUPPORTED_FF156_ONLY" displayName="$(string.SUPPORTED_FF156_ONLY)"/>
+      <definition name="SUPPORTED_FF158_ONLY" displayName="$(string.SUPPORTED_FF158_ONLY)"/>
     </definitions>
   </supportedOn>
   <categories>
@@ -229,7 +237,19 @@
     <category displayName="$(string.AIControls_SmartWindow_group)" name="SmartWindow">
       <parentCategory ref="AIControls"/>
     </category>
+    <category displayName="$(string.LocalNetworkAccess_group)" name="LocalNetworkAccess">
+      <parentCategory ref="firefox"/>
+    </category>
 
+    <category displayName="$(string.FirefoxHome_Widgets_group)" name="FirefoxHome_Widgets">
+      <parentCategory ref="FirefoxHome"/>
+    </category>
+    <category displayName="$(string.RelaunchRequired_group)" name="RelaunchRequired">
+      <parentCategory ref="firefox"/>
+    </category>
+    <category displayName="$(string.InterceptionPoints_ClipboardCopy_group)" name="InterceptionPoints_ClipboardCopy">
+      <parentCategory ref="InterceptionPoints"/>
+    </category>
   </categories>
   <policies>
     <policy name="AppAutoUpdate" class="Both" displayName="$(string.AppAutoUpdate)" explainText="$(string.AppAutoUpdate_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="AppAutoUpdate">
@@ -508,6 +528,11 @@
               <string>reject-tracker</string>
             </value>
           </item>
+          <item displayName="$(string.Cookies_Behavior_PartitionForeign)">
+            <value>
+              <string>partition-foreign</string>
+            </value>
+          </item>
           <item displayName="$(string.Cookies_Behavior_RejectTrackerAndPartitionForeign)">
             <value>
               <string>reject-tracker-and-partition-foreign</string>
@@ -546,6 +571,11 @@
               <string>reject-tracker</string>
             </value>
           </item>
+          <item displayName="$(string.Cookies_Behavior_PartitionForeign)">
+            <value>
+              <string>partition-foreign</string>
+            </value>
+          </item>
           <item displayName="$(string.Cookies_Behavior_RejectTrackerAndPartitionForeign)">
             <value>
               <string>reject-tracker-and-partition-foreign</string>
@@ -565,7 +595,7 @@
       <parentCategory ref="Camera"/>
       <supportedOn ref="SUPPORTED_FF62"/>
       <elements>
-        <list id="Permissions" key="Software\Policies\Mozilla\Firefox\Camera\Permissions\Block" valuePrefix=""/>
+        <list id="Permissions" key="Software\Policies\Mozilla\Firefox\Permissions\Camera\Block" valuePrefix=""/>
       </elements>
     </policy>
     <policy name="Camera_BlockNewRequests" class="Both" displayName="$(string.Camera_BlockNewRequests)" explainText="$(string.Camera_BlockNewRequests_Explain)" key="Software\Policies\Mozilla\Firefox\Permissions\Camera" valueName="BlockNewRequests">
@@ -804,6 +834,16 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy name="DefaultBrowserSettingEnabled" class="Both" displayName="$(string.DefaultBrowserSettingEnabled)" explainText="$(string.DefaultBrowserSettingEnabled_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="DefaultBrowserSettingEnabled">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF154"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy name="DefaultDownloadDirectory" class="Both" displayName="$(string.DefaultDownloadDirectory)" explainText="$(string.DefaultDownloadDirectory_Explain)" key="Software\Policies\Mozilla\Firefox" presentation="$(presentation.Preferences_String)">
       <parentCategory ref="firefox"/>
       <supportedOn ref="SUPPORTED_FF68"/>
@@ -820,7 +860,7 @@
     </policy>
     <policy name="DNSOverHTTPS_Enabled" class="Both" displayName="$(string.DNSOverHTTPS_Enabled)" explainText="$(string.DNSOverHTTPS_Enabled_Explain)" key="Software\Policies\Mozilla\Firefox\DNSOverHTTPS" valueName="Enabled">
       <parentCategory ref="DNSOverHTTPS"/>
-      <supportedOn ref="SUPPORTED_FF63ESR"/>
+      <supportedOn ref="SUPPORTED_FF60ESR"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -830,14 +870,14 @@
     </policy>
     <policy name="DNSOverHTTPS_ProviderURL" class="Both" displayName="$(string.DNSOverHTTPS_ProviderURL)" explainText="$(string.DNSOverHTTPS_ProviderURL_Explain)" key="Software\Policies\Mozilla\Firefox\DNSOverHTTPS" presentation="$(presentation.String)">
       <parentCategory ref="DNSOverHTTPS"/>
-      <supportedOn ref="SUPPORTED_FF63ESR"/>
+      <supportedOn ref="SUPPORTED_FF60ESR"/>
       <elements>
         <text id="String" valueName="ProviderURL"/>
       </elements>
     </policy>
     <policy name="DNSOverHTTPS_Locked" class="Both" displayName="$(string.DNSOverHTTPS_Locked)" explainText="$(string.DNSOverHTTPS_Locked_Explain)" key="Software\Policies\Mozilla\Firefox\DNSOverHTTPS" valueName="Locked">
       <parentCategory ref="DNSOverHTTPS"/>
-      <supportedOn ref="SUPPORTED_FF63ESR"/>
+      <supportedOn ref="SUPPORTED_FF60ESR"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -955,6 +995,16 @@
     <policy name="DisableFormHistory" class="Both" displayName="$(string.DisableFormHistory)" explainText="$(string.DisableFormHistory_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="DisableFormHistory">
       <parentCategory ref="firefox"/>
       <supportedOn ref="SUPPORTED_FF60"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="DisableLaunchOnLogin" class="Both" displayName="$(string.DisableLaunchOnLogin)" explainText="$(string.DisableLaunchOnLogin_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="DisableLaunchOnLogin">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF155_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -1529,6 +1579,16 @@
     <policy name="Homepage_ShowHomeButton" class="Both" displayName="$(string.Homepage_ShowHomeButton)" explainText="$(string.Homepage_ShowHomeButton_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="ShowHomeButton">
       <parentCategory ref="Homepage"/>
       <supportedOn ref="SUPPORTED_FF88"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="Homepage_NewTabOnRestore" class="Both" displayName="$(string.Homepage_NewTabOnRestore)" explainText="$(string.Homepage_NewTabOnRestore_Explain)" key="Software\Policies\Mozilla\Firefox\Homepage" valueName="NewTabOnRestore">
+      <parentCategory ref="Homepage"/>
+      <supportedOn ref="SUPPORTED_FF154_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -3671,6 +3731,13 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy name="J_SanitizeOnShutdown_Exceptions" class="Both" displayName="$(string.SanitizeOnShutdown_Exceptions)" explainText="$(string.SanitizeOnShutdown_Exceptions_Explain)" key="Software\Policies\Mozilla\Firefox" presentation="$(presentation.Permissions)">
+      <parentCategory ref="SanitizeOnShutdown"/>
+      <supportedOn ref="SUPPORTED_FF154_ONLY"/>
+      <elements>
+        <list id="Permissions" key="Software\Policies\Mozilla\Firefox\SanitizeOnShutdown\Exceptions" valuePrefix=""/>
+      </elements>
+    </policy>
     <policy name="A_TrackingProtection_Value" class="Both" displayName="$(string.TrackingProtection_Value)" explainText="$(string.TrackingProtection_Value_Explain)" key="Software\Policies\Mozilla\Firefox\EnableTrackingProtection" valueName="Value">
       <parentCategory ref="TrackingProtection"/>
       <supportedOn ref="SUPPORTED_FF74"/>
@@ -3720,7 +3787,7 @@
     </policy>
     <policy name="F_TrackingProtection_EmailTracking" class="Both" displayName="$(string.TrackingProtection_EmailTracking)" explainText="$(string.TrackingProtection_EmailTracking_Explain)" key="Software\Policies\Mozilla\Firefox\EnableTrackingProtection" valueName="EmailTracking">
       <parentCategory ref="TrackingProtection"/>
-      <supportedOn ref="SUPPORTED_FF112"/>
+      <supportedOn ref="SUPPORTED_FF112_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -3836,7 +3903,7 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy name="UserMessaging_FirefoxLabs" class="Both" displayName="$(string.UserMessaging_FirefoxLabs)" explainText="$(string.UserMessaging_FirefoxLabs)" key="Software\Policies\Mozilla\Firefox\UserMessaging" valueName="FirefoxLabs">
+    <policy name="UserMessaging_FirefoxLabs" class="Both" displayName="$(string.UserMessaging_FirefoxLabs)" explainText="$(string.UserMessaging_FirefoxLabs_Explain)" key="Software\Policies\Mozilla\Firefox\UserMessaging" valueName="FirefoxLabs">
       <parentCategory ref="UserMessaging"/>
       <supportedOn ref="SUPPORTED_FF130_ONLY"/>
       <enabledValue>
@@ -4028,7 +4095,7 @@
     </policy>
     <policy name="DisabledCiphers_TLS_CHACHA20_POLY1305_SHA256" class="Both" displayName="$(string.DisabledCiphers_TLS_CHACHA20_POLY1305_SHA256)" explainText="$(string.DisabledCiphers_Explain)" key="Software\Policies\Mozilla\Firefox\DisabledCiphers" valueName="TLS_CHACHA20_POLY1305_SHA256">
       <parentCategory ref="DisabledCiphers"/>
-      <supportedOn ref="SUPPORTED_FF138"/>
+      <supportedOn ref="SUPPORTED_FF138_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -4038,7 +4105,7 @@
     </policy>
     <policy name="DisabledCiphers_TLS_AES_128_GCM_SHA256" class="Both" displayName="$(string.DisabledCiphers_TLS_AES_128_GCM_SHA256)" explainText="$(string.DisabledCiphers_Explain)" key="Software\Policies\Mozilla\Firefox\DisabledCiphers" valueName="TLS_AES_128_GCM_SHA256">
       <parentCategory ref="DisabledCiphers"/>
-      <supportedOn ref="SUPPORTED_FF138"/>
+      <supportedOn ref="SUPPORTED_FF138_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -4048,7 +4115,7 @@
     </policy>
     <policy name="DisabledCiphers_TLS_AES_256_GCM_SHA384" class="Both" displayName="$(string.DisabledCiphers_TLS_AES_256_GCM_SHA384)" explainText="$(string.DisabledCiphers_Explain)" key="Software\Policies\Mozilla\Firefox\DisabledCiphers" valueName="TLS_AES_256_GCM_SHA384">
       <parentCategory ref="DisabledCiphers"/>
-      <supportedOn ref="SUPPORTED_FF138"/>
+      <supportedOn ref="SUPPORTED_FF138_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -4272,14 +4339,14 @@
     </policy>
     <policy name="ContainersOneLine" class="Both" displayName="$(string.ContainersOneLine)" key="Software\Policies\Mozilla\Firefox" explainText="$(string.Containers_Explain)" presentation="$(presentation.JSONOneLine)">
       <parentCategory ref="firefox"/>
-      <supportedOn ref="SUPPORTED_FF113"/>
+      <supportedOn ref="SUPPORTED_FF113_ONLY"/>
       <elements>
         <text id="JSONOneLine" valueName="Containers" maxLength="16384"/>
       </elements>
     </policy>
     <policy name="Containers" class="Both" displayName="$(string.Containers)" key="Software\Policies\Mozilla\Firefox" explainText="$(string.Containers_Explain)" presentation="$(presentation.JSON)">
       <parentCategory ref="firefox"/>
-      <supportedOn ref="SUPPORTED_FF113"/>
+      <supportedOn ref="SUPPORTED_FF113_ONLY"/>
       <elements>
         <multiText id="JSON" valueName="Containers" maxLength="16384"/>
       </elements>
@@ -4411,6 +4478,16 @@
     <policy name="PostQuantumKeyAgreementEnabled" class="Both" displayName="$(string.PostQuantumKeyAgreementEnabled)" explainText="$(string.PostQuantumKeyAgreementEnabled_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="PostQuantumKeyAgreementEnabled">
       <parentCategory ref="firefox"/>
       <supportedOn ref="SUPPORTED_FF127_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="CNSA2KeyAgreementEnabled" class="Both" displayName="$(string.CNSA2KeyAgreementEnabled)" explainText="$(string.CNSA2KeyAgreementEnabled_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="CNSA2KeyAgreementEnabled">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF154_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -4611,7 +4688,7 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
-    <policy name="ContentAnalysis_InterceptionPoints_DragAndDrop_PlainTextOnly" class="Both" displayName="$(string.ContentAnalysis_InterceptionPoints_DragAndDrop_PlainTextOnly)" explainText="$(string.ContentAnalysis_InterceptionPoints_DragAndDrop_PlainTextOnly_Explain)" key="Software\Policies\Mozilla\Firefox\ContentAnalysis\InterceptionPoints\DragAndDrop" valueName="PlainTextEnabled">
+    <policy name="ContentAnalysis_InterceptionPoints_DragAndDrop_PlainTextOnly" class="Both" displayName="$(string.ContentAnalysis_InterceptionPoints_DragAndDrop_PlainTextOnly)" explainText="$(string.ContentAnalysis_InterceptionPoints_DragAndDrop_PlainTextOnly_Explain)" key="Software\Policies\Mozilla\Firefox\ContentAnalysis\InterceptionPoints\DragAndDrop" valueName="PlainTextOnly">
       <parentCategory ref="InterceptionPoints_DragAndDrop"/>
       <supportedOn ref="SUPPORTED_FF138_ONLY"/>
       <enabledValue>
@@ -4744,6 +4821,16 @@
         <decimal value="0"/>
       </disabledValue>
     </policy>
+    <policy name="FirefoxHome_Weather" class="Both" displayName="$(string.FirefoxHome_Weather)" explainText="$(string.FirefoxHome_Weather_Explain)" key="Software\Policies\Mozilla\Firefox\FirefoxHome" valueName="Weather">
+      <parentCategory ref="FirefoxHome"/>
+      <supportedOn ref="SUPPORTED_FF152_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
     <policy name="FirefoxHome_Locked" class="Both" displayName="$(string.FirefoxHome_Locked)" explainText="$(string.FirefoxHome_Locked_Explain)" key="Software\Policies\Mozilla\Firefox\FirefoxHome" valueName="Locked">
       <parentCategory ref="FirefoxHome"/>
       <supportedOn ref="SUPPORTED_FF68"/>
@@ -4816,7 +4903,7 @@
     </policy>
     <policy name="BrowserDataBackup_AllowBackup" class="Both" displayName="$(string.BrowserDataBackup_AllowBackup)" explainText="$(string.BrowserDataBackup_AllowBackup_Explain)" key="Software\Policies\Mozilla\Firefox\BrowserDataBackup" valueName="AllowBackup">
       <parentCategory ref="BrowserDataBackup"/>
-      <supportedOn ref="SUPPORTED_FF146"/>
+      <supportedOn ref="SUPPORTED_FF146_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -4826,7 +4913,7 @@
     </policy>
     <policy name="BrowserDataBackup_AllowRestore" class="Both" displayName="$(string.BrowserDataBackup_AllowRestore)" explainText="$(string.BrowserDataBackup_AllowRestore_Explain)" key="Software\Policies\Mozilla\Firefox\BrowserDataBackup" valueName="AllowRestore">
       <parentCategory ref="BrowserDataBackup"/>
-      <supportedOn ref="SUPPORTED_FF146"/>
+      <supportedOn ref="SUPPORTED_FF146_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -4836,7 +4923,17 @@
     </policy>
     <policy name="DisableRemoteImprovements" class="Both" displayName="$(string.DisableRemoteImprovements)" explainText="$(string.DisableRemoteImprovements_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="DisableRemoteImprovements">
       <parentCategory ref="firefox"/>
-      <supportedOn ref="SUPPORTED_FF148"/>
+      <supportedOn ref="SUPPORTED_FF148_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="DisableRemoteSettingsAndAcceptSecurityConsequences" class="Both" displayName="$(string.DisableRemoteSettingsAndAcceptSecurityConsequences)" explainText="$(string.DisableRemoteSettingsAndAcceptSecurityConsequences_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="DisableRemoteSettingsAndAcceptSecurityConsequences">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF153_ONLY"/>
       <enabledValue>
         <decimal value="1"/>
       </enabledValue>
@@ -5042,6 +5139,187 @@
     </policy>
     <policy name="SmartWindow_Locked" class="Both" displayName="$(string.Locked)" explainText="$(string.AIControls_SmartWindow_Locked_Explain)" key="Software\Policies\Mozilla\Firefox\AIControls\SmartWindow" valueName="Locked">
       <parentCategory ref="SmartWindow"/>
+      <supportedOn ref="SUPPORTED_FF150_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="LocalNetworkAccess_Enabled" class="Both" displayName="$(string.LocalNetworkAccess_Enabled)" explainText="$(string.LocalNetworkAccess_Enabled_Explain)" key="Software\Policies\Mozilla\Firefox\LocalNetworkAccess" valueName="Enabled">
+      <parentCategory ref="LocalNetworkAccess"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="LocalNetworkAccess_BlockTrackers" class="Both" displayName="$(string.LocalNetworkAccess_BlockTrackers)" explainText="$(string.LocalNetworkAccess_BlockTrackers_Explain)" key="Software\Policies\Mozilla\Firefox\LocalNetworkAccess" valueName="BlockTrackers">
+      <parentCategory ref="LocalNetworkAccess"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="LocalNetworkAccess_EnablePrompting" class="Both" displayName="$(string.LocalNetworkAccess_EnablePrompting)" explainText="$(string.LocalNetworkAccess_EnablePrompting_Explain)" key="Software\Policies\Mozilla\Firefox\LocalNetworkAccess" valueName="EnablePrompting">
+      <parentCategory ref="LocalNetworkAccess"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="LocalNetworkAccess_SkipDomains" class="Both" displayName="$(string.LocalNetworkAccess_SkipDomains)" explainText="$(string.LocalNetworkAccess_SkipDomains_Explain)" key="Software\Policies\Mozilla\Firefox\LocalNetworkAccess" presentation="$(presentation.LocalNetworkAccess_SkipDomains)">
+      <parentCategory ref="LocalNetworkAccess"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <elements>
+        <list id="LocalNetworkAccess_SkipDomains" key="Software\Policies\Mozilla\Firefox\LocalNetworkAccess\SkipDomains" valuePrefix=""/>
+      </elements>
+    </policy>
+    <policy name="LocalNetworkAccess_Locked" class="Both" displayName="$(string.LocalNetworkAccess_Locked)" explainText="$(string.LocalNetworkAccess_Locked_Explain)" key="Software\Policies\Mozilla\Firefox\LocalNetworkAccess" valueName="Locked">
+      <parentCategory ref="LocalNetworkAccess"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="DefaultSerialGuardSetting" class="Both" displayName="$(string.DefaultSerialGuardSetting)" explainText="$(string.DefaultSerialGuardSetting_Explain)" key="Software\Policies\Mozilla\Firefox" presentation="$(presentation.DefaultSerialGuardSetting)">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <elements>
+        <enum id="DefaultSerialGuardSetting" valueName="DefaultSerialGuardSetting">
+          <item displayName="$(string.DefaultSerialGuardSetting_2)">
+            <value>
+              <decimal value="2"/>
+            </value>
+          </item>
+          <item displayName="$(string.DefaultSerialGuardSetting_3)">
+            <value>
+              <decimal value="3"/>
+            </value>
+          </item>
+        </enum>
+      </elements>
+    </policy>
+    <policy name="XSLTEnabled" class="Both" displayName="$(string.XSLTEnabled)" explainText="$(string.XSLTEnabled_Explain)" key="Software\Policies\Mozilla\Firefox" valueName="XSLTEnabled">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF151_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="SitePolicies" class="Both" displayName="$(string.SitePolicies)" explainText="$(string.SitePolicies_Explain)" key="Software\Policies\Mozilla\Firefox" presentation="$(presentation.JSON)">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF150_ONLY"/>
+      <elements>
+        <multiText id="JSON" valueName="SitePolicies" maxLength="16384"/>
+      </elements>
+    </policy>
+    <policy name="SitePoliciesOneLine" class="Both" displayName="$(string.SitePoliciesOneLine)" explainText="$(string.SitePolicies_Explain)" key="Software\Policies\Mozilla\Firefox" presentation="$(presentation.JSONOneLine)">
+      <parentCategory ref="firefox"/>
+      <supportedOn ref="SUPPORTED_FF150_ONLY"/>
+      <elements>
+        <text id="JSONOneLine" valueName="SitePolicies" maxLength="16384"/>
+      </elements>
+    </policy>
+    <policy name="FirefoxHome_Widgets_Enabled" class="Both" displayName="$(string.FirefoxHome_Widgets_Enabled)" explainText="$(string.FirefoxHome_Widgets_Enabled_Explain)" key="Software\Policies\Mozilla\Firefox\FirefoxHome\Widgets" valueName="Enabled">
+      <parentCategory ref="FirefoxHome_Widgets"/>
+      <supportedOn ref="SUPPORTED_FF156_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="FirefoxHome_Widgets_Blocked" class="Both" displayName="$(string.FirefoxHome_Widgets_Blocked)" explainText="$(string.FirefoxHome_Widgets_Blocked_Explain)" key="Software\Policies\Mozilla\Firefox\FirefoxHome\Widgets" presentation="$(presentation.List)">
+      <parentCategory ref="FirefoxHome_Widgets"/>
+      <supportedOn ref="SUPPORTED_FF156_ONLY"/>
+      <elements>
+        <list id="List" key="Software\Policies\Mozilla\Firefox\FirefoxHome\Widgets\Blocked" valuePrefix=""/>
+      </elements>
+    </policy>
+    <policy name="ContentAnalysis_MaxConnectionsCount" class="Both" displayName="$(string.ContentAnalysis_MaxConnectionsCount)" explainText="$(string.ContentAnalysis_MaxConnectionsCount_Explain)" key="Software\Policies\Mozilla\Firefox\ContentAnalysis" presentation="$(presentation.Number)">
+      <parentCategory ref="ContentAnalysis"/>
+      <supportedOn ref="SUPPORTED_FF138_ONLY"/>
+      <elements>
+        <decimal id="Number" valueName="MaxConnectionsCount" minValue="0" maxValue="256"/>
+      </elements>
+    </policy>
+    <policy name="RelaunchRequired_NotificationPeriodHours" class="Both" displayName="$(string.RelaunchRequired_NotificationPeriodHours)" explainText="$(string.RelaunchRequired_NotificationPeriodHours_Explain)" key="Software\Policies\Mozilla\Firefox\RelaunchRequired" presentation="$(presentation.Number)">
+      <parentCategory ref="RelaunchRequired"/>
+      <supportedOn ref="SUPPORTED_FF150_ONLY"/>
+      <elements>
+        <decimal id="Number" valueName="NotificationPeriodHours"/>
+      </elements>
+    </policy>
+    <policy name="RelaunchRequired_RestartTimeOfDay_Hour" class="Both" displayName="$(string.RelaunchRequired_RestartTimeOfDay_Hour)" explainText="$(string.RelaunchRequired_RestartTimeOfDay_Hour_Explain)" key="Software\Policies\Mozilla\Firefox\RelaunchRequired\RestartTimeOfDay" presentation="$(presentation.Number)">
+      <parentCategory ref="RelaunchRequired"/>
+      <supportedOn ref="SUPPORTED_FF150_ONLY"/>
+      <elements>
+        <decimal id="Number" valueName="Hour" minValue="0" maxValue="23"/>
+      </elements>
+    </policy>
+    <policy name="RelaunchRequired_RestartTimeOfDay_Minute" class="Both" displayName="$(string.RelaunchRequired_RestartTimeOfDay_Minute)" explainText="$(string.RelaunchRequired_RestartTimeOfDay_Minute_Explain)" key="Software\Policies\Mozilla\Firefox\RelaunchRequired\RestartTimeOfDay" presentation="$(presentation.Number)">
+      <parentCategory ref="RelaunchRequired"/>
+      <supportedOn ref="SUPPORTED_FF150_ONLY"/>
+      <elements>
+        <decimal id="Number" valueName="Minute" minValue="0" maxValue="59"/>
+      </elements>
+    </policy>
+    <policy name="FirefoxSuggest_OnlineEnabled" class="Both" displayName="$(string.FirefoxSuggest_OnlineEnabled)" explainText="$(string.FirefoxSuggest_OnlineEnabled_Explain)" key="Software\Policies\Mozilla\Firefox\FirefoxSuggest" valueName="OnlineEnabled">
+      <parentCategory ref="FirefoxSuggest"/>
+      <supportedOn ref="SUPPORTED_FF118"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="SearchEngines_DefaultPrivate" class="Both" displayName="$(string.SearchEngines_DefaultPrivate)" explainText="$(string.SearchEngines_DefaultPrivate_Explain)" key="Software\Policies\Mozilla\Firefox\SearchEngines" presentation="$(presentation.SearchEngines_DefaultPrivate)">
+      <parentCategory ref="Search"/>
+      <supportedOn ref="SUPPORTED_FF71"/>
+      <elements>
+        <text id="SearchEngines_DefaultPrivate" valueName="DefaultPrivate" required="true"/>
+      </elements>
+    </policy>
+    <policy name="ContentAnalysis_InterceptionPoints_ClipboardCopy" class="Both" displayName="$(string.ContentAnalysis_InterceptionPoints_ClipboardCopy)" explainText="$(string.ContentAnalysis_InterceptionPoints_ClipboardCopy_Explain)" key="Software\Policies\Mozilla\Firefox\ContentAnalysis\InterceptionPoints\ClipboardCopy" valueName="Enabled">
+      <parentCategory ref="InterceptionPoints_ClipboardCopy"/>
+      <supportedOn ref="SUPPORTED_FF158_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="ContentAnalysis_InterceptionPoints_ClipboardCopy_PlainTextOnly" class="Both" displayName="$(string.ContentAnalysis_InterceptionPoints_ClipboardCopy_PlainTextOnly)" explainText="$(string.ContentAnalysis_InterceptionPoints_ClipboardCopy_PlainTextOnly_Explain)" key="Software\Policies\Mozilla\Firefox\ContentAnalysis\InterceptionPoints\ClipboardCopy" valueName="PlainTextOnly">
+      <parentCategory ref="InterceptionPoints_ClipboardCopy"/>
+      <supportedOn ref="SUPPORTED_FF158_ONLY"/>
+      <enabledValue>
+        <decimal value="1"/>
+      </enabledValue>
+      <disabledValue>
+        <decimal value="0"/>
+      </disabledValue>
+    </policy>
+    <policy name="GenerativeAI_SmartWindow" class="Both" displayName="$(string.GenerativeAI_SmartWindow)" explainText="$(string.GenerativeAI_SmartWindow_Explain)" key="Software\Policies\Mozilla\Firefox\GenerativeAI" valueName="SmartWindow">
+      <parentCategory ref="GenerativeAI"/>
       <supportedOn ref="SUPPORTED_FF150_ONLY"/>
       <enabledValue>
         <decimal value="1"/>

@@ -40,9 +40,15 @@ jobs:
       - name: Fetch the ADMX pack and rebuild the catalog
         if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
         run: |
+          sudo apt-get update -qq
           sudo apt-get install -y -qq msitools
           npm run fetch:admx-pack
           npm run build:csp-catalog
+
+      - name: Count the catalog against the committed one, refuse a shrunken one
+        id: stats
+        if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
+        run: node scripts/catalog-stats.mjs --base HEAD
 
       - name: Verify the app still builds
         if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
@@ -63,9 +69,11 @@ jobs:
               https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf
             - ADMX pack: the one pinned in `scripts/sources.mjs`
 
-            The build log of this run prints the setting count, the areas, the ADMX-backed settings with a
-            schema attached, and the command count. Read those numbers against the previous rebuild, then merge:
-            the catalog ships to csp-builder.getprimo.com on merge, and sourcehub's coverage catalogue
-            re-projects it on its next refresh.
+            Against the committed catalog:
+
+            ${{ steps.stats.outputs.stats }}
+
+            Read the numbers, then merge: the catalog ships to csp-builder.getprimo.com on merge, and
+            sourcehub's coverage catalogue re-projects it on its next refresh.
           labels: |
             dependencies

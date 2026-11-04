@@ -61,6 +61,10 @@ jobs:
           commit-message: "[MDM-3832] Rebuild the CSP catalog on ${{ steps.ddf.outputs.zip }}"
           branch: chore/refresh-csp-catalog
           delete-branch: true
+          # The rebuild moves these two and nothing else; `npm ci` rewrites yarn.lock on the runner, which is noise.
+          add-paths: |
+            src/lib/csp-native/catalog.json
+            scripts/csp-ddf/*.zip
           title: "[MDM-3832] Rebuild the CSP catalog on ${{ steps.ddf.outputs.zip }}"
           body: |
             Automated rebuild of `src/lib/csp-native/catalog.json`.

@@ -1,0 +1,79 @@
+name: Refresh CSP catalog
+
+# Rebuilds src/lib/csp-native/catalog.json when Microsoft publishes a new DDF
+# zip (about three a year), and opens a pull request a human merges. The ADMX
+# pack is pinned in scripts/sources.mjs and is not a trigger: a run without a
+# new DDF changes nothing and opens nothing.
+
+on:
+  schedule:
+    # Monday 06:00 UTC
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+    inputs:
+      force_rebuild:
+        description: "Rebuild the catalog on the committed DDF zip (after bumping the ADMX pack, or to prove the run)"
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Look for a new DDF zip
+        id: ddf
+        run: npm run fetch:ddf
+
+      - name: Fetch the ADMX pack and rebuild the catalog
+        if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq msitools
+          npm run fetch:admx-pack
+          npm run build:csp-catalog
+
+      - name: Count the catalog against the committed one, refuse a shrunken one
+        id: stats
+        if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
+        run: node scripts/catalog-stats.mjs --base HEAD
+
+      - name: Verify the app still builds
+        if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
+        run: npm run build
+
+      - name: Open PR on diff
+        if: steps.ddf.outputs.changed == 'true' || inputs.force_rebuild
+        uses: peter-evans/create-pull-request@c5a7806660adbe173f04e3e038b0ccdcd758773c # v6
+        with:
+          commit-message: "[MDM-3832] Rebuild the CSP catalog on ${{ steps.ddf.outputs.zip }}"
+          branch: chore/refresh-csp-catalog
+          delete-branch: true
+          title: "[MDM-3832] Rebuild the CSP catalog on ${{ steps.ddf.outputs.zip }}"
+          body: |
+            Automated rebuild of `src/lib/csp-native/catalog.json`.
+
+            - DDF: `${{ steps.ddf.outputs.zip }}` (new: `${{ steps.ddf.outputs.changed }}`), from
+              https://learn.microsoft.com/en-us/windows/client-management/mdm/configuration-service-provider-ddf
+            - ADMX pack: the one pinned in `scripts/sources.mjs`
+
+            Against the committed catalog:
+
+            ${{ steps.stats.outputs.stats }}
+
+            Read the numbers, then merge: the catalog ships to csp-builder.getprimo.com on merge, and
+            sourcehub's coverage catalogue re-projects it on its next refresh.
+          labels: |
+            dependencies

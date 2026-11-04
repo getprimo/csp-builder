@@ -9,6 +9,8 @@
     "build:singlefile": "tsc -b && vite build --mode singlefile",
     "build:csp-catalog": "node scripts/build-csp-catalog.mjs",
     "fetch:admx-pack": "node scripts/fetch-admx-pack.mjs",
+    "fetch:ddf": "node scripts/fetch-ddf.mjs",
+    "catalog:stats": "node scripts/catalog-stats.mjs",
     "refresh:samples": "node scripts/refresh-samples.mjs",
     "build:og-image": "rsvg-convert -w 1200 -h 630 scripts/og-image.svg -o public/og-image.png",
     "lint": "eslint .",

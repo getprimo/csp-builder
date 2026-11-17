@@ -127,6 +127,28 @@ export interface CspSetting {
    * exporter emits a proper `<enabled/><data…/>` payload.
    */
   admx?: CspAdmxMeta;
+  /** The Group Policy behind the setting, from the DDF's `GpMapping`, else its `AdmxBacked`. */
+  gp?: CspGroupPolicy;
+  /** Where that Group Policy writes in the registry, when it is an ADMX policy the bundled pack holds. */
+  registry?: CspRegistry;
+}
+
+export interface CspGroupPolicy {
+  /** The policy name: the ADMX policy name, or the English name of a native policy ("Accounts: …"). */
+  name: string;
+  /** The GP category path; an ADMX one reads `<namespace>~AT~<categories>`. */
+  area?: string;
+  /** The ADMX element the setting maps to, when it maps to one element of the policy. */
+  element?: string;
+  /** The ADMX file an ADMX-backed setting names. */
+  file?: string;
+  /** The policy's English title, as the Group Policy editor shows it. */
+  displayName?: string;
+}
+
+export interface CspRegistry {
+  hive: "HKLM" | "HKCU" | "Both";
+  values: { key: string; valueName?: string }[];
 }
 
 export interface CspCatalog {

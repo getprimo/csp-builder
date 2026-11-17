@@ -2,7 +2,8 @@
 /**
  * Fetch the Windows PolicyDefinitions used to enrich the CSP catalog with
  * ADMX element schemas: Microsoft's official Administrative Templates pack,
- * pinned in scripts/sources.mjs (ADMX_PACK).
+ * pinned in scripts/sources.mjs (ADMX_PACK), and the two templates of the
+ * Security Compliance Toolkit the DDF also points to (SECURITY_BASELINE).
  *
  * Downloads the MSI, extracts it with `msiextract` (msitools: `apt-get install
  * msitools` on a runner, `brew install msitools` on a Mac), and copies the
@@ -19,7 +20,7 @@ import { copyFileSync, existsSync, mkdirSync, mkdtempSync, readdirSync, rmSync, 
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { ADMX_PACK } from "./sources.mjs";
+import { ADMX_PACK, SECURITY_BASELINE } from "./sources.mjs";
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const OUT_DIR = join(__dirname, "admx-windows");
@@ -48,6 +49,30 @@ function copyAll(from, to, extension) {
   return count;
 }
 
+/** Copies SECURITY_BASELINE's templates, ADMX and en-US ADML, from its zip's `Templates/` into OUT_DIR. */
+async function fetchBaselineTemplates(tmp) {
+  console.log(`Downloading ${SECURITY_BASELINE.name} ...`);
+  const response = await fetch(SECURITY_BASELINE.url);
+  if (!response.ok) throw new Error(`${SECURITY_BASELINE.url}: HTTP ${response.status}`);
+  const zip = join(tmp, "baseline.zip");
+  writeFileSync(zip, Buffer.from(await response.arrayBuffer()));
+
+  const entries = execFileSync("unzip", ["-Z1", zip], { encoding: "utf8" }).split("\n");
+  let count = 0;
+  for (const template of SECURITY_BASELINE.templates) {
+    for (const [suffix, to] of [
+      [`/Templates/${template}.admx`, join(OUT_DIR, `${template}.admx`)],
+      [`/Templates/en-US/${template}.adml`, join(EN_US_OUT, `${template}.adml`)],
+    ]) {
+      const entry = entries.find((name) => name.endsWith(suffix));
+      if (!entry) throw new Error(`${SECURITY_BASELINE.name} holds no ${suffix}`);
+      writeFileSync(to, execFileSync("unzip", ["-p", zip, entry]));
+      count++;
+    }
+  }
+  return count;
+}
+
 async function main() {
   const tmp = mkdtempSync(join(tmpdir(), "admx-pack-"));
   try {
@@ -72,7 +97,11 @@ async function main() {
     const admlCount = copyAll(join(policyDefs, enUs), EN_US_OUT, ".adml");
     if (admxCount === 0 || admlCount === 0) throw new Error(`Empty pack: ${admxCount} ADMX, ${admlCount} ADML`);
 
-    console.log(`Done: ${admxCount} ADMX + ${admlCount} en-US ADML → ${OUT_DIR}`);
+    const baselineCount = await fetchBaselineTemplates(tmp);
+
+    console.log(
+      `Done: ${admxCount} ADMX + ${admlCount} en-US ADML, and ${baselineCount} from ${SECURITY_BASELINE.name} → ${OUT_DIR}`
+    );
     console.log("Next: npm run build:csp-catalog");
   } finally {
     rmSync(tmp, { recursive: true, force: true });

@@ -225,7 +225,27 @@ function walk(node, uriParts, areaChain, emit) {
     deprecated: props.Deprecated !== undefined,
     osBuildDeprecated:
       props.Deprecated?.["@_OsBuildDeprecated"] ?? undefined,
+    gp: gpOf(props),
   });
+}
+
+/**
+ * The Group Policy behind a DDF leaf: its `GpMapping`, else the ADMX policy an
+ * ADMX-backed leaf names. `area` is the GP category path; an ADMX one reads
+ * `<admx namespace>~AT~<categories>`, a native one (security options, user
+ * rights, audit) has no `~AT~`.
+ */
+function gpOf(props) {
+  const mapping = props.GpMapping;
+  const backed = props.AllowedValues?.AdmxBacked;
+  const name = mapping?.["@_GpEnglishName"] ?? backed?.["@_Name"];
+  if (!name) return undefined;
+  return {
+    name,
+    area: mapping?.["@_GpAreaPath"] ?? backed?.["@_Area"],
+    element: mapping?.["@_GpElement"] || undefined,
+    file: backed?.["@_File"] || undefined,
+  };
 }
 
 function normalizeTopPath(p) {
@@ -420,6 +440,43 @@ function parseElements(elementsNode, strings, presentationLabels) {
   return out;
 }
 
+const HIVES = { Machine: "HKLM", User: "HKCU", Both: "Both" };
+
+/**
+ * Where a policy writes in the registry: its own value, each element's, and the
+ * items of its enabled and disabled lists. `element` is the element id, so a DDF
+ * leaf mapped to one element (`GpElement`) keeps only its own values.
+ */
+function registryOf(p) {
+  const key = attr(p, "key");
+  const values = [];
+  const valueName = attr(p, "valueName");
+  if (valueName) values.push({ key, valueName });
+  for (const [tag, nodes] of Object.entries(p.elements ?? {})) {
+    if (tag.startsWith("@_") || tag === "#text") continue;
+    for (const n of asArray(nodes)) {
+      const element = attr(n, "id");
+      const elementKey = attr(n, "key") ?? key;
+      const elementValue = attr(n, "valueName");
+      if (elementValue) values.push({ key: elementKey, valueName: elementValue, element });
+      else if (tag === "list") values.push({ key: elementKey, element });
+    }
+  }
+  for (const listTag of ["enabledList", "disabledList"]) {
+    const list = p[listTag];
+    if (!list) continue;
+    const defaultKey = attr(list, "defaultKey") ?? key;
+    for (const item of asArray(list.item)) {
+      const itemValue = attr(item, "valueName");
+      if (itemValue) values.push({ key: attr(item, "key") ?? defaultKey, valueName: itemValue });
+    }
+  }
+  if (!key) return undefined;
+  if (values.length === 0) values.push({ key });
+  const unique = new Map(values.map((v) => [`${v.key}|${v.valueName ?? ""}|${v.element ?? ""}`, v]));
+  return { hive: HIVES[attr(p, "class")] ?? attr(p, "class"), values: [...unique.values()] };
+}
+
 function loadAdmxArea(admxPath, admlPath) {
   const admxText = readFileSync(admxPath, "utf8");
   const admlText = admlPath && existsSync(admlPath)
@@ -442,6 +499,7 @@ function loadAdmxArea(admxPath, admlPath) {
     const enabledValue = parseRegValue(p.enabledValue);
     const disabledValue = parseRegValue(p.disabledValue);
     byName.set(name, {
+      registry: registryOf(p),
       elements,
       enabledValue,
       disabledValue,
@@ -584,6 +642,7 @@ function main() {
             accessType: leaf.accessType,
             deprecated: leaf.deprecated || undefined,
             osBuildDeprecated: leaf.osBuildDeprecated,
+            gp: leaf.gp,
           });
         }
       });
@@ -615,6 +674,24 @@ function main() {
       s.description = policy.explainText;
     }
     admxAttached++;
+  }
+
+  // Pass 3: the registry values behind the Group Policy of a leaf, where the
+  // policy is an ADMX one: the DDF's File, else the namespace before `~AT~`.
+  let registryAttached = 0;
+  for (const s of byId.values()) {
+    if (!s.gp) continue;
+    const base = s.gp.file?.replace(/\.admx$/i, "") ?? (s.gp.area?.includes("~AT~") ? s.gp.area.split("~AT~")[0] : undefined);
+    const policy = base ? byAdmxBase.get(base.toLowerCase())?.policies.get(s.gp.name) : undefined;
+    if (!policy?.registry) continue;
+    const { hive, values } = policy.registry;
+    const own = s.gp.element ? values.filter((v) => v.element === s.gp.element) : values;
+    s.registry = {
+      hive,
+      values: (own.length > 0 ? own : values).map(({ key, valueName }) => (valueName ? { key, valueName } : { key })),
+    };
+    if (policy.displayName) s.gp.displayName = policy.displayName;
+    registryAttached++;
   }
 
   const settings = [...byId.values()].sort((a, b) => {
@@ -659,6 +736,9 @@ function main() {
   console.log(`Wrote ${settings.length} settings to ${OUT} (${(bytes / 1024).toFixed(0)} KB).`);
   console.log(
     `ADMX-backed: ${admxAttached} with element schema attached, ${admxFallback} fallback to textarea.`
+  );
+  console.log(
+    `Group Policy: ${settings.filter((x) => x.gp).length} mapped, ${registryAttached} with their registry values.`
   );
   console.log(`Top-level nodes scanned: ${totalTopNodes}, Policy-rooted: ${policyTopNodes}.`);
   const areas = new Set(settings.map((s) => s.area));
